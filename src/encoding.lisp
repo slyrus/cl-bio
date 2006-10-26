@@ -15,14 +15,15 @@
 
 (let ((char-list (coerce *simple-dna-sequence-char-map* 'list)))
   (let ((simple-dna-sequence-int-array
-         (make-array (char-lookup-array-length char-list))))
+         (make-array (char-lookup-array-length char-list)
+                     :initial-element nil)))
     (loop for c in char-list
        for i from 0
        do
          (setf (aref simple-dna-sequence-int-array (char-code (char-upcase c))) i)
          (setf (aref simple-dna-sequence-int-array (char-code (char-downcase c))) i))
     
-    (defmethod char-to-seq-code ((seq simple-dna-sequence) char)
+    (defmethod char-to-seq-code ((seq 2-bit-dna-sequence-encoding) char)
       (aref simple-dna-sequence-int-array (char-code char)))))
 
 (defclass 2-bit-rna-sequence-encoding (sequence-encoding) ())
@@ -34,7 +35,8 @@
 
 (let ((char-list (coerce *simple-rna-sequence-char-map* 'list)))
   (let ((simple-rna-sequence-int-array
-         (make-array (char-lookup-array-length char-list))))
+         (make-array (char-lookup-array-length char-list)
+                     :initial-element nil)))
     (loop for c in char-list
        for i from 0
        do
@@ -57,7 +59,8 @@
 
 (let ((char-list (coerce *simple-aa-sequence-char-map* 'list)))
   (let ((simple-aa-sequence-int-array
-         (make-array (char-lookup-array-length char-list))))
+         (make-array (char-lookup-array-length char-list)
+                     :initial-element nil)))
     (loop for c in char-list
        for i from 0
        do

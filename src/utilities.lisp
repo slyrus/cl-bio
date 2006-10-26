@@ -12,12 +12,12 @@
                              char-list)))))
 
 (defun flexichain-to-list (fc)
-  (loop for i below (nb-elements fc)
-       collect (element* fc i)))
+  (loop for i below (flexichain:nb-elements fc)
+       collect (flexichain:element* fc i)))
 
 (defun general-flexichain-to-string (fc)
-  (coerce (loop for i below (nb-elements fc)
-             append (let ((el (element* fc i)))
+  (coerce (loop for i below (flexichain:nb-elements fc)
+             append (let ((el (flexichain:element* fc i)))
                       (cond ((characterp el)
                              (list el))
                             ((stringp el)
@@ -25,6 +25,6 @@
           'string))
 
 (defun vector-flexichain-to-string (fc)
-  (coerce (loop for i below (nb-elements fc)
-             collect (element* fc i))
+  (coerce (loop for i below (flexichain:nb-elements fc)
+             collect (flexichain:element* fc i))
           'string))
