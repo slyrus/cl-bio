@@ -8,6 +8,7 @@
 (defgeneric seq-length (seq))
 (defgeneric residues-string (seq))
 (defgeneric (setf residues-string) (val seq))
+(defgeneric residues-string-range (seq range))
 (defgeneric residue (seq i))
 (defgeneric (setf residue) (val seq i))
 
@@ -28,6 +29,14 @@
        for i from 0
        do (setf (residue seq i) (elt residues i)))
   residues)
+
+(defmethod residues-string-range ((seq sequence-with-residues) (range range))
+  (let ((str (make-string (range-length range))))
+    (loop
+       for i from (range-start range) to (range-end range)
+       for j from 0
+       do (setf (elt str j) (residue seq i)))
+    str))
 
 (defgeneric residue-code (seq i))
 (defgeneric (setf residue-code) (val seq i))

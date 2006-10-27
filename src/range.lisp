@@ -38,6 +38,10 @@
   (max (range-start range)
        (range-end range)))
 
+(defmethod range-length ((range range))
+  (1+ (- (range-end range)
+         (range-start range))))
+
 (defconstant +plus-strand+ 1)
 (defconstant +unknown-strand+ 0)
 (defconstant +minus-strand+ -1)
@@ -51,3 +55,4 @@
   (and (call-next-method)
        (equal (strand range1)
               (strand range2))))
+

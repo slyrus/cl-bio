@@ -39,3 +39,6 @@
 (slot-value (residues df) 'flexichain::element-type)
 
 (residues-string df)
+
+(let ((r (make-instance 'range 10 12)))
+  (residues-string-range df r))

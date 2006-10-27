@@ -20,7 +20,7 @@
              (:cl-source-file "range" :depends-on ("defpackage"))
              (:cl-source-file "utilities" :depends-on ("defpackage"))
              (:cl-source-file "encoding" :depends-on ("defpackage" "utilities"))
-             (:cl-source-file "bio-sequence" :depends-on ("defpackage" "encoding"))))
+             (:cl-source-file "bio-sequence" :depends-on ("defpackage" "encoding" "range"))))
    (:static-file "bootstrap" :pathname #p"bootstrap.cl")
    (:static-file "COPYRIGHT")
    (:static-file "README")
