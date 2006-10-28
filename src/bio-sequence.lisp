@@ -33,7 +33,7 @@
 (defmethod residues-string-range ((seq sequence-with-residues) (range range))
   (let ((str (make-string (range-length range))))
     (loop
-       for i from (range-start range) to (range-end range)
+       for i from (range-start range) below (range-end range)
        for j from 0
        do (setf (elt str j) (residue seq i)))
     str))

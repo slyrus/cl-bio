@@ -39,8 +39,8 @@
        (range-end range)))
 
 (defmethod range-length ((range range))
-  (1+ (- (range-end range)
-         (range-start range))))
+  (- (range-end range)
+     (range-start range)))
 
 (defconstant +plus-strand+ 1)
 (defconstant +unknown-strand+ 0)
