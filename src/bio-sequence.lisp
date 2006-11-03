@@ -109,7 +109,7 @@ representation."))
 
 (defgeneric residue-code (seq i)
   (:documentation "Returns the residue cod value (the internal
-  integer representation) of the ith residue of seq."))
+integer representation) of the ith residue of seq."))
 
 (defgeneric (setf residue-code) (val seq i)
   (:documentation "Sets the internal interger representation of the
@@ -183,7 +183,7 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
 (defgeneric insert-residue (seq pos res))
 (defgeneric insert-residues (seq pos str))
 (defgeneric insert-residue-codes (seq pos vec))
-(defgeneric append-residues (seq res))
+(defgeneric append-residue (seq res))
 (defgeneric append-residues (seq str))
 (defgeneric append-residue-codes (seq vec))
 (defgeneric delete-residue (seq pos))
@@ -310,7 +310,7 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
 
 (defgeneric reverse-complement (seq)
   (:documentation "Returns a new sequence that is the reverse
-  complement of seq."))
+complement of seq."))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; implementation classes for DNA sequences
