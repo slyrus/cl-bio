@@ -1,19 +1,76 @@
+;;; Bio-sequence
+;;; Classes, generic functions, methods and functions for working
+;;; with biological sequences
+;;;
+;;; Copyright (c) 2006 Cyrus Harmon (ch-lisp@bobobeach.com)
+;;; All rights reserved.
+;;;
+;;; Redistribution and use in source and binary forms, with or without
+;;; modification, are permitted provided that the following conditions
+;;; are met:
+;;;
+;;;   * Redistributions of source code must retain the above copyright
+;;;     notice, this list of conditions and the following disclaimer.
+;;;
+;;;   * Redistributions in binary form must reproduce the above
+;;;     copyright notice, this list of conditions and the following
+;;;     disclaimer in the documentation and/or other materials
+;;;     provided with the distribution.
+;;;
+;;; THIS SOFTWARE IS PROVIDED BY THE AUTHOR 'AS IS' AND ANY EXPRESSED
+;;; OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+;;; WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+;;; ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+;;; DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+;;; DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+;;; GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+;;; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+;;; WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+;;; NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+;;;
 
 (in-package :cl-bio)
 
-;; sequences
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Biological sequences, such as nucleic acid and
+;;; protein sequences.
 
+;;; biological sequence protocol class
 (defclass bio-sequence () ())
 
-(defgeneric seq-length (seq))
-(defgeneric residues-string (seq))
-(defgeneric (setf residues-string) (val seq))
-(defgeneric residues-string-range (seq range))
-(defgeneric residue (seq i))
-(defgeneric (setf residue) (val seq i))
+(defgeneric seq-length (seq)
+  (:documentation "Returns the length of a bio-sequence. Subclasses of
+bio-sequence are free to use arbitrary units for the length, although
+it is expected that sequences with residues will return the number
+of residues as the length."))
 
+;;; Protocol class for biological sequences having residues
 (defclass sequence-with-residues ()
   ((residues :accessor residues)))
+
+(defgeneric residues-string (seq)
+  (:documentation "Returns all of the residues of the sequence as a
+single string."))
+
+(defgeneric (setf residues-string) (val seq)
+  (:documentation "Sets the residues of the sequence to be the residues
+contained in the string. The sequence may or may not modify the
+string or use the provided string as the storage for the reisdues."))
+
+(defgeneric residues-string-range (seq range)
+  (:documentation "Returns the residues of the sequence in a particular
+range."))
+
+(defgeneric residue (seq i)
+  (:documentation "Returns the residue of seq at position i. Note
+that for residue-coded sequences this is the external character
+representation of the residues, not the internal integer
+representation."))
+
+(defgeneric (setf residue) (val seq i)
+  (:documentation "Sets the ith residue of seq to val."))
 
 (defmethod seq-length ((seq sequence-with-residues))
   (length (residues seq)))
@@ -38,10 +95,53 @@
        do (setf (elt str j) (residue seq i)))
     str))
 
-(defgeneric residue-code (seq i))
-(defgeneric (setf residue-code) (val seq i))
 
-(defclass simple-sequence (sequence-with-residues) ())
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Residue codes. Rather than just using characters to represent the
+;;; residues of sequences, we allow for an encoding of a residue as an
+;;; integer. The protocol class sequence-with-residue-codes is to be a
+;;; superclass of classes that use residue codes and support the
+;;; residue-code method and its friends.
+
+;;; seuqence with residue codes protocol class
+(defclass sequence-with-residue-codes (sequence-with-residues) ())
+
+(defgeneric residue-code (seq i)
+  (:documentation "Returns the residue cod value (the internal
+  integer representation) of the ith residue of seq."))
+
+(defgeneric (setf residue-code) (val seq i)
+  (:documentation "Sets the internal interger representation of the
+ith residue of seq to the residue code val."))
+
+(defgeneric seq-reverse (seq)
+  (:documentation "Returns a new instance of the same class as seq
+whose residues have been reversed (AACCGT -> TGCCAA)"))
+
+(defmethod seq-reverse ((forward sequence-with-residue-codes))
+  (let* ((length (seq-length forward))
+         (rev (make-instance (class-of forward) :length length)))
+    (loop for i below length
+       for j from (1- length) downto 0
+       do (setf (residue-code rev i) (residue-code forward j)))
+    rev)
+  
+  ;; the following is a slightly less efficient, if simpler way of
+  ;; doing the same thing:
+  #+nil (make-instance (class-of forward)
+                       :initial-contents (reverse (residues-string forward))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Simple sequences. A simple sequence is a sequence that extends
+;;; sequence-with-residue-codes (and therefore sequence-with-residues
+;;; and bio-sequence) that stores its residues using an array. Simple
+;;; operations such as getting and setting residue values are
+;;; supported, but more involved operations such as inesrtion and
+;;; deletion are not.
+
+;;; simple sequence protocol class
+(defclass simple-sequence (sequence-with-residue-codes) ())
 
 (defmethod initialize-instance :after ((seq simple-sequence) &rest initargs
                                        &key length initial-contents)
@@ -72,6 +172,13 @@
 (defmethod (setf residue-code) (val (seq simple-sequence) i)
   (setf (aref (residues seq) i) val))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Adjustable sequences. An adjustable sequence is a sequence that
+;;; supports operations for insertion, deletion and appening of
+;;; residues
+
+;;; adjustable sequence protocol class
+(defclass adjustable-sequence (sequence-with-residue-codes) ())
 
 (defgeneric insert-residue (seq pos res))
 (defgeneric insert-residues (seq pos str))
@@ -81,10 +188,20 @@
 (defgeneric append-residue-codes (seq vec))
 (defgeneric delete-residue (seq pos))
 
-(defclass flexichain-sequence (sequence-with-residues) ())
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Flexichain Sequences. Flexichain sequences are adjustable
+;;; sequences that ues a flexichain as the storage for the residues.
+
+;;; flexichain sequences class
+(defclass flexichain-sequence (adjustable-sequence)
+  ((initial-element :initform 0)))
 
 (defmethod initialize-instance :after ((seq flexichain-sequence) &rest initargs
-                                       &key length initial-contents)
+                                       &key
+                                       length
+                                       initial-contents
+                                       initial-residue-codes
+                                       initial-element)
   (declare (ignore initargs))
   (let ((element-type (slot-value seq 'element-type))
         (length (or (and initial-contents
@@ -92,12 +209,17 @@
                     length)))
     (setf (residues seq)
           (apply #'make-instance 'flexichain:standard-flexichain
-                 (append (when length `(:min-size ,length))
-                         (when element-type `(:element-type ,element-type))))))
-  (when initial-contents
-    (let ((chain (residues seq)))
-      (loop for res across initial-contents
-         do (flexichain:push-end chain (char-to-seq-code seq res))))))
+                 :initial-element (or initial-element (slot-value seq 'initial-element))
+                 (append (when length `(:initial-nb-elements ,length))
+                         (if initial-residue-codes
+                             `(:initial-contents ,initial-residue-codes)
+                             (when initial-contents `(:initial-contents
+                                                      ,(map 'vector
+                                                            #'(lambda (c)
+                                                                (char-to-seq-code seq c))
+                                                            initial-contents))))
+                         (when length `(:initial-nb-elements ,length))
+                         (when element-type `(:element-type ,element-type)))))))
 
 (defmethod seq-length ((seq flexichain-sequence))
   (flexichain:nb-elements (residues seq)))
@@ -159,23 +281,51 @@
      do (flexichain:delete* (residues seq) pos)))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; sequences for handling specific size residues
+
+;;; 2-bit sequence protocol class
 (defclass 2-bit-sequence (bio-sequence)
   ((element-type :initform '(unsigned-byte 2) :allocation :class)))
 
+;;; 5-bit sequence protocol class
 (defclass 5-bit-sequence (bio-sequence)
   ((element-type :initform '(unsigned-byte 5) :allocation :class)))
 
-;;; nucleic acid sequences
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; sequences for handling specific types of biomolecules, such as
+;;; nucleic acid, DNA, RNA, or amino acids (proteins).
+
+;;; nucleic acid sequence protocol class
 (defclass na-sequence (bio-sequence) ())
 
-;;; DNA sequences
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; protocol classes for DNA sequences
+
+;;; DNA sequence protocol class
 (defclass dna-sequence (na-sequence) ())
+
+;;; 2-bit DNA sequence protocol class
 (defclass 2-bit-dna-sequence (dna-sequence 2-bit-sequence 2-bit-dna-sequence-encoding) ())
+
+(defgeneric reverse-complement (seq)
+  (:documentation "Returns a new sequence that is the reverse
+  complement of seq."))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; implementation classes for DNA sequences
+
+;;; simple DNA sequence class
 (defclass simple-dna-sequence (2-bit-dna-sequence simple-sequence) ())
-(defclass flexichain-dna-sequence (2-bit-dna-sequence flexichain-sequence) ())
+
+;;; adjustable DNA sequence class
+(defclass adjustable-dna-sequence (2-bit-dna-sequence flexichain-sequence) ())
 
 (defun make-simple-dna-sequence (length)
   (make-instance 'simple-dna-sequence :length length))
+
+(defun make-adjustable-dna-sequence (length)
+  (make-instance 'adjustable-dna-sequence :length length))
 
 (defun make-dna-sequence-from-string (residues)
   (make-instance 'simple-dna-sequence :initial-contents residues))
@@ -187,14 +337,37 @@
          do (setf (residue-code dna i) (random k))))
     dna))
 
-;;; RNA sequences
+(defmethod reverse-complement ((forward 2-bit-dna-sequence))
+  (let* ((length (seq-length forward))
+         (revcomp (make-instance (class-of forward) :length length)))
+    (loop for i below length
+       for j from (1- length) downto 0
+       do (setf (residue-code revcomp i) (- 3 (residue-code forward j))))
+    revcomp))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; protocol classes for RNA sequences
+
+;;; RNA sequence protocol class
 (defclass rna-sequence (na-sequence) ())
+
+;;; 2-bit RNA sequence protocol class
 (defclass 2-bit-rna-sequence (rna-sequence 2-bit-sequence 2-bit-rna-sequence-encoding) ())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; implementation classes for RNA sequences
+
+;;; simple RNA sequence class
 (defclass simple-rna-sequence (2-bit-rna-sequence simple-sequence) ())
-(defclass flexichain-rna-sequence (2-bit-rna-sequence flexichain-sequence) ())
+
+;;; adjustable RNA sequence class
+(defclass adjustable-rna-sequence (2-bit-rna-sequence flexichain-sequence) ())
 
 (defun make-simple-rna-sequence (length)
   (make-instance 'simple-rna-sequence :length length))
+
+(defun make-adjustable-rna-sequence (length)
+  (make-instance 'adjustable-rna-sequence :length length))
 
 (defun make-rna-sequence-from-string (residues)
   (make-instance 'simple-rna-sequence :initial-contents residues))
@@ -206,11 +379,23 @@
          do (setf (residue-code rna i) (random k))))
     rna))
 
-;;; amino acid sequences
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; protocol classes for amino acid sequences
+
+;;; amino acid sequence protocol class
 (defclass aa-sequence (bio-sequence) ())
+
+;;; 5-bit amino acid sequence protocol class
 (defclass 5-bit-aa-sequence (aa-sequence 5-bit-sequence aa-sequence-encoding) ())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; implementation classes for amino acid sequences
+
+;;; simple amino acid sequence class
 (defclass simple-aa-sequence (5-bit-aa-sequence simple-sequence) ())
-(defclass flexichain-aa-sequence (5-bit-aa-sequence flexichain-sequence) ())
+
+;;; adjustable amino acid sequence class
+(defclass adjustable-aa-sequence (5-bit-aa-sequence flexichain-sequence) ())
 
 (defun make-simple-aa-sequence (length)
   (make-instance 'simple-aa-sequence :length length))

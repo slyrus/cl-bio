@@ -1,19 +1,34 @@
 
+==========
 cl-bio
 Cyrus Harmon, October 2006
+
+==========
 
 Welcome to the cl-bio project. The idea is that this project will
 serve as a trivial lisp-based analog of the BioPerl project. Simple,
 light-weight versions of biological objects and methods on these
 obejcts will be provided.
 
+==========
+
 Initial biological objects:
 
 Sequences: simple implementations of packed 2-bit DNA and RNA
-sequences (A,C,G,T and A,C,G,U, respectively)
+sequences (A,C,G,T and A,C,G,U, respectively). Currently there are two
+kinds of implementation classes for sequences, simple-sequences and
+adjustable-seqeuences. The adjustable sequences use the flexichain
+data structure to store the residues of the sequence, which allows for
+efficient insertion and deletion of residues.
 
 Ranges: directed ranges with a start and an end, as well as double
 stranded ranges (ds-range) with an additional strand field, with
 options +plus-strand+, +minus-strand+, +unknown-strand+, and
 +both-strands+.
 
+Identifiers: means of naming sequences
+
+==========
+
+Thanks to Robert Strandh for making the flexichain package. Thanks to
+the BioPerl group for inspiration.

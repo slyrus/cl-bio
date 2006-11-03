@@ -4,9 +4,9 @@
 
 (residues-string d)
 
-(defparameter df (make-instance 'flexichain-dna-sequence :initial-contents (residues-string (make-random-dna-sequence 100))))
-(defparameter rf (make-instance 'flexichain-rna-sequence :initial-contents (residues-string (make-random-rna-sequence 100))))
-(defparameter af (make-instance 'flexichain-aa-sequence :initial-contents (residues-string (make-random-aa-sequence 100))))
+(defparameter df (make-instance 'adjustable-dna-sequence :initial-contents (residues-string (make-random-dna-sequence 1000))))
+(defparameter rf (make-instance 'adjustable-rna-sequence :initial-contents (residues-string (make-random-rna-sequence 100))))
+(defparameter af (make-instance 'adjustable-aa-sequence :initial-contents (residues-string (make-random-aa-sequence 100))))
 
 (insert-residues df 0 "TTTT")
 (insert-residues rf 0 "UUUU")
@@ -21,7 +21,7 @@
 (append-residues rf "CUCU")
 (append-residues af "YYYY")
 
-(insert-residues df 127 "AAAA")
+(insert-residues df 1 "AAAA")
 #+nil
 (array-element-type (map '(vector (unsigned-byte 2))
                          #'(lambda (x)
@@ -40,5 +40,7 @@
 
 (residues-string df)
 
-(let ((r (make-instance 'range 10 12)))
+(let ((r (make-instance 'range :start 10 :end 12)))
   (residues-string-range df r))
+
+
