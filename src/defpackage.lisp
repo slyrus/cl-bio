@@ -88,5 +88,9 @@
              #:make-simple-aa-sequence
              #:make-adjustable-aa-sequence
              #:make-aa-sequence-from-string
-             #:make-random-aa-sequence))
+             #:make-random-aa-sequence
+
+             ;; input and output
+             #:read-fast-sequences
+             #:read-fasta-file))
 
