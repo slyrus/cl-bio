@@ -20,8 +20,9 @@
              (:cl-source-file "range" :depends-on ("defpackage"))
              (:cl-source-file "utilities" :depends-on ("defpackage"))
              (:cl-source-file "encoding" :depends-on ("defpackage" "utilities"))
-             (:cl-source-file "identifier" :depends-on ("defpackage" "utilities"))
-             (:cl-source-file "bio-sequence" :depends-on ("defpackage" "encoding" "range"))
+             (:cl-source-file "descriptor" :depends-on ("defpackage" "utilities"))
+             (:cl-source-file "identifier" :depends-on ("defpackage" "utilities" "descriptor"))
+             (:cl-source-file "bio-sequence" :depends-on ("defpackage" "encoding" "range" "descriptor"))
              (:module :io
                       :components
                       ((:cl-source-file "fasta"))

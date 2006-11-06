@@ -108,6 +108,13 @@ representation."))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 
+;;; Annotated sequences. Sequences that can have annotations attached
+;;; to them.
+
+(defclass annotated-sequence (bio-sequence described-object) ())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; Residue codes. Rather than just using characters to represent the
 ;;; residues of sequences, we allow for an encoding of a residue as an
@@ -152,7 +159,7 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
 ;;; deletion are not.
 
 ;;; simple sequence protocol class
-(defclass simple-sequence (sequence-with-residue-codes) ())
+(defclass simple-sequence (sequence-with-residue-codes annotated-sequence) ())
 
 (defmethod initialize-instance :after ((seq simple-sequence) &rest initargs
                                        &key length initial-contents)
@@ -204,7 +211,7 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
 ;;; sequences that ues a flexichain as the storage for the residues.
 
 ;;; flexichain sequences class
-(defclass flexichain-sequence (adjustable-sequence)
+(defclass flexichain-sequence (adjustable-sequence annotated-sequence)
   ((initial-element :initform 0)))
 
 (defmethod initialize-instance :after ((seq flexichain-sequence) &rest initargs
@@ -394,7 +401,7 @@ complement of seq."))
 
 (defun make-random-rna-sequence (length)
   (let* ((rna (make-simple-rna-sequence length)))
-    (let ((k (length *simple-rna-sequence-char-map*)))
+    (let ((k 4))
       (loop for i below length
          do (setf (residue-code rna i) (random k))))
     rna))
@@ -425,7 +432,7 @@ complement of seq."))
 
 (defun make-random-aa-sequence (length)
   (let* ((aa (make-simple-aa-sequence length)))
-    (let ((k (length *simple-aa-sequence-char-map*)))
+    (let ((k 20))
       (loop for i below length
          do (setf (residue-code aa i) (random k))))
     aa))

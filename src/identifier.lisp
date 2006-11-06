@@ -35,7 +35,7 @@
 ;;;
 ;;; identifier class
 
-(defclass identifier ()
+(defclass identifier (descriptor)
   ((id :accessor id :initarg :id)
    (type :accessor identity-type :initarg :type)
    (version :accessor version :initarg :version)
@@ -47,7 +47,19 @@
 (defclass ncbi-gi (identifier)
   ((id :accessor id :initarg :id :initarg :gi)
    (type :accessor identity-type :initarg :type :initform "gi")
+   (authority :accessor authority :initarg :authority :initform
+  "ncbi")))
+
+(defmethod get-ncbi-gis ((described described-object))
+  (get-descriptors described :type 'ncbi-gi))
+
+(defclass refseq-id (identifier)
+  ((id :accessor id :initarg :id :initarg :refseq-id)
+   (type :accessor identity-type :initarg :type :initform "refseq-id")
    (authority :accessor authority :initarg :authority :initform "ncbi")))
+
+(defmethod get-refseq-ids ((described described-object))
+  (get-descriptors described :type 'refseq-id))
 
 (defclass genbank-accession (identifier)
   ((id :accessor id :initarg :id :initarg :accession)

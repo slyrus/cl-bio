@@ -57,6 +57,29 @@
                #:+minus-strand+
                #:+both-strands+
 
+               ;; descritptors
+               #:descriptor
+               #:get-descriptors
+               #:add-descriptor
+               #:remove-descriptor
+               
+               ;; identifiers
+               #:identifier
+               #:id
+               #:type
+               #:version
+               #:authority
+
+               #:ncbi-gi
+               #:get-ncbi-gis
+
+               #:refseq-id
+               #:get-refseq-ids
+               #:genbank-accession
+               #:affymetrix-probe-set-id
+               #:flybase-identifier
+               #:flybase-gene-identifier
+               
                ;; bio-sequences
                #:bio-sequence
                #:residues-string

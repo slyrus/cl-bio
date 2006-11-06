@@ -50,42 +50,51 @@
 (defun check-end-of-file (stream)
   (equal (peek-char t stream nil :eof) :eof))
 
-(defun read-fasta-header-line (stream)
+(defun read-fasta-header-line (stream seq)
   ;; read until the first #\>
   (read-until-char stream #\>)
   ;; skip over the #\>
   (read-char stream)
   (let ((header (read-line stream)))
-    (let ((terms (split-sequence:split-sequence #\| header))
-          (ids)
-          (descriptors))
+    (let ((terms (split-sequence:split-sequence #\| header)))
       (do ((term (pop terms) (pop terms)))
           ((null terms))
         (print term)
         (cond ((equal term "gi")
                (let ((gi-id (pop terms)))
-                 (push (make-instance 'cl-bio::ncbi-gi :id gi-id) ids))))))
+                 (add-descriptor
+                  seq
+                  (make-instance 'ncbi-gi :id gi-id))))
+              ((equal term "ref")
+               (let ((refseq-id (pop terms)))
+                 (add-descriptor
+                  seq
+                  (make-instance 'refseq-id :id refseq-id)))))))
     (print header)))
 
-(defun read-fasta-residues (stream &key (sequence-type :dna))
+(defun read-fasta-residues (stream seq &key (sequence-type :dna))
+  (declare (ignore sequence-type))
   ;; peek a character and if it's, EOF, newline or >, then we're done, otherwise,
   ;; read the line and add it to the sequence
   (flet ((read-fasta-sequence-line ()
            (or (check-end-of-sequence stream)
                (read-line stream nil :eof))))
-    (cond ((eql sequence-type :dna)
-           (let ((seq (make-instance 'cl-bio::4-bit-adjustable-dna-sequence :length 0)))
-             (do ((line (read-fasta-sequence-line) (read-fasta-sequence-line)))
-                 ((eq line :eof))
-               (append-residues seq line))
-             seq)))))
+    (do ((line (read-fasta-sequence-line) (read-fasta-sequence-line)))
+        ((eq line :eof))
+      (append-residues seq line))))
 
 (defun read-fasta-sequence (stream &key (sequence-type :dna sequence-type-supplied-p))
-  (read-fasta-header-line stream)
-  (apply #'read-fasta-residues
-         stream
-         (when sequence-type-supplied-p
-           `(:sequence-type ,sequence-type))))
+  
+  (let ((seq (cond ((eql sequence-type :dna)
+                    (make-instance 'cl-bio::4-bit-adjustable-dna-sequence :length 0)))))
+    (when seq
+      (read-fasta-header-line stream seq)
+      (apply #'read-fasta-residues
+             stream
+             seq
+             (when sequence-type-supplied-p
+               `(:sequence-type ,sequence-type)))
+      seq)))
 
 (defun read-fasta-sequences (stream &key (sequence-type :dna sequence-type-supplied-p))
   "Returns a list whose elements are bio-sequences, populated from the stream."
