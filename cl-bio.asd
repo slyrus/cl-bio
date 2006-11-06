@@ -10,7 +10,7 @@
                (read vers))
   :licence "BSD"
   :description "A library for representing various biological objects"
-  :depends-on (flexichain)
+  :depends-on (flexichain split-sequence)
   :components
   ((:static-file "version" :pathname #p"version.lisp-expr")
    (:module :src
@@ -20,6 +20,7 @@
              (:cl-source-file "range" :depends-on ("defpackage"))
              (:cl-source-file "utilities" :depends-on ("defpackage"))
              (:cl-source-file "encoding" :depends-on ("defpackage" "utilities"))
+             (:cl-source-file "identifier" :depends-on ("defpackage" "utilities"))
              (:cl-source-file "bio-sequence" :depends-on ("defpackage" "encoding" "range"))
              (:module :io
                       :components

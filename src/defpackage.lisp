@@ -29,68 +29,87 @@
 
 (in-package #:cl-user)
 
-(defpackage #:cl-bio (:use #:cl)
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (unless (find-package 'cl-bio)
+    (defpackage #:cl-bio)))
 
-            (:export
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defpackage #:cl-bio-io (:use #:cl #:cl-bio)
+              (:export
+               .
+               #1=(
+                   #:read-fast-sequences
+                   #:read-fasta-file)))
 
-             ;; ranges
-             #:range
-             #:ds-range
+  (defpackage #:cl-bio (:use #:cl #:cl-bio-io)
+
+              (:export
+
+               ;; ranges
+               #:range
+               #:ds-range
              
-             #:range-equal
-             #:range-contains
+               #:range-equal
+               #:range-contains
              
-             #:+plus-strand+
-             #:+unknown-strand+
-             #:+minus-strand+
-             #:+both-strands+
+               #:+plus-strand+
+               #:+unknown-strand+
+               #:+minus-strand+
+               #:+both-strands+
 
-             ;; bio-sequences
-             #:bio-sequence
-             #:residues-string
-             #:seq-length
+               ;; bio-sequences
+               #:bio-sequence
+               #:residues-string
+               #:residues-string-range
+               #:seq-length
 
-             ;; sequences with residues
-             #:sequence-with-residues
-             #:seq-reverse
+               ;; sequences with residues
+               #:sequence-with-residues
+               #:seq-reverse
 
-             ;; simple sequences
-             #:simple-sequence
+               ;; simple sequences
+               #:simple-sequence
 
-             ;; adjustable sequences
-             #:adjustable-sequence
-             #:insert-residue
-             #:insert-residues
-             #:append-residue
-             #:append-residues
-             #:delete-residue
+               ;; adjustable sequences
+               #:adjustable-sequence
+               #:insert-residue
+               #:insert-residues
+               #:append-residue
+               #:append-residues
+               #:delete-residue
 
-             ;; nucleic acid sequences
-             #:na-sequence
+               ;; nucleic acid sequences
+               #:na-sequence
 
-             ;; DNA sequences
-             #:dna-sequence
-             #:reverse-complement
-             #:make-simple-dna-sequence
-             #:make-adjustable-dna-sequence
-             #:make-dna-sequence-from-string
-             #:make-random-dna-sequence
+               ;; DNA sequences
+               #:dna-sequence
+               #:simple-dna-sequence
+               #:adjustable-dna-sequence
+               #:reverse-complement
+               #:make-simple-dna-sequence
+               #:make-adjustable-dna-sequence
+               #:make-dna-sequence-from-string
+               #:make-random-dna-sequence
 
-             ;; RNA sequences
-             #:rna-sequence
-             #:make-simple-rna-sequence
-             #:make-adjustable-rna-sequence
-             #:make-rna-sequence-from-string
-             #:make-random-rna-sequence
+               ;; RNA sequences
+               #:rna-sequence
+               #:simple-rna-sequence
+               #:adjustable-rna-sequence
+               #:make-simple-rna-sequence
+               #:make-adjustable-rna-sequence
+               #:make-rna-sequence-from-string
+               #:make-random-rna-sequence
 
-             ;; amino acid sequences
-             #:aa-sequence
-             #:make-simple-aa-sequence
-             #:make-adjustable-aa-sequence
-             #:make-aa-sequence-from-string
-             #:make-random-aa-sequence
+               ;; amino acid sequences
+               #:aa-sequence
+               #:simple-aa-sequence
+               #:adjustable-aa-sequence
+               #:make-simple-aa-sequence
+               #:make-adjustable-aa-sequence
+               #:make-aa-sequence-from-string
+               #:make-random-aa-sequence
 
-             ;; input and output
-             #:read-fast-sequences
-             #:read-fasta-file))
+               . #1#)))
+
+(defpackage #:cl-bio-user (:use #:cl #:cl-bio))
 

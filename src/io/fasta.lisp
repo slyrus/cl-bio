@@ -29,29 +29,52 @@
 ;;;
 
 
-(in-package :cl-bio)
+(in-package :cl-bio-io)
 
-(defun read-fasta-header-line (stream)
-  (let ((header (read-line stream)))
-    (print header)))
-
-(defun check-end-of-sequence (stream)
+(defun check-end-of-sequence (stream &key (end-char #\>))
   (let ((char (peek-char t stream nil :eof)))
-    (when (or (equal char #\>)
+    (when (or (equal char end-char)
               (equal char :eof))
       :eof)))
 
+(defun read-until-char (stream end-char)
+  (flet ((read-char-if-not (stream end-char)
+           (unless (eq (check-end-of-sequence stream :end-char end-char) :eof)
+             (print (read-char stream)))))
+    (let ((l))
+      (do ((char (read-char-if-not stream end-char) (read-char-if-not stream end-char)))
+          ((null char))
+        (push char l))
+      (coerce (nreverse l) 'string))))
+
 (defun check-end-of-file (stream)
   (equal (peek-char t stream nil :eof) :eof))
+
+(defun read-fasta-header-line (stream)
+  ;; read until the first #\>
+  (read-until-char stream #\>)
+  ;; skip over the #\>
+  (read-char stream)
+  (let ((header (read-line stream)))
+    (let ((terms (split-sequence:split-sequence #\| header))
+          (ids)
+          (descriptors))
+      (do ((term (pop terms) (pop terms)))
+          ((null terms))
+        (print term)
+        (cond ((equal term "gi")
+               (let ((gi-id (pop terms)))
+                 (push (make-instance 'cl-bio::ncbi-gi :id gi-id) ids))))))
+    (print header)))
 
 (defun read-fasta-residues (stream &key (sequence-type :dna))
   ;; peek a character and if it's, EOF, newline or >, then we're done, otherwise,
   ;; read the line and add it to the sequence
   (flet ((read-fasta-sequence-line ()
-             (or (check-end-of-sequence stream)
-                 (read-line stream nil :eof))))
+           (or (check-end-of-sequence stream)
+               (read-line stream nil :eof))))
     (cond ((eql sequence-type :dna)
-           (let ((seq (make-adjustable-dna-sequence 0)))
+           (let ((seq (make-instance 'cl-bio::4-bit-adjustable-dna-sequence :length 0)))
              (do ((line (read-fasta-sequence-line) (read-fasta-sequence-line)))
                  ((eq line :eof))
                (append-residues seq line))

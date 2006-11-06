@@ -46,6 +46,14 @@ bio-sequence are free to use arbitrary units for the length, although
 it is expected that sequences with residues will return the number
 of residues as the length."))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 
+;;; Sequence with residues. Anticipating the need for sequences
+;;; without residues, we explicitly define a sequence-with-reisidues
+;;; class and define generic methods that are intended to be
+;;; associated with these classes, as well as simple reference
+;;; implementation of these functions.
+
 ;;; Protocol class for biological sequences having residues
 (defclass sequence-with-residues ()
   ((residues :accessor residues)))
@@ -57,7 +65,7 @@ single string."))
 (defgeneric (setf residues-string) (val seq)
   (:documentation "Sets the residues of the sequence to be the residues
 contained in the string. The sequence may or may not modify the
-string or use the provided string as the storage for the reisdues."))
+string or use the provided string as the storage for the reisdues."))1
 
 (defgeneric residues-string-range (seq range)
   (:documentation "Returns the residues of the sequence in a particular
@@ -72,6 +80,9 @@ representation."))
 (defgeneric (setf residue) (val seq i)
   (:documentation "Sets the ith residue of seq to val."))
 
+;;; some reference implementations for
+;;; sequence-with-residues. subclasses are free to override these as
+;;; they see fit
 (defmethod seq-length ((seq sequence-with-residues))
   (length (residues seq)))
 
@@ -288,6 +299,9 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
 (defclass 2-bit-sequence (bio-sequence)
   ((element-type :initform '(unsigned-byte 2) :allocation :class)))
 
+(defclass 4-bit-sequence (bio-sequence)
+  ((element-type :initform '(unsigned-byte 4) :allocation :class)))
+
 ;;; 5-bit sequence protocol class
 (defclass 5-bit-sequence (bio-sequence)
   ((element-type :initform '(unsigned-byte 5) :allocation :class)))
@@ -308,6 +322,9 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
 ;;; 2-bit DNA sequence protocol class
 (defclass 2-bit-dna-sequence (dna-sequence 2-bit-sequence 2-bit-dna-sequence-encoding) ())
 
+;;; 2-bit DNA sequence protocol class
+(defclass 4-bit-dna-sequence (dna-sequence 4-bit-sequence 4-bit-dna-sequence-encoding) ())
+
 (defgeneric reverse-complement (seq)
   (:documentation "Returns a new sequence that is the reverse
 complement of seq."))
@@ -321,6 +338,9 @@ complement of seq."))
 ;;; adjustable DNA sequence class
 (defclass adjustable-dna-sequence (2-bit-dna-sequence flexichain-sequence) ())
 
+(defclass 4-bit-adjustable-dna-sequence (4-bit-dna-sequence
+                                        flexichain-sequence) ())
+
 (defun make-simple-dna-sequence (length)
   (make-instance 'simple-dna-sequence :length length))
 
@@ -332,7 +352,7 @@ complement of seq."))
 
 (defun make-random-dna-sequence (length)
   (let* ((dna (make-simple-dna-sequence length)))
-    (let ((k (length *simple-dna-sequence-char-map*)))
+    (let ((k 4))
       (loop for i below length
          do (setf (residue-code dna i) (random k))))
     dna))
