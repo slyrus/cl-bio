@@ -54,11 +54,15 @@ code code in sequence seq."))
   (:documentation "Returns the sequence code for the character char in
 in sequence seq."))
 
+;;; dna sequence encoding protocol class
+
+(defclass dna-sequence-encoding (sequence-encoding) ())
+
 ;;; 2-bit dna sequence encoding
 (let ((2-bit-dna-sequence-char-map #(#\A #\C #\G #\T)))
   (let ((char-list (coerce 2-bit-dna-sequence-char-map 'list)))
     
-    (defclass 2-bit-dna-sequence-encoding (sequence-encoding)
+    (defclass 2-bit-dna-sequence-encoding (dna-sequence-encoding)
       ((char-map :reader char-map :allocation :class :initform 2-bit-dna-sequence-char-map)
        (int-array :accessor int-array
                   :allocation :class
@@ -83,25 +87,25 @@ in sequence seq."))
 ;;;  1  C - Cytosine
 ;;;  2  G - Guanine
 ;;;  3  T - Thymine
-;;;  4  B - NOT A (C, G or T)
-;;;  5  D - NOT C
-;;;  6  H - NOT G
-;;;  7  V - NOT T
-;;;  8  S - A or T
-;;;  9 W - C or G
-;;;  10 K - Keto
-;;;  11 M - Amino
-;;;  12 R - Purine
-;;;  13 Y - Pyrimidine
-;;;  14 N - Any
-
+;;;  4  B - (or C G T) (not A)
+;;;  5  D - (or A G T) (not C)
+;;;  6  H - (or A C T) (not G)
+;;;  7  V - (or A C G) (not T)
+;;;  8  S - (or C G)
+;;;  9  W - (or A T)
+;;;  10 K - (or G T) (Keto)
+;;;  11 M - (or A C) (Amino)
+;;;  12 R - (or A G) (Purine)
+;;;  13 Y - (or C T) (Pyrimidine)
+;;;  14 N - (or A C G T)
+;;;  15 . - (not (or A C G T))
 (let ((4-bit-dna-sequence-char-map #(#\A #\C #\G #\T
                                       #\B #\D #\H #\V
                                       #\S #\W #\K #\M
-                                      #\R #\Y #\N #\Space)))
+                                      #\R #\Y #\N #\.)))
   (let ((char-list (coerce 4-bit-dna-sequence-char-map 'list)))
     
-    (defclass 4-bit-dna-sequence-encoding (sequence-encoding)
+    (defclass 4-bit-dna-sequence-encoding (dna-sequence-encoding)
       ((char-map :reader char-map :allocation :class :initform 4-bit-dna-sequence-char-map)
        (int-array :accessor int-array
                   :allocation :class
@@ -120,12 +124,16 @@ in sequence seq."))
     (defmethod char-to-seq-code ((seq 4-bit-dna-sequence-encoding) char)
       (aref (int-array seq) (char-code char)))))
 
+;;; dna sequence encoding protocol class
+
+(defclass rna-sequence-encoding (sequence-encoding) ())
+
 ;;; 2-bit rna sequence encoding
 
 (let ((2-bit-rna-sequence-char-map #(#\A #\C #\G #\U)))
   (let ((char-list (coerce 2-bit-rna-sequence-char-map 'list)))
     
-    (defclass 2-bit-rna-sequence-encoding (sequence-encoding)
+    (defclass 2-bit-rna-sequence-encoding (rna-sequence-encoding)
       ((char-map :reader char-map :allocation :class :initform 2-bit-rna-sequence-char-map)
        (int-array :accessor int-array
                   :allocation :class
@@ -145,8 +153,11 @@ in sequence seq."))
       (aref (int-array seq) (char-code char)))))
 
 
-;;; 5-bit amino acide sequence encoding
+;;; amino acid sequence encoding protocol class
 
+(defclass aa-sequence-encoding (sequence-encoding) ())
+
+;;; 5-bit amino acide sequence encoding
 
 (let ((5-bit-aa-sequence-char-map #(#\A #\C #\D #\E #\F
                                       #\G #\H #\I #\K #\L
@@ -154,7 +165,7 @@ in sequence seq."))
                                       #\S #\T #\V #\W #\Y)))
   (let ((char-list (coerce 5-bit-aa-sequence-char-map 'list)))
     
-    (defclass 5-bit-aa-sequence-encoding (sequence-encoding)
+    (defclass 5-bit-aa-sequence-encoding (aa-sequence-encoding)
       ((char-map :reader char-map :allocation :class :initform 5-bit-aa-sequence-char-map)
        (int-array :accessor int-array
                   :allocation :class
