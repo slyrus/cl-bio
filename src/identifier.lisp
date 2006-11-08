@@ -77,3 +77,7 @@
 
 (defclass flybase-gene-identifier (flybase-identifier)
   ((type :accessor identity-type :initarg :type :initform "gene-identifier")))
+
+(defclass flybase-symbol (flybase-identifier)
+  ((type :accessor identity-type :initarg :type :initform "symbol")))
+

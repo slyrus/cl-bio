@@ -28,27 +28,7 @@
 ;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;
 
-
 (in-package :cl-bio-io)
-
-(defun check-end-of-sequence (stream &key (end-char #\>))
-  (let ((char (peek-char t stream nil :eof)))
-    (when (or (equal char end-char)
-              (equal char :eof))
-      :eof)))
-
-(defun read-until-char (stream end-char)
-  (flet ((read-char-if-not (stream end-char)
-           (unless (eq (check-end-of-sequence stream :end-char end-char) :eof)
-             (print (read-char stream)))))
-    (let ((l))
-      (do ((char (read-char-if-not stream end-char) (read-char-if-not stream end-char)))
-          ((null char))
-        (push char l))
-      (coerce (nreverse l) 'string))))
-
-(defun check-end-of-file (stream)
-  (equal (peek-char t stream nil :eof) :eof))
 
 (defun read-fasta-header-line (stream seq)
   ;; read until the first #\>

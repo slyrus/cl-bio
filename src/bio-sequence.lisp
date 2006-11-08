@@ -38,7 +38,7 @@
 ;;; protein sequences.
 
 ;;; biological sequence protocol class
-(defclass bio-sequence () ())
+(defclass bio-sequence (bio-object) ())
 
 (defgeneric seq-length (seq)
   (:documentation "Returns the length of a bio-sequence. Subclasses of

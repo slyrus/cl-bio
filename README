@@ -26,7 +26,10 @@ stranded ranges (ds-range) with an additional strand field, with
 options +plus-strand+, +minus-strand+, +unknown-strand+, and
 +both-strands+.
 
-Identifiers: means of naming sequences
+Descriptors: Information about sequences.
+
+Identifiers: Subclasses of descriptors that provide a means of naming
+sequences
 
 ==========
 
