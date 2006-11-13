@@ -42,7 +42,7 @@
 
 (defclass xy-probe (probe)
   ((x :accessor x-pos)
-   (x :accessor y-pos)))
+   (y :accessor y-pos)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

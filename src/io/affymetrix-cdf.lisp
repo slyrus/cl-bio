@@ -64,24 +64,60 @@
            (cl-ppcre:scan-to-strings "^(\\w+)=(.+)$" line))
           'list))
 
+(defmethod parse-cdf-section (chip stream (section (eql :unit-block)) section-line)
+  (multiple-value-bind (matched term-vec)
+      (cl-ppcre:scan-to-strings "\\[([a-zA-Z]+)(\\d+)_Block(\\d+)\\]" section-line)
+    (declare (ignore matched))
+    (when term-vec
+      (let ((unit (elt term-vec 0))
+            (block (elt term-vec 1)))
+        (let (name block-number num-atoms num-cells start-position end-position cell-header)
+          (do ((line (print (read-dos-line stream)) (read-dos-line stream)
+                     ))
+              ((equal line ""))
+            (destructuring-bind (tag value)
+                (parse-tag-value-line line)
+              (print tag)
+              (cond ((equal "Name" tag)
+                     (print (cons :name value))
+                     (setf name value))
+                    ((equal "BlockNumber" tag)
+                     (print (cons :block-number value))
+                     (setf block-number value))
+                    ((equal "NumAtoms" tag)
+                     (print (cons :num-atoms value))
+                     (setf num-atoms value))
+                    ((equal "NumCells" tag)
+                     (print (cons :num-cells value))
+                     (setf num-cells value))
+                    ((equal "StartPosition" tag)
+                     (print (cons :start-position value))
+                     (setf start-position value))
+                    ((equal "StopPosition" tag)
+                     (print (cons :stop-position value))
+                     (setf end-position value))
+                    ((equal "CellHeader" tag)
+                     (print (cons :cell-header value))
+                     (setf cell-header value))
+                    (t
+                     (multiple-value-bind (matched cell-num)
+                         (cl-ppcre:scan-to-strings "Cell(\\d+)" tag)
+                       (declare (ignore matched))
+                       (when cell-num
+                         (print (cons :cell-num (elt cell-num 0)))))))))          
+          (break))
+        ))))
+
 (defmethod parse-cdf-section (chip stream (section (eql :unit)) section-line)
-  (let ((term-vec
-         (nth-value 1
-                    (cl-ppcre:scan-to-strings "\\[([a-zA-Z]+)(\\d+)\\]" section-line))))
-    (if term-vec
-        (progn
-          #+nil (progn do the right thing here))
-        (let ((term-vec
-               (nth-value 1
-                          (cl-ppcre:scan-to-strings "\\[([a-zA-Z]+)(\\d+)Block(\\d+)\\]" section-line))))
-          (when term-vec
-            (let ((unit (elt term-vec 0))
-                  (block (elt term-vec 1)))
-              (let (name block-number num-atoms num-cells start-position end-position cell-header)
-                (destructuring-bind (tag value)
-                    (parse-tag-value-line )))
-              
-              ))))))
+  (if (cl-ppcre:scan-to-strings "\\[([a-zA-Z]+)(\\d+)_Block(\\d+)\\]" section-line)
+      (parse-cdf-section chip stream :unit-block section-line)
+      (multiple-value-bind (matched term-vec)
+          (cl-ppcre:scan-to-strings "\\[([a-zA-Z]+)(\\d+)\\]" section-line)
+        (declare (ignore matched))
+        (if term-vec
+            (progn
+              #+nil (progn do the right thing here))
+            ))))
 
 
 
