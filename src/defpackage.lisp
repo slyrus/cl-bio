@@ -103,11 +103,13 @@
 
                ;; nucleic acid sequences
                #:na-sequence
+               #:na-sequence-with-residues
 
                ;; DNA sequences
                #:dna-sequence
                #:simple-dna-sequence
                #:adjustable-dna-sequence
+               #:dna-sequence-with-residues
                #:reverse-complement
                #:make-simple-dna-sequence
                #:make-adjustable-dna-sequence
@@ -118,6 +120,7 @@
                #:rna-sequence
                #:simple-rna-sequence
                #:adjustable-rna-sequence
+               #:rna-sequence-with-residues
                #:make-simple-rna-sequence
                #:make-adjustable-rna-sequence
                #:make-rna-sequence-from-string
@@ -127,6 +130,7 @@
                #:aa-sequence
                #:simple-aa-sequence
                #:adjustable-aa-sequence
+               #:aa-sequence-with-residues
                #:make-simple-aa-sequence
                #:make-adjustable-aa-sequence
                #:make-aa-sequence-from-string

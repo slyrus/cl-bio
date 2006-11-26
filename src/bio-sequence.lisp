@@ -319,12 +319,14 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
 
 ;;; nucleic acid sequence protocol class
 (defclass na-sequence (bio-sequence) ())
+(defclass na-sequence-with-residues (na-sequence sequence-with-residues) ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; protocol classes for DNA sequences
 
 ;;; DNA sequence protocol class
 (defclass dna-sequence (na-sequence) ())
+(defclass dna-sequence-with-residues (dna-sequence na-sequence-with-residues) ())
 
 ;;; 2-bit DNA sequence protocol class
 (defclass 2-bit-dna-sequence (dna-sequence 2-bit-sequence 2-bit-dna-sequence-encoding) ())
@@ -340,13 +342,14 @@ complement of seq."))
 ;;; implementation classes for DNA sequences
 
 ;;; simple DNA sequence class
-(defclass simple-dna-sequence (2-bit-dna-sequence simple-sequence) ())
+(defclass simple-dna-sequence (2-bit-dna-sequence simple-sequence dna-sequence-with-residues) ())
 
 ;;; adjustable DNA sequence class
-(defclass adjustable-dna-sequence (2-bit-dna-sequence flexichain-sequence) ())
+(defclass adjustable-dna-sequence (2-bit-dna-sequence flexichain-sequence dna-sequence-with-residues) ())
 
 (defclass 4-bit-adjustable-dna-sequence (4-bit-dna-sequence
-                                        flexichain-sequence) ())
+                                        flexichain-sequence
+                                        dna-sequence-with-residues) ())
 
 (defun make-simple-dna-sequence (length)
   (make-instance 'simple-dna-sequence :length length))
@@ -377,6 +380,7 @@ complement of seq."))
 
 ;;; RNA sequence protocol class
 (defclass rna-sequence (na-sequence) ())
+(defclass rna-sequence-with-residues (rna-sequence na-sequence-with-residues) ())
 
 ;;; 2-bit RNA sequence protocol class
 (defclass 2-bit-rna-sequence (rna-sequence 2-bit-sequence 2-bit-rna-sequence-encoding) ())
@@ -385,10 +389,10 @@ complement of seq."))
 ;;; implementation classes for RNA sequences
 
 ;;; simple RNA sequence class
-(defclass simple-rna-sequence (2-bit-rna-sequence simple-sequence) ())
+(defclass simple-rna-sequence (2-bit-rna-sequence simple-sequence rna-sequence-with-residues) ())
 
 ;;; adjustable RNA sequence class
-(defclass adjustable-rna-sequence (2-bit-rna-sequence flexichain-sequence) ())
+(defclass adjustable-rna-sequence (2-bit-rna-sequence flexichain-sequence rna-sequence-with-residues) ())
 
 (defun make-simple-rna-sequence (length)
   (make-instance 'simple-rna-sequence :length length))
@@ -411,6 +415,7 @@ complement of seq."))
 
 ;;; amino acid sequence protocol class
 (defclass aa-sequence (bio-sequence) ())
+(defclass aa-sequence-with-residues (aa-sequence sequence-with-residues) ())
 
 ;;; 5-bit amino acid sequence protocol class
 (defclass 5-bit-aa-sequence (aa-sequence 5-bit-sequence aa-sequence-encoding) ())
@@ -419,10 +424,10 @@ complement of seq."))
 ;;; implementation classes for amino acid sequences
 
 ;;; simple amino acid sequence class
-(defclass simple-aa-sequence (5-bit-aa-sequence simple-sequence) ())
+(defclass simple-aa-sequence (5-bit-aa-sequence simple-sequence aa-sequence-with-residues) ())
 
 ;;; adjustable amino acid sequence class
-(defclass adjustable-aa-sequence (5-bit-aa-sequence flexichain-sequence) ())
+(defclass adjustable-aa-sequence (5-bit-aa-sequence flexichain-sequence aa-sequence-with-residues) ())
 
 (defun make-simple-aa-sequence (length)
   (make-instance 'simple-aa-sequence :length length))
