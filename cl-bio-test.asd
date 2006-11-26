@@ -10,10 +10,13 @@
                (read vers))
   :licence "BSD"
   :description "Tests for cl-bio"
-  :depends-on (cl-bio)
+  :depends-on (cl-bio ch-asdf)
   :components
   ((:module :test
 	    :components
 	    ((:cl-source-file "defpackage")
-	     (:cl-source-file "cl-bio-test" :depends-on ("defpackage"))))))
+	     (:cl-source-file "cl-bio-test" :depends-on ("defpackage"))))
+   (:module :data
+	    :components
+	    ((:static-file "dpp.fasta")))))
 

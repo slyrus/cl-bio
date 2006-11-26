@@ -10,7 +10,7 @@
                (read vers))
   :licence "BSD"
   :description "A library for representing various biological objects"
-  :depends-on (flexichain split-sequence cl-ppcre)
+  :depends-on (alexandria flexichain split-sequence cl-ppcre ch-asdf)
   :components
   ((:static-file "version" :pathname #p"version.lisp-expr")
    (:module :src
@@ -34,6 +34,14 @@
                       ((:cl-source-file "utilities")
                        (:cl-source-file "fasta" :depends-on ("utilities")))
                       :depends-on ("defpackage" "encoding" "range" "bio-sequence"))))
+   (:module :align
+            :components
+            ((:cl-source-file "defpackage")
+             (:cl-source-file "align" :depends-on ("defpackage"))
+             (:module :matrix
+                      :components
+                      ((:static-file "blosum62" :pathname #p"blosum62.bla"))))
+            :depends-on (:src))
    (:static-file "bootstrap" :pathname #p"bootstrap.cl")
    (:static-file "COPYRIGHT")
    (:static-file "README")

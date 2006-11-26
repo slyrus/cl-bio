@@ -65,3 +65,18 @@
        (make-instance 'ds-range :start 100 :end 2 :strand +plus-strand+)
        (make-instance 'ds-range :start 101 :end 1 :strand +plus-strand+))))
 
+
+;; file IO
+
+(defun test-load-dpp ()
+  (let ((dpp (car (read-fasta-file
+                   (ch-asdf:asdf-lookup-path "asdf:/cl-bio-test/data/dpp.fasta")))))
+    dpp))
+
+(defun test-load-2l ()
+  (let ((2l (car (read-fasta-file "data/2L_genomic_dmel_RELEASE3-1.FASTA"))))
+    2l))
+
+(defun test-load-trunc-2l ()
+  (let ((2l (car (read-fasta-file "data/trunc-2l.fasta"))))
+    2l))
