@@ -38,3 +38,6 @@
 ;;; bio-object protocol class
 (defclass bio-object () ())
 
+(defparameter *bio-rucksack* (ch-asdf:asdf-lookup-path "asdf:/cl-bio/rucksack"))
+
+(ensure-directories-exist (ch-asdf:asdf-lookup-path "asdf:/cl-bio/rucksack"))

@@ -10,7 +10,7 @@
                (read vers))
   :licence "BSD"
   :description "A library for representing various biological objects"
-  :depends-on (alexandria flexichain split-sequence cl-ppcre ch-asdf)
+  :depends-on (ch-asdf alexandria cl-ppcre flexichain split-sequence rucksack)
   :components
   ((:static-file "version" :pathname #p"version.lisp-expr")
    (:module :src
@@ -42,7 +42,8 @@
                       :components
                       ((:static-file "blosum62" :pathname #p"blosum62.bla"))))
             :depends-on (:src))
-   (:static-file "bootstrap" :pathname #p"bootstrap.cl")
+   (:module :rucksack)
+   (:static-file "bootstrap" :pathname #p"bootstrap.lisp")
    (:static-file "COPYRIGHT")
    (:static-file "README")
    (:static-file "make-dist" :pathname #.(make-pathname :name "make-dist" :type "sh"))))
