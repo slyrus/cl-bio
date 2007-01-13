@@ -38,7 +38,6 @@
 
 ;;; taxon protocol class
 
-
 (defclass taxon (bio-object)
   ((tax-id :accessor tax-id :initarg :tax-id)
    (parent-id :accessor parent-id :initarg :parent-id)
@@ -58,6 +57,17 @@
    (hidden-subtree :accessor hidden-subtree :initarg :hidden-subtree)
    (comments :accessor comments :initarg :comments)))
 
+;;; tax-name protocol class
+
+(defclass tax-name ()
+  ((tax-id :accessor tax-id :initarg :tax-id)
+   (name :accessor name :initarg :name)
+   (unique-name :accessor unique-name :initarg :unique-name)
+   (name-class :accessor name-class :initarg :name-class)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; rucksack persistent classes
+
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (rucksack:with-rucksack (rucksack *bio-rucksack*)
     (rucksack:with-transaction ()
@@ -76,17 +86,7 @@
          hidden-subtree
          comments)
         (:index t)
-        (:metaclass rucksack:persistent-class)))))
-
-(defclass tax-name ()
-  ((tax-id :accessor tax-id :initarg :tax-id)
-   (name :accessor name :initarg :name)
-   (unique-name :accessor unique-name :initarg :unique-name)
-   (name-class :accessor name-class :initarg :name-class)))
-
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (rucksack:with-rucksack (rucksack *bio-rucksack*)
-    (rucksack:with-transaction ()
+        (:metaclass rucksack:persistent-class))
       (defclass p-tax-name (tax-name)
         ((tax-id :accessor tax-id :initarg :tax-id :index :number-index)
          (name :accessor name :initarg :name :index :string-index)
@@ -110,33 +110,14 @@
 (defmacro string-int-boolean (arg)
   `(not (zerop (parse-integer ,arg))))
 
-(defvar *tax-node-hash* (make-hash-table))
-
-(defun get-tax-node (tax-id)
-  (gethash tax-id *tax-node-hash*))
-
-(defun set-tax-node (tax-id taxon)
-  (setf (gethash tax-id *tax-node-hash*)
-        taxon))
-
-(defvar *tax-node-children-hash* (make-hash-table))
-
-(defun get-tax-node-children (tax-id)
-  (gethash tax-id *tax-node-children-hash*))
-
-(defun add-tax-node-child (parent-id child-id)
-  (setf (gethash parent-id *tax-node-children-hash*)
-        (pushnew child-id (gethash parent-id *tax-node-children-hash*))))
-
 (defun parse-tax-nodes (&key (file *tax-nodes-file*))
   (let ((batch-size 500))
     (flet ((parse-batch (stream)
              (rucksack:with-rucksack (rucksack *bio-rucksack*)
                (rucksack::without-rucksack-gcing
                  (rucksack:with-transaction ()
-                   (print 'new-transaction)
-                   (loop for line = (read-line stream nil nil)
-                      for i below batch-size
+                   (loop for i below batch-size
+                      for line = (read-line stream nil nil)
                       while line
                       do
                       (let ((strings (cl-ppcre:split "\\t\\|\\t" line)))
@@ -175,30 +156,14 @@
                                            (string-int-boolean mitochondrial-genetic-code-inherited)
                                            :genbank-hidden (string-int-boolean genbank-hidden)
                                            :hidden-subtree (string-int-boolean hidden-subtree)
-                                           :comments (subseq comments 0 (- (length comments) 2)))
-                            #+nil
-                            (set-tax-node
-                             tax-id
-                             )
-                            #+nil
-                            (add-tax-node-child parent-id tax-id))))
+                                           :comments (subseq comments 0 (- (length comments) 2))))))
                       finally (return line)))))))
       (with-open-file (stream file)
         (loop with eof = nil
            while (not eof)
            do (setf eof (not (parse-batch stream))))))))
 
-(defun retrieve-tax-nodes ()
-  (rucksack:with-rucksack (rucksack *bio-rucksack*)
-    (rucksack:with-transaction ()
-      (let (objects)
-        (rucksack:rucksack-map-slot
-         rucksack 'p-taxon 'tax-id
-         (lambda (x)
-           (push x objects)))
-        (nreverse objects)))))
-
-(defun retrieve-tax-node (id)
+(defun get-tax-node (id)
   (rucksack:with-rucksack (rucksack *bio-rucksack*)
     (rucksack:with-transaction ()
       (let ((objects))
@@ -209,28 +174,25 @@
          :equal id)
         (nreverse objects)))))
 
-(defun set-tax-node-rank (id rank)
+(defun get-tax-node-children (id)
   (rucksack:with-rucksack (rucksack *bio-rucksack*)
     (rucksack:with-transaction ()
       (let ((objects))
         (rucksack:rucksack-map-slot
-         rucksack 'p-taxon 'tax-id
+         rucksack 'p-taxon 'parent-id
          (lambda (x)
-           (push x objects))
+           (unless (= id (tax-id x))
+             (push x objects)))
          :equal id)
-        (setf objects (nreverse objects))
-        (setf (rank (car objects))
-              rank)
-        objects))))
+        (nreverse objects)))))
 
-(defvar *tax-node-names-hash* (make-hash-table))
-
-(defun get-tax-node-names (tax-id)
-  (gethash tax-id *tax-node-names-hash*))
-
-(defun add-tax-node-name (tax-id name)
-  (setf (gethash tax-id *tax-node-names-hash*)
-        (pushnew name (gethash tax-id *tax-node-names-hash*) :test 'equal :key #'unique-name)))
+(defun get-tax-node-ancestors  (id)
+  (labels ((%get-tax-node-ancestors (id)
+             (let ((node (car (get-tax-node id))))
+               (when node (if (= (parent-id node) id)
+                              (list id)
+                              (cons id (%get-tax-node-ancestors (parent-id node))))))))
+    (%get-tax-node-ancestors id)))
 
 (defun parse-tax-names (&key (file *tax-names-file*))
   (let ((batch-size 500))
@@ -267,7 +229,7 @@
            while (not eof)
            do (setf eof (not (parse-batch stream))))))))
 
-(defun retrieve-tax-name (id)
+(defun get-tax-names (id)
   (rucksack:with-rucksack (rucksack *bio-rucksack*)
     (rucksack:with-transaction ()
       (let ((objects))
@@ -278,6 +240,12 @@
          :equal id)
         (nreverse objects)))))
 
+(defun get-preferred-tax-name (id)
+  (let ((names (get-tax-names id)))
+    (when names
+      (name (or (find "scientific name" names :test 'equal :key #'name-class)
+                (car names))))))
+
 (defun lookup-tax-name (name)
   (rucksack:with-rucksack (rucksack *bio-rucksack*)
     (rucksack:with-transaction ()
@@ -286,11 +254,44 @@
          rucksack 'p-tax-name 'name
          (lambda (x)
            (push x objects))
-         :min name
-         :max (concatenate 'string name "z"))
+         :min name :include-min t
+         :max (let ((max-name (copy-seq name))
+                    (len (length name)))
+                (setf (elt max-name (1- len))
+                      (code-char (1+ (char-code (elt max-name (1- len))))))
+                max-name))
         (nreverse objects)))))
 
-(defun collect-rucksack-garbage ()
+(defun get-tax-node-ancestor-names (id)
+  (mapcar #'(lambda (x)
+              (let ((name
+                     (let ((names (get-tax-names
+                                   (tax-id
+                                    (car (get-tax-node x))))))
+                       (find "scientific name" names :test 'equal :key #'name-class))))
+                (when name (name name))))
+          (get-tax-node-ancestors id)))
+
+;;;; loading
+
+(defun load-taxon-data ()
+  (parse-tax-nodes)
+  (parse-tax-names))
+
+;;;; misc junk
+
+#+nil
+(defun set-tax-node-rank (id rank)
   (rucksack:with-rucksack (rucksack *bio-rucksack*)
     (rucksack:with-transaction ()
-      nil)))
+      (let ((objects))
+        (rucksack:rucksack-map-slot
+         rucksack 'p-taxon 'tax-id
+         (lambda (x)
+           (push x objects))
+         :equal id)
+        (setf objects (nreverse objects))
+        (setf (rank (car objects))
+              rank)
+        objects))))
+
