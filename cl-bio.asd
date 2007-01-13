@@ -29,6 +29,8 @@
                                                           "range"
                                                           "descriptor"
                                                           "bio-object"))
+             (:cl-source-file "taxon" :depends-on ("defpackage"
+                                                   "bio-object"))
              (:module :io
                       :components
                       ((:cl-source-file "utilities")
