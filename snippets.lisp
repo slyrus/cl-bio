@@ -23,18 +23,5 @@
          (get-tax-node-ancestors
           (tax-id (car (lookup-tax-name "Drosophila melanogaster"))))))
 
-(defun tree-print (x)
-  (if (atom x)
-      (when x (print x))
-      (progn (tree-print (car x))
-             (tree-print (cdr x)))))
-
-(mapcar #'(lambda (x)
-            (mapcar #'(lambda (y)
-                        (cond ((listp y)
-                               (print y)
-                               (mapcar #'tax-id y))
-                              (t (tax-id y))))
-                    x))
-        (mapcar #'identity (mapcar #'cdr (get-tax-node-descendents 32346))))
-
+;;; get the preferred tax-names of all of the children of Drosophila
+(tree-map #'(lambda (x) (get-preferred-tax-name (tax-id x))) (get-tax-node-descendents 7215))

@@ -206,11 +206,10 @@
 (defun get-tax-node-descendents (id)
   (labels ((%get-tax-node-descendents (id)
              (let ((children (get-tax-node-children id)))
-               (mapcan #'(lambda (node)
+               (mapcar #'(lambda (node)
                            (when node (unless (= (parent-id node) id))
                                  (let ((subs (%get-tax-node-descendents (tax-id node))))
-                                   (append (list node)
-                                           (when subs (list subs))))))
+                                    (cons node subs))))
                        children))))
     (%get-tax-node-descendents id)))
 
