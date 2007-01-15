@@ -36,7 +36,24 @@
 ;;;
 ;;; Taxon
 
-;;; taxon protocol class
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; rucksack storage and parsing parameters
+
+(defparameter *taxonomy-data-directory*
+  (merge-pathnames #p"data/taxonomy/"
+                   (user-homedir-pathname)))
+
+(defparameter *tax-nodes-file*
+  (merge-pathnames #p"taxdump/nodes.dmp"
+                   *taxonomy-data-directory*))
+
+(defparameter *tax-names-file*
+  (merge-pathnames #p"taxdump/names.dmp"
+                   *taxonomy-data-directory*))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; taxon classes
 
 (defclass taxon (bio-object)
   ((tax-id :accessor tax-id :initarg :tax-id)
@@ -57,13 +74,38 @@
    (hidden-subtree :accessor hidden-subtree :initarg :hidden-subtree)
    (comments :accessor comments :initarg :comments)))
 
-;;; tax-name protocol class
-
 (defclass tax-name ()
   ((tax-id :accessor tax-id :initarg :tax-id)
    (name :accessor name :initarg :name)
    (unique-name :accessor unique-name :initarg :unique-name)
    (name-class :accessor name-class :initarg :name-class)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; rucksack macros
+
+(defmacro with-bio-rucksack ((rucksack) &body body)
+  `(rucksack:with-rucksack (,rucksack *bio-rucksack*)
+     (rucksack:with-transaction ()
+       ,@body)))
+
+(defmacro maybe-with-rucksack ((rucksack) &body body)
+  `(if (and (boundp ',rucksack)
+            ,rucksack)
+       ,@body
+       (with-bio-rucksack (,rucksack)
+         ,@body)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; utility macros and functions
+
+(defun tree-map (fn x)
+  (if (atom x)
+      (when x (funcall fn x))
+      (cons (tree-map fn (car x))
+            (tree-map fn (cdr x)))))
+
+(defmacro string-int-boolean (arg)
+  `(not (zerop (parse-integer ,arg))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rucksack persistent classes
@@ -99,20 +141,8 @@
         (:index t)
         (:metaclass rucksack:persistent-class)))))
 
-(defparameter *taxonomy-data-directory*
-  (merge-pathnames #p"data/taxonomy/"
-                   (user-homedir-pathname)))
-
-(defparameter *tax-nodes-file*
-  (merge-pathnames #p"taxdump/nodes.dmp"
-                   *taxonomy-data-directory*))
-
-(defparameter *tax-names-file*
-  (merge-pathnames #p"taxdump/names.dmp"
-                   *taxonomy-data-directory*))
-
-(defmacro string-int-boolean (arg)
-  `(not (zerop (parse-integer ,arg))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; flat file parsing
 
 (defun parse-tax-nodes (&key (file *tax-nodes-file*))
   (let ((batch-size 500))
@@ -167,58 +197,6 @@
            while (not eof)
            do (setf eof (not (parse-batch stream))))))))
 
-;;; since tax-id is unique, just return the single tax node
-(defun get-tax-node (id)
-  (rucksack:with-rucksack (rucksack *bio-rucksack*)
-    (rucksack:with-transaction ()
-      (let ((objects))
-        (rucksack:rucksack-map-slot
-         rucksack 'p-taxon 'tax-id
-         (lambda (x)
-           (push x objects))
-         :equal id)
-        (car objects)))))
-
-(defun get-tax-node-children (id)
-  (rucksack:with-rucksack (rucksack *bio-rucksack*)
-    (rucksack:with-transaction ()
-      (let ((objects))
-        (rucksack:rucksack-map-slot
-         rucksack 'p-taxon 'parent-id
-         (lambda (x)
-           (unless (= id (tax-id x))
-             (push x objects)))
-         :equal id)
-        (nreverse objects)))))
-
-(defun get-sibling-tax-nodes (id)
-  (let ((taxnode (get-tax-node id)))
-    (get-tax-node-children (parent-id taxnode))))
-
-(defun get-tax-node-ancestors (id)
-  (labels ((%get-tax-node-ancestors (id)
-             (let ((node (get-tax-node id)))
-               (when node (if (= (parent-id node) id)
-                              (list id)
-                              (cons id (%get-tax-node-ancestors (parent-id node))))))))
-    (%get-tax-node-ancestors id)))
-
-(defun get-tax-node-descendents (id)
-  (labels ((%get-tax-node-descendents (id)
-             (let ((children (get-tax-node-children id)))
-               (mapcar #'(lambda (node)
-                           (when node (unless (= (parent-id node) id))
-                                 (let ((subs (%get-tax-node-descendents (tax-id node))))
-                                    (cons node subs))))
-                       children))))
-    (%get-tax-node-descendents id)))
-
-(defun tree-map (fn x)
-  (if (atom x)
-      (when x (funcall fn x))
-      (cons (tree-map fn (car x))
-            (tree-map fn (cdr x)))))
-
 (defun parse-tax-names (&key (file *tax-names-file*))
   (let ((batch-size 500))
     (flet ((parse-batch (stream)
@@ -255,69 +233,101 @@
            while (not eof)
            do (setf eof (not (parse-batch stream))))))))
 
-(defun get-tax-names (id)
-  (rucksack:with-rucksack (rucksack *bio-rucksack*)
-    (rucksack:with-transaction ()
-      (let ((objects))
-        (rucksack:rucksack-map-slot
-         rucksack 'p-tax-name 'tax-id
-         (lambda (x)
-           (push x objects))
-         :equal id)
-        (nreverse objects)))))
-
-(defun get-preferred-tax-name (id)
-  (let ((names (get-tax-names id)))
-    (when names
-      (name (or (find "scientific name" names :test 'equal :key #'name-class)
-                (car names))))))
-
-(defun lookup-tax-name (name)
-  (rucksack:with-rucksack (rucksack *bio-rucksack*)
-    (rucksack:with-transaction ()
-      (let ((objects))
-        (rucksack:rucksack-map-slot
-         rucksack 'p-tax-name 'name
-         (lambda (x)
-           (push x objects))
-         :min name :include-min t
-         :max (let ((max-name (copy-seq name))
-                    (len (length name)))
-                (setf (elt max-name (1- len))
-                      (code-char (1+ (char-code (elt max-name (1- len))))))
-                max-name))
-        (nreverse objects)))))
-
-(defun get-tax-node-ancestor-names (id)
-  (mapcar #'(lambda (x)
-              (let ((name
-                     (let ((names (get-tax-names
-                                   (tax-id
-                                    (get-tax-node x)))))
-                       (find "scientific name" names :test 'equal :key #'name-class))))
-                (when name (name name))))
-          (get-tax-node-ancestors id)))
-
-;;;; loading
-
 (defun load-taxon-data ()
   (parse-tax-nodes)
   (parse-tax-names))
 
-;;;; misc junk
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; taxonomy data retrieval
 
-#+nil
-(defun set-tax-node-rank (id rank)
-  (rucksack:with-rucksack (rucksack *bio-rucksack*)
-    (rucksack:with-transaction ()
-      (let ((objects))
-        (rucksack:rucksack-map-slot
-         rucksack 'p-taxon 'tax-id
-         (lambda (x)
-           (push x objects))
-         :equal id)
-        (setf objects (nreverse objects))
-        (setf (rank (car objects))
-              rank)
-        objects))))
+;;; since tax-id is unique, just return the single tax node
+(defun get-tax-node (id &key rucksack)
+  (maybe-with-rucksack (rucksack)
+    (let ((objects))
+      (rucksack:rucksack-map-slot
+       rucksack 'p-taxon 'tax-id
+       (lambda (x)
+         (push x objects))
+       :equal id)
+      (car objects))))
+
+(defun get-tax-node-children (id &key rucksack)
+  (maybe-with-rucksack (rucksack)
+    (let ((objects))
+      (rucksack:rucksack-map-slot
+       rucksack 'p-taxon 'parent-id
+       (lambda (x)
+         (unless (= id (tax-id x))
+           (push x objects)))
+       :equal id)
+      (nreverse objects))))
+
+(defun get-sibling-tax-nodes (id)
+  (let ((taxnode (get-tax-node id)))
+    (get-tax-node-children (parent-id taxnode))))
+
+(defun get-tax-node-ancestors (id &key rucksack)
+  (maybe-with-rucksack (rucksack)
+    (labels ((%get-tax-node-ancestors (id)
+               (let ((node (get-tax-node id :rucksack rucksack)))
+                 (when node (if (= (parent-id node) id)
+                                (list id)
+                                (cons id (%get-tax-node-ancestors (parent-id node))))))))
+      (%get-tax-node-ancestors id))))
+
+(defun get-tax-node-descendents (id &key rucksack)
+  (maybe-with-rucksack (rucksack)
+    (labels ((%get-tax-node-descendents (id)
+               (let ((children (get-tax-node-children id :rucksack rucksack)))
+                 (mapcar #'(lambda (node)
+                             (when node (unless (= (parent-id node) id))
+                                   (let ((subs (%get-tax-node-descendents (tax-id node))))
+                                     (cons node subs))))
+                         children))))
+      (%get-tax-node-descendents id))))
+
+(defun get-tax-names (id &key rucksack)
+  (maybe-with-rucksack (rucksack)
+    (let ((objects))
+      (rucksack:rucksack-map-slot
+       rucksack 'p-tax-name 'tax-id
+       (lambda (x)
+         (push x objects))
+       :equal id)
+      (nreverse objects))))
+
+(defun get-preferred-tax-name (id &key rucksack)
+  (maybe-with-rucksack (rucksack)
+    (let ((names (get-tax-names id :rucksack rucksack)))
+      (when names
+        (name (or (find "scientific name" names :test 'equal :key #'name-class)
+                  (car names)))))))
+
+(defun lookup-tax-name (name &key rucksack)
+  (maybe-with-rucksack (rucksack)
+    (let ((objects))
+      (rucksack:rucksack-map-slot
+       rucksack 'p-tax-name 'name
+       (lambda (x)
+         (push x objects))
+       :min name :include-min t
+       :max (let ((max-name (copy-seq name))
+                  (len (length name)))
+              (setf (elt max-name (1- len))
+                    (code-char (1+ (char-code (elt max-name (1- len))))))
+              max-name))
+      (nreverse objects))))
+
+(defun get-tax-node-ancestor-names (id &key rucksack)
+  (maybe-with-rucksack (rucksack)
+    (mapcar #'(lambda (x)
+                (let ((name
+                       (let ((names (get-tax-names
+                                     (tax-id
+                                      (get-tax-node x))
+                                     :rucksack rucksack)))
+                         (find "scientific name" names :test 'equal :key #'name-class))))
+                  (when name (name name))))
+            (get-tax-node-ancestors id :rucksack rucksack))))
+
 
