@@ -86,12 +86,13 @@
 (defmacro with-bio-rucksack ((rucksack) &body body)
   `(rucksack:with-rucksack (,rucksack *bio-rucksack*)
      (rucksack:with-transaction ()
-       ,@body)))
+       (progn
+         ,@body))))
 
 (defmacro maybe-with-rucksack ((rucksack) &body body)
-  `(if (and (boundp ',rucksack)
-            ,rucksack)
-       ,@body
+  `(if rucksack
+       (progn
+         ,@body)
        (with-bio-rucksack (,rucksack)
          ,@body)))
 
@@ -149,6 +150,7 @@
     (flet ((parse-batch (stream)
              (rucksack:with-rucksack (rucksack *bio-rucksack*)
                (rucksack::without-rucksack-gcing
+                 (print 'new-transaction)
                  (rucksack:with-transaction ()
                    (loop for i below batch-size
                       for line = (read-line stream nil nil)
@@ -276,15 +278,15 @@
       (%get-tax-node-ancestors id))))
 
 (defun get-tax-node-descendents (id &key rucksack)
-  (maybe-with-rucksack (rucksack)
-    (labels ((%get-tax-node-descendents (id)
-               (let ((children (get-tax-node-children id :rucksack rucksack)))
-                 (mapcar #'(lambda (node)
-                             (when node (unless (= (parent-id node) id))
-                                   (let ((subs (%get-tax-node-descendents (tax-id node))))
-                                     (cons node subs))))
-                         children))))
-      (%get-tax-node-descendents id))))
+  (labels ((%get-tax-node-descendents (id rucksack)
+             (let ((children (get-tax-node-children id :rucksack rucksack)))
+               (mapcar #'(lambda (node)
+                           (when node (unless (= (parent-id node) id))
+                                 (let ((subs (%get-tax-node-descendents (tax-id node) rucksack)))
+                                   (cons node subs))))
+                       children))))
+    (maybe-with-rucksack (rucksack)
+      (%get-tax-node-descendents id rucksack))))
 
 (defun get-tax-names (id &key rucksack)
   (maybe-with-rucksack (rucksack)
