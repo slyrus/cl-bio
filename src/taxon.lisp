@@ -86,7 +86,11 @@
          hidden-subtree
          comments)
         (:index t)
-        (:metaclass rucksack:persistent-class))
+        (:metaclass rucksack:persistent-class)))))
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (rucksack:with-rucksack (rucksack *bio-rucksack*)
+    (rucksack:with-transaction ()
       (defclass p-tax-name (tax-name)
         ((tax-id :accessor tax-id :initarg :tax-id :index :number-index)
          (name :accessor name :initarg :name :index :string-index)
@@ -121,7 +125,7 @@
                       while line
                       do
                       (let ((strings (cl-ppcre:split "\\t\\|\\t" line)))
-                        (print strings)
+                        #+nil (print strings)
                         (destructuring-bind
                               (tax-id
                                parent-id
@@ -163,6 +167,7 @@
            while (not eof)
            do (setf eof (not (parse-batch stream))))))))
 
+;;; since tax-id is unique, just return the single tax node
 (defun get-tax-node (id)
   (rucksack:with-rucksack (rucksack *bio-rucksack*)
     (rucksack:with-transaction ()
@@ -172,7 +177,7 @@
          (lambda (x)
            (push x objects))
          :equal id)
-        (nreverse objects)))))
+        (car objects)))))
 
 (defun get-tax-node-children (id)
   (rucksack:with-rucksack (rucksack *bio-rucksack*)
@@ -186,13 +191,34 @@
          :equal id)
         (nreverse objects)))))
 
-(defun get-tax-node-ancestors  (id)
+(defun get-sibling-tax-nodes (id)
+  (let ((taxnode (get-tax-node id)))
+    (get-tax-node-children (parent-id taxnode))))
+
+(defun get-tax-node-ancestors (id)
   (labels ((%get-tax-node-ancestors (id)
-             (let ((node (car (get-tax-node id))))
+             (let ((node (get-tax-node id)))
                (when node (if (= (parent-id node) id)
                               (list id)
                               (cons id (%get-tax-node-ancestors (parent-id node))))))))
     (%get-tax-node-ancestors id)))
+
+(defun get-tax-node-descendents (id)
+  (labels ((%get-tax-node-descendents (id)
+             (let ((children (get-tax-node-children id)))
+               (mapcan #'(lambda (node)
+                           (when node (unless (= (parent-id node) id))
+                                 (let ((subs (%get-tax-node-descendents (tax-id node))))
+                                   (append (list node)
+                                           (when subs (list subs))))))
+                       children))))
+    (%get-tax-node-descendents id)))
+
+(defun tree-map (fn x)
+  (if (atom x)
+      (when x (funcall fn x))
+      (cons (tree-map fn (car x))
+            (tree-map fn (cdr x)))))
 
 (defun parse-tax-names (&key (file *tax-names-file*))
   (let ((batch-size 500))
@@ -206,7 +232,7 @@
                       while line
                       do
                         (let ((strings (cl-ppcre:split "\\t\\|\\t" line)))
-                          (print strings)
+                          #+nil (print strings)
                           (destructuring-bind
                                 (tax-id
                                  name
@@ -225,6 +251,7 @@
                         
                       finally (return line)))))))
       (with-open-file (stream file)
+           ;; for i by batch-size below 20000
         (loop with eof = nil
            while (not eof)
            do (setf eof (not (parse-batch stream))))))))
@@ -267,7 +294,7 @@
               (let ((name
                      (let ((names (get-tax-names
                                    (tax-id
-                                    (car (get-tax-node x))))))
+                                    (get-tax-node x)))))
                        (find "scientific name" names :test 'equal :key #'name-class))))
                 (when name (name name))))
           (get-tax-node-ancestors id)))
