@@ -201,8 +201,8 @@
                (rucksack::without-rucksack-gcing
                  (rucksack:with-transaction ()
                    (print 'new-transaction)
-                   (loop for line = (read-line stream nil nil)
-                      for i below batch-size
+                   (loop for i below batch-size
+                      for line = (read-line stream nil nil)
                       while line
                       do
                         (let ((strings (cl-ppcre:split "\\t\\|\\t" line)))
