@@ -149,51 +149,50 @@
   (let ((batch-size 500))
     (flet ((parse-batch (stream)
              (rucksack:with-rucksack (rucksack *bio-rucksack*)
-               (rucksack::without-rucksack-gcing
-                 (print 'new-transaction)
-                 (rucksack:with-transaction ()
-                   (loop for i below batch-size
-                      for line = (read-line stream nil nil)
-                      while line
-                      do
-                      (let ((strings (cl-ppcre:split "\\t\\|\\t" line)))
-                        #+nil (print strings)
-                        (destructuring-bind
-                              (tax-id
-                               parent-id
-                               rank
-                               embl-code
-                               division-id
-                               division-inherited
-                               genetic-code-id
-                               genetic-code-inherited
-                               mitochondrial-genetic-code-id
-                               mitochondrial-genetic-code-inherited
-                               genbank-hidden
-                               hidden-subtree
-                               comments)
-                            strings
-                          (let ((tax-id (parse-integer tax-id))
-                                (parent-id (parse-integer parent-id)))
-                            (make-instance 'p-taxon
-                                           :tax-id tax-id
-                                           :parent-id parent-id
-                                           :rank rank
-                                           :embl-code embl-code
-                                           :division-id (parse-integer division-id)
-                                           :division-inherited (string-int-boolean
-                                                                division-inherited)
-                                           :genetic-code-id (parse-integer genetic-code-id)
-                                           :genetic-code-inherited (string-int-boolean
-                                                                    genetic-code-inherited)
-                                           :mitochondrial-genetic-code-id (parse-integer
-                                                                           mitochondrial-genetic-code-id)
-                                           :mitochondrial-genetic-code-inherited
-                                           (string-int-boolean mitochondrial-genetic-code-inherited)
-                                           :genbank-hidden (string-int-boolean genbank-hidden)
-                                           :hidden-subtree (string-int-boolean hidden-subtree)
-                                           :comments (subseq comments 0 (- (length comments) 2))))))
-                      finally (return line)))))))
+               (print 'new-transaction)
+               (rucksack:with-transaction (:inhibit-gc t)
+                 (loop for i below batch-size
+                    for line = (read-line stream nil nil)
+                    while line
+                    do
+                    (let ((strings (cl-ppcre:split "\\t\\|\\t" line)))
+                      #+nil (print strings)
+                      (destructuring-bind
+                            (tax-id
+                             parent-id
+                             rank
+                             embl-code
+                             division-id
+                             division-inherited
+                             genetic-code-id
+                             genetic-code-inherited
+                             mitochondrial-genetic-code-id
+                             mitochondrial-genetic-code-inherited
+                             genbank-hidden
+                             hidden-subtree
+                             comments)
+                          strings
+                        (let ((tax-id (parse-integer tax-id))
+                              (parent-id (parse-integer parent-id)))
+                          (make-instance 'p-taxon
+                                         :tax-id tax-id
+                                         :parent-id parent-id
+                                         :rank rank
+                                         :embl-code embl-code
+                                         :division-id (parse-integer division-id)
+                                         :division-inherited (string-int-boolean
+                                                              division-inherited)
+                                         :genetic-code-id (parse-integer genetic-code-id)
+                                         :genetic-code-inherited (string-int-boolean
+                                                                  genetic-code-inherited)
+                                         :mitochondrial-genetic-code-id (parse-integer
+                                                                         mitochondrial-genetic-code-id)
+                                         :mitochondrial-genetic-code-inherited
+                                         (string-int-boolean mitochondrial-genetic-code-inherited)
+                                         :genbank-hidden (string-int-boolean genbank-hidden)
+                                         :hidden-subtree (string-int-boolean hidden-subtree)
+                                         :comments (subseq comments 0 (- (length comments) 2))))))
+                    finally (return line))))))
       (with-open-file (stream file)
         (loop with eof = nil
            while (not eof)
@@ -203,32 +202,31 @@
   (let ((batch-size 500))
     (flet ((parse-batch (stream)
              (rucksack:with-rucksack (rucksack *bio-rucksack*)
-               (rucksack::without-rucksack-gcing
-                 (rucksack:with-transaction ()
-                   (print 'new-transaction)
-                   (loop for i below batch-size
-                      for line = (read-line stream nil nil)
-                      while line
-                      do
-                        (let ((strings (cl-ppcre:split "\\t\\|\\t" line)))
-                          #+nil (print strings)
-                          (destructuring-bind
-                                (tax-id
-                                 name
-                                 unique-name
-                                 name-class)
-                              strings
-                            (let ((tax-id (parse-integer tax-id))
-                                  (unique-name (if (plusp (length unique-name))
-                                                   unique-name
-                                                   name)))
-                              (make-instance 'p-tax-name
-                                             :tax-id tax-id
-                                             :name name
-                                             :unique-name unique-name
-                                             :name-class (subseq name-class 0 (- (length name-class) 2))))))
+               (print 'new-transaction)
+               (rucksack:with-transaction (:inhibit-gc t)
+                 (loop for i below batch-size
+                    for line = (read-line stream nil nil)
+                    while line
+                    do
+                    (let ((strings (cl-ppcre:split "\\t\\|\\t" line)))
+                      #+nil (print strings)
+                      (destructuring-bind
+                            (tax-id
+                             name
+                             unique-name
+                             name-class)
+                          strings
+                        (let ((tax-id (parse-integer tax-id))
+                              (unique-name (if (plusp (length unique-name))
+                                               unique-name
+                                               name)))
+                          (make-instance 'p-tax-name
+                                         :tax-id tax-id
+                                         :name name
+                                         :unique-name unique-name
+                                         :name-class (subseq name-class 0 (- (length name-class) 2))))))
                         
-                      finally (return line)))))))
+                    finally (return line))))))
       (with-open-file (stream file)
            ;; for i by batch-size below 20000
         (loop with eof = nil
@@ -305,19 +303,22 @@
         (name (or (find "scientific name" names :test 'equal :key #'name-class)
                   (car names)))))))
 
-(defun lookup-tax-name (name &key rucksack)
+(defun lookup-tax-name (name &key rucksack partial)
   (maybe-with-rucksack (rucksack)
     (let ((objects))
-      (rucksack:rucksack-map-slot
+      (apply
+       #'rucksack:rucksack-map-slot
        rucksack 'p-tax-name 'name
        (lambda (x)
          (push x objects))
-       :min name :include-min t
-       :max (let ((max-name (copy-seq name))
-                  (len (length name)))
-              (setf (elt max-name (1- len))
-                    (code-char (1+ (char-code (elt max-name (1- len))))))
-              max-name))
+       (if partial
+           (list :min name :include-min t
+                 :max (let ((max-name (copy-seq name))
+                            (len (length name)))
+                        (setf (elt max-name (1- len))
+                              (code-char (1+ (char-code (elt max-name (1- len))))))
+                        max-name))
+           (list :equal name)))
       (nreverse objects))))
 
 (defun get-tax-node-ancestor-names (id &key rucksack)
