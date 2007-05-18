@@ -1,5 +1,5 @@
 
-(in-package :cl-bio-align)
+(in-package :bio-align)
 
 (defclass score-matrix ()
   ((list :accessor score-matrix-list :initarg :list)

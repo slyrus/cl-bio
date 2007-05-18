@@ -18,5 +18,5 @@
 	     (:cl-source-file "cl-bio-test" :depends-on ("defpackage"))))
    (:module :data
 	    :components
-	    ((:static-file "dpp.fasta")))))
+	    ((:static-file "dpp-fasta" :pathname #p"dpp.fasta")))))
 

@@ -30,18 +30,18 @@
 (in-package #:cl-user)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (unless (find-package 'cl-bio)
-    (defpackage #:cl-bio)))
+  (unless (find-package 'bio)
+    (defpackage #:bio)))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (defpackage #:cl-bio-io (:use #:cl #:cl-bio)
+  (defpackage #:bio-io (:use #:cl #:bio)
               (:export
                .
                #1=(
                    #:read-fast-sequences
                    #:read-fasta-file)))
 
-  (defpackage #:cl-bio (:use #:cl #:cl-bio-io)
+  (defpackage #:bio (:use #:cl #:bio-io)
 
               (:export
 
@@ -138,5 +138,5 @@
 
                . #1#)))
 
-(defpackage #:cl-bio-user (:use #:cl #:cl-bio))
+(defpackage #:bio-user (:use #:cl #:bio))
 

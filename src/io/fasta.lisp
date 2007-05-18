@@ -28,7 +28,7 @@
 ;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;
 
-(in-package :cl-bio-io)
+(in-package :bio-io)
 
 (defun read-fasta-header-line (stream seq)
   ;; read until the first #\>
@@ -66,7 +66,7 @@
 (defun read-fasta-sequence (stream &key (sequence-type :dna sequence-type-supplied-p))
   
   (let ((seq (cond ((eql sequence-type :dna)
-                    (make-instance 'cl-bio::4-bit-adjustable-dna-sequence :length 0)))))
+                    (make-instance 'bio::4-bit-adjustable-dna-sequence :length 0)))))
     (when seq
       (read-fasta-header-line stream seq)
       (apply #'read-fasta-residues

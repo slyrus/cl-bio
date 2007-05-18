@@ -29,5 +29,5 @@
 ;;;
 
 
-(in-package :cl-bio-io)
+(in-package :bio-io)
 

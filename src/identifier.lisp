@@ -30,7 +30,7 @@
 ;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;
 
-(in-package :cl-bio)
+(in-package :bio)
 
 ;;;
 ;;; identifier class

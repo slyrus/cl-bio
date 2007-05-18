@@ -1,5 +1,5 @@
 
-(in-package :cl-bio-test)
+(in-package :bio-test)
 
 ;;; ranges
 
@@ -70,7 +70,7 @@
 
 (defun test-load-dpp ()
   (let ((dpp (car (read-fasta-file
-                   (ch-asdf:asdf-lookup-path "asdf:/cl-bio-test/data/dpp.fasta")))))
+                   (ch-asdf:asdf-lookup-path "asdf:/cl-bio-test/data/dpp-fasta")))))
     dpp))
 
 (defun test-load-2l ()

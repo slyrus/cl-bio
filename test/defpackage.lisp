@@ -1,6 +1,6 @@
 
 (in-package #:cl-user)
 
-(defpackage #:cl-bio-test
-  (:use #:cl #:cl-bio)
+(defpackage #:bio-test
+  (:use #:cl #:bio)
   #+nil (:export nil))

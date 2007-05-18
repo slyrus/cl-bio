@@ -29,7 +29,7 @@
 ;;;
 
 
-(in-package :cl-bio-io)
+(in-package :bio-io)
 
 (defun parse-taxonomy-dump (stream))
 

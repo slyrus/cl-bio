@@ -1,6 +1,6 @@
 
 
-(in-package :cl-bio)
+(in-package :bio)
 
 (defparameter *drosophila-2-annot-csv-file*
   "/Users/sly/projects/wing/expression/drodev/affy-annot/Drosophila_2_annot.csv")

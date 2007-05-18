@@ -1,2 +1,2 @@
 
-(in-package :cl-bio)
+(in-package :bio)

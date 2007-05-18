@@ -29,7 +29,7 @@
 ;;;
 
 
-(in-package :cl-bio-io)
+(in-package :bio-io)
 
 (defun read-cdf-line (stream)
   (let ((line-type (read-until-char stream #\=))
@@ -49,10 +49,10 @@
      do (multiple-value-bind (line-type line)
             (read-cdf-line stream)
           (cond ((equal line-type "Name")
-                 (setf (cl-bio::name chip)
+                 (setf (bio::name chip)
                        line))
                 ((equal line-type "NumberOfUnits")
-                 (setf (cl-bio::unit-count chip)
+                 (setf (bio::unit-count chip)
                        (parse-integer line))))
           (print (cons line-type line)))))
 
@@ -137,7 +137,7 @@
             (parse-cdf-section chip stream section-key section)))))))
 
 (defun parse-affymetrix-cdf-file (file)
-  (let ((chip (make-instance 'cl-bio::chip)))
+  (let ((chip (make-instance 'bio::chip)))
     (with-open-file (stream file)
       (loop while (not (check-end-of-file stream))
          do 

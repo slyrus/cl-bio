@@ -29,5 +29,5 @@
 
 (in-package #:cl-user)
 
-(defpackage #:cl-bio-align (:use #:cl #:cl-bio))
+(defpackage #:bio-align (:use #:cl #:bio))
 
