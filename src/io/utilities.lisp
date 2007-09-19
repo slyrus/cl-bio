@@ -64,3 +64,10 @@
 
 (defun check-end-of-line (stream)
   (member (peek-char nil stream nil #\Newline) *line-ending-chars*))
+
+(defun remove-initial-spaces (string)
+  (string-left-trim '(#\Space #\Tab #\Newline) string))
+
+(defun remove-trailing-spaces (string)
+  (string-right-trim '(#\Space #\Tab #\Newline) string))
+  
