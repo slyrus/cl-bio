@@ -1,7 +1,7 @@
-;;; Bio-object
-;;; A superclass class of biological objects
+;;; Rucksack
+;;; Persistent storage for biological objects
 ;;;
-;;; Copyright (c) 2006 Cyrus Harmon (ch-lisp@bobobeach.com)
+;;; Copyright (c) 2007 Cyrus Harmon (ch-lisp@bobobeach.com)
 ;;; All rights reserved.
 ;;;
 ;;; Redistribution and use in source and binary forms, with or without
@@ -31,12 +31,6 @@
 
 (in-package :bio)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;
-;;; Biological objects
+(defparameter *bio-rucksack* (ch-asdf:asdf-lookup-path "asdf:/cl-bio/rucksack"))
 
-;;; bio-object protocol class
-(defclass bio-object () ())
-
-(defclass bio-set (bio-object) ())
-
+(ensure-directories-exist (ch-asdf:asdf-lookup-path "asdf:/cl-bio/rucksack"))

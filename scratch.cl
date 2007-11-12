@@ -1,3 +1,4 @@
+
 (in-package :cl-bio-user)
 
 (defparameter d (make-random-dna-sequence 100))
@@ -47,3 +48,4 @@
   (residues-string-range df r))
 
 
+(entrez::gb-set-get-gb-seqs esr1)

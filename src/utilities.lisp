@@ -30,10 +30,10 @@
           'string))
 
 (defun find-matches (seq1 seq2)
-  (let ((l))
-    (loop with i = 0 while i
-       do
-         (let ((pos (setf i (search seq1 seq2 :start2 i))))
-           (when pos (push pos l))
-           (when i (incf i))))
-    (reverse l)))
+  "Returns a list of the occurences of seq1 in seq2. Note that the
+instances of seq1 in seq2 can overlap such that (find-matches \"AA\"
+  \"AAA\" returns (0 1)."
+  (butlast
+   (loop with i = 0 while i
+      collect (setf i (search seq1 seq2 :start2 i))
+      when i do (incf i))))

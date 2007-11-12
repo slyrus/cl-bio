@@ -18,6 +18,7 @@
 	    ((:cl-source-file "defpackage")
 	     (:cl-source-file "cl-bio" :depends-on ("defpackage"))
              (:cl-source-file "bio-object" :depends-on ("defpackage"))
+             (:cl-source-file "rucksack" :depends-on ("defpackage" "bio-object"))
              (:cl-source-file "gene" :depends-on ("defpackage" "bio-object"))
              (:cl-source-file "range" :depends-on ("defpackage"))
              (:cl-source-file "utilities" :depends-on ("defpackage"))
@@ -30,7 +31,8 @@
                                                           "descriptor"
                                                           "bio-object"))
              (:cl-source-file "taxon" :depends-on ("defpackage"
-                                                   "bio-object"))
+                                                   "bio-object"
+                                                   "rucksack"))
              (:module :io
                       :components
                       ((:cl-source-file "utilities")

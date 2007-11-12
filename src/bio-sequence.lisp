@@ -320,6 +320,7 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
 ;;; nucleic acid sequence protocol class
 (defclass na-sequence (bio-sequence) ())
 (defclass na-sequence-with-residues (na-sequence sequence-with-residues) ())
+(defclass simple-na-sequence (simple-sequence na-sequence-with-residues) ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; protocol classes for DNA sequences
@@ -342,7 +343,7 @@ complement of seq."))
 ;;; implementation classes for DNA sequences
 
 ;;; simple DNA sequence class
-(defclass simple-dna-sequence (2-bit-dna-sequence simple-sequence dna-sequence-with-residues) ())
+(defclass simple-dna-sequence (simple-na-sequence dna-sequence-with-residues 2-bit-dna-sequence) ())
 
 ;;; adjustable DNA sequence class
 (defclass adjustable-dna-sequence (2-bit-dna-sequence flexichain-sequence dna-sequence-with-residues) ())
@@ -389,7 +390,7 @@ complement of seq."))
 ;;; implementation classes for RNA sequences
 
 ;;; simple RNA sequence class
-(defclass simple-rna-sequence (2-bit-rna-sequence simple-sequence rna-sequence-with-residues) ())
+(defclass simple-rna-sequence (simple-na-sequence rna-sequence-with-residues 2-bit-rna-sequence) ())
 
 ;;; adjustable RNA sequence class
 (defclass adjustable-rna-sequence (2-bit-rna-sequence flexichain-sequence rna-sequence-with-residues) ())

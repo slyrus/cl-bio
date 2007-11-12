@@ -31,6 +31,25 @@ Descriptors: Information about sequences.
 Identifiers: Subclasses of descriptors that provide a means of naming
 sequences
 
+File parsers:
+
+* FASTA
+
+* NCBI Taxonomy Data
+
+* PDB (Protein Data Bank)
+
+ This is wholely incomplete, but contains some infrastructure for
+ parsing PDB files and utility functions for dealing with continued
+ records and what not.
+
+* Affymetrix CDF files
+
+ Again, incomplete, but some of the infrastructure is there.
+
+* Affymetrix Annotation files
+
+
 ==========
 
 Thanks to Robert Strandh for making the flexichain package. Thanks to

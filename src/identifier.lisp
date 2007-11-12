@@ -53,6 +53,15 @@
 (defmethod get-ncbi-gis ((described described-object))
   (get-descriptors described :type 'ncbi-gi))
 
+(defclass ncbi-locus (identifier)
+  ((id :accessor id :initarg :id :initarg :locus)
+   (type :accessor identity-type :initarg :type :initform "locus")
+   (authority :accessor authority :initarg :authority :initform
+  "ncbi")))
+
+(defmethod get-ncbi-loci ((described described-object))
+  (get-descriptors described :type 'ncbi-locus))
+
 (defclass refseq-id (identifier)
   ((id :accessor id :initarg :id :initarg :refseq-id)
    (type :accessor identity-type :initarg :type :initform "refseq-id")

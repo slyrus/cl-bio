@@ -1,5 +1,5 @@
 
-(in-package :cl-bio)
+(in-package :bio)
 
 ;;; find all taxa that start with "Canis" and return a list containing their
 ;;; rank (genus, species, etc...) and a list of (name . name-class) pairs

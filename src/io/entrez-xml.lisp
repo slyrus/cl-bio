@@ -31,3 +31,15 @@
 
 (in-package :bio-io)
 
+(defun convert-entrez-seq-to-bio-seq (eseq)
+  (flet ((get-element-data (tag list)
+           (caddr (assoc tag list :test 'equal))))
+    (when (equal (car eseq) "GBSeq")
+      (let ((moltype (get-element-data "GBSeq_moltype" (cddr eseq))))
+        (print moltype)
+        (let ((bseq
+               (cond
+                 ((string-equal moltype "AA") (make-instance 'aa-sequence))
+                 ((string-equal moltype "NA") (make-instance 'na-sequence))
+                 ((string-equal moltype "mRNA") (make-instance 'rna-sequence)))))
+          bseq)))))
