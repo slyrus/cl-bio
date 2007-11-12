@@ -1,5 +1,5 @@
 
-(in-package :cl-bio-user)
+(in-package :bio-user)
 
 (defparameter d (make-random-dna-sequence 100))
 
@@ -33,19 +33,31 @@
                          "TACGT"))
 
 (flexichain:insert-vector*
- (cl-bio::residues df) 0 (map '(vector (unsigned-byte 2))
+ (bio::residues df) 0 (map '(vector (unsigned-byte 2))
                       #'(lambda (x)
-                          (cl-bio::char-to-seq-code df x))
+                          (bio::char-to-seq-code df x))
                       "AAAAA"))
 
 
 (array-element-type (make-array 5 :initial-contents '(0 0 0 0 0) :element-type '(unsigned-byte 2)))
-(slot-value (cl-bio::residues df) 'flexichain::element-type)
+(slot-value (bio::residues df) 'flexichain::element-type)
 
 (residues-string df)
 
-(let ((r (make-instance 'range :start 10 :end 12)))
+(let ((r (make-instance 'range :start 10 :end 15)))
   (residues-string-range df r))
 
 
 (entrez::gb-set-get-gb-seqs esr1)
+
+(bio::find-matches "t" (entrez::gb-seq-sequence-get-residues (entrez::gb-seq-get-sequence (car (entrez::gb-set-get-gb-seqs esr1)))))
+
+
+(entrez::gb-seq-get-sequence (car (entrez::gb-set-get-gb-seqs esr1)))
+
+(defparameter esrseq (car (entrez::gb-set-get-gb-seqs esr1)))
+
+(cdr esrseq)
+(cadr (assoc :|GBSeq_moltype| (cdr esrseq)))
+
+(bio-io::convert-entrez-seq-to-bio-seq esrseq)

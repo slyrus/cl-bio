@@ -419,7 +419,7 @@ complement of seq."))
 (defclass aa-sequence-with-residues (aa-sequence sequence-with-residues) ())
 
 ;;; 5-bit amino acid sequence protocol class
-(defclass 5-bit-aa-sequence (aa-sequence 5-bit-sequence aa-sequence-encoding) ())
+(defclass 5-bit-aa-sequence (aa-sequence 5-bit-sequence 5-bit-aa-sequence-encoding) ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; implementation classes for amino acid sequences
