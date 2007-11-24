@@ -40,6 +40,9 @@
 ;;; biological sequence protocol class
 (defclass bio-sequence (bio-object) ())
 
+(defclass bio-sequence-set (bio-set)
+  ((members :initarg :bio-sequences :accessor bio-sequences)))
+
 (defgeneric seq-length (seq)
   (:documentation "Returns the length of a bio-sequence. Subclasses of
 bio-sequence are free to use arbitrary units for the length, although
@@ -214,6 +217,26 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
 (defclass flexichain-sequence (adjustable-sequence annotated-sequence)
   ((initial-element :initform 0)))
 
+(defun make-residues-flexichain (seq
+                                 &key
+                                 length
+                                 initial-contents
+                                 initial-residue-codes
+                                 initial-element
+                                 element-type)
+  (apply #'make-instance 'flexichain:standard-flexichain
+                 :initial-element (or initial-element (slot-value seq 'initial-element))
+                 (append (when length `(:initial-nb-elements ,length))
+                         (if initial-residue-codes
+                             `(:initial-contents ,initial-residue-codes)
+                             (when initial-contents `(:initial-contents
+                                                      ,(map 'vector
+                                                            #'(lambda (c)
+                                                                (char-to-seq-code seq c))
+                                                            initial-contents))))
+                         (when length `(:initial-nb-elements ,length))
+                         (when element-type `(:element-type ,element-type)))))
+
 (defmethod initialize-instance :after ((seq flexichain-sequence) &rest initargs
                                        &key
                                        length
@@ -226,21 +249,22 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
                          (length initial-contents))
                     length)))
     (setf (residues seq)
-          (apply #'make-instance 'flexichain:standard-flexichain
-                 :initial-element (or initial-element (slot-value seq 'initial-element))
-                 (append (when length `(:initial-nb-elements ,length))
-                         (if initial-residue-codes
-                             `(:initial-contents ,initial-residue-codes)
-                             (when initial-contents `(:initial-contents
-                                                      ,(map 'vector
-                                                            #'(lambda (c)
-                                                                (char-to-seq-code seq c))
-                                                            initial-contents))))
-                         (when length `(:initial-nb-elements ,length))
-                         (when element-type `(:element-type ,element-type)))))))
+          (apply #'make-residues-flexichain
+                 seq
+                 (append
+                  (when length `(:length ,length))
+                  (when initial-contents `(:initial-contents initial-contents))
+                  (when initial-residue-codes `(:initial-residue-codes ,initial-residue-codes))
+                  (when initial-element `(:initial-element ,initial-element))
+                  (when element-type `(:element-type ,element-type)))))))
 
 (defmethod seq-length ((seq flexichain-sequence))
   (flexichain:nb-elements (residues seq)))
+
+(defmethod (setf residues-string) (residues (seq flexichain-sequence))
+  (setf (residues seq)
+        (make-residues-flexichain seq :initial-contents residues))
+  residues)
 
 (defmethod residue ((seq flexichain-sequence) i)
   (seq-code-to-char seq (flexichain:element* (residues seq) i)))

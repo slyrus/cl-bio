@@ -37,5 +37,10 @@
 ;;; Genes
 
 ;;; gene protocol class
-(defclass gene (bio-object) ())
+(defclass gene (bio-object)
+  ((type :accessor gene-type :initarg :type)
+   (source :accessor gene-source :initarg :source)))
 
+;;; gene-set protocol class
+(defclass gene-set (bio-set)
+  ((members :initarg :genes :accessor genes)))

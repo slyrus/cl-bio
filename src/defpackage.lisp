@@ -45,6 +45,10 @@
 
               (:export
 
+               ;; objects
+               #:bio-object
+               #:bio-object-set
+               
                ;; ranges
                #:range
                #:ds-range
@@ -135,6 +139,11 @@
                #:make-adjustable-aa-sequence
                #:make-aa-sequence-from-string
                #:make-random-aa-sequence
+
+               ;; genes
+               #:gene
+               #:gene-set
+               #:genes
 
                . #1#)))
 

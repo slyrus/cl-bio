@@ -36,7 +36,9 @@
 ;;; Biological objects
 
 ;;; bio-object protocol class
-(defclass bio-object () ())
+(defclass bio-object ()
+  ((identifiers :accessor identifiers :initarg :identifiers :initform nil)))
 
-(defclass bio-set (bio-object) ())
+(defclass bio-set (bio-object)
+  ((members :initarg :members :accessor members)))
 
