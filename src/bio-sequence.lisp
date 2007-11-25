@@ -49,6 +49,35 @@ bio-sequence are free to use arbitrary units for the length, although
 it is expected that sequences with residues will return the number
 of residues as the length."))
 
+(defclass sequence-range (bio-object)
+  ((sequence :accessor sequence-range-sequence :initarg sequence)
+   (range :accessor sequence-range-range :initarg range)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 
+;;; Alignments. Alignments represent relationships between sequences
+
+(defclass alignment (bio-object) ())
+
+(defclass simple-pairwise-alignment (alignment)
+  ((alpha-sequence :accessor alpha-sequence :initarg :alpha-sequence)
+   (alpha-range :accessor alpha-range :initarg :alpha-range)
+   (beta-sequence :accessor beta-sequence :initarg :beta-sequence)
+   (beta-range :accessor beta-range :initarg :beta-range)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 
+;;; Annotations. Annotations are themselves sequences, though not
+;;; necessarily sequences.
+
+(defclass annotation (bio-sequence)
+  ((length :accessor annotation-length :initarg :length)
+   (type :accessor annotation-type :initarg :type)
+   (note :accessor annotation-note :initarg :note)))
+
+(defclass exon (annotation)
+  ((type :accessor annotation-type :initarg type :initform "exon")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 
 ;;; Sequence with residues. Anticipating the need for sequences
@@ -115,7 +144,8 @@ representation."))
 ;;; Annotated sequences. Sequences that can have annotations attached
 ;;; to them.
 
-(defclass annotated-sequence (bio-sequence described-object) ())
+(defclass annotated-sequence (bio-sequence described-object)
+  ((annotations :accessor annotations :initarg :annotations :initform nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -253,7 +283,7 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
                  seq
                  (append
                   (when length `(:length ,length))
-                  (when initial-contents `(:initial-contents initial-contents))
+                  (when initial-contents `(:initial-contents ,initial-contents))
                   (when initial-residue-codes `(:initial-residue-codes ,initial-residue-codes))
                   (when initial-element `(:initial-element ,initial-element))
                   (when element-type `(:element-type ,element-type)))))))

@@ -36,7 +36,7 @@
   ;; skip over the #\>
   (read-char stream)
   (let ((header (read-line stream)))
-    (let ((terms (split-sequence:split-sequence #\| header)))
+    (let ((terms (cl-ppcre:split #\| header)))
       (do ((term (pop terms) (pop terms)))
           ((null terms))
         (print term)

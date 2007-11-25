@@ -10,7 +10,7 @@
                (read vers))
   :licence "BSD"
   :description "A library for representing various biological objects"
-  :depends-on (ch-asdf alexandria cl-ppcre flexichain split-sequence rucksack)
+  :depends-on (ch-asdf alexandria cl-ppcre flexichain rucksack)
   :components
   ((:static-file "version" :pathname #p"version.lisp-expr")
    (:module :src
@@ -33,6 +33,7 @@
              (:cl-source-file "taxon" :depends-on ("defpackage"
                                                    "bio-object"
                                                    "rucksack"))
+             (:cl-source-file "dictionary" :depends-on ("defpackage" "bio-object"))
              (:module :io
                       :components
                       ((:cl-source-file "utilities")

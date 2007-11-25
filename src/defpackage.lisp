@@ -48,6 +48,7 @@
                ;; objects
                #:bio-object
                #:bio-object-set
+               #:members
                
                ;; ranges
                #:range
@@ -69,6 +70,7 @@
                
                ;; identifiers
                #:identifier
+               #:identifiers
                #:id
                #:type
                #:version
@@ -144,6 +146,14 @@
                #:gene
                #:gene-set
                #:genes
+               #:gene-type
+               #:gene-source
+               
+               #:annotation
+               #:annotations
+               #:exon
+
+               #:simple-pairwise-alignment
 
                . #1#)))
 

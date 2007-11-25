@@ -21,11 +21,14 @@
 (residues-string af)
 (seq-length df)
 
+(bio::residue df 0)
+
 (append-residues df "TTTT")
 (append-residues rf "CUCU")
 (append-residues af "YYYY")
 
 (insert-residues df 1 "AAAA")
+
 #+nil
 (array-element-type (map '(vector (unsigned-byte 2))
                          #'(lambda (x)
