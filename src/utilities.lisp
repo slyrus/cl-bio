@@ -3,6 +3,20 @@
 
 ;; utility functions
 
+(defun split-string-into-lines-list (string &key (max-line-length 70))
+  (let ((line-buffer (make-string max-line-length)))
+    (with-input-from-string (stream string)
+      (loop for count = (read-sequence line-buffer stream)
+           while (plusp count)
+         collect (subseq line-buffer 0 count)))))
+
+(defun split-string-into-lines-string (string &key max-line-length)
+  (format nil
+          "~{~A~^~&~}"
+          (apply #'split-string-into-lines-list string
+                 (when max-line-length `(:max-line-length ,max-line-length)))))
+
+
 (defun char-lookup-array-length (char-list)
   (1+ (apply #'max
              (mapcar #'char-code

@@ -40,6 +40,7 @@
 ;;; biological sequence protocol class
 (defclass bio-sequence (bio-object) ())
 
+;;; biological sequence-set protocol class
 (defclass bio-sequence-set (bio-set)
   ((members :initarg :bio-sequences :accessor bio-sequences)))
 
@@ -64,19 +65,6 @@ of residues as the length."))
    (alpha-range :accessor alpha-range :initarg :alpha-range)
    (beta-sequence :accessor beta-sequence :initarg :beta-sequence)
    (beta-range :accessor beta-range :initarg :beta-range)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 
-;;; Annotations. Annotations are themselves sequences, though not
-;;; necessarily sequences.
-
-(defclass annotation (bio-sequence)
-  ((length :accessor annotation-length :initarg :length)
-   (type :accessor annotation-type :initarg :type)
-   (note :accessor annotation-note :initarg :note)))
-
-(defclass exon (annotation)
-  ((type :accessor annotation-type :initarg type :initform "exon")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 

@@ -1,8 +1,5 @@
 
-(defpackage #:cl-bio-system (:use #:asdf #:cl))
-(in-package #:cl-bio-system)
-
-(defsystem #:cl-bio
+(asdf:defsystem #:cl-bio
   :name "cl-bio"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
   :version #.(with-open-file
@@ -30,6 +27,12 @@
                                                           "range"
                                                           "descriptor"
                                                           "bio-object"))
+             (:cl-source-file "annotation" :depends-on ("defpackage"
+                                                          "encoding"
+                                                          "range"
+                                                          "descriptor"
+                                                          "bio-object"
+                                                          "bio-sequence"))
              (:cl-source-file "taxon" :depends-on ("defpackage"
                                                    "bio-object"
                                                    "rucksack"))

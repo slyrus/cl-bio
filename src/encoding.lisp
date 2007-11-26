@@ -154,12 +154,11 @@ in sequence seq."))
         (setf char #\u))
       (aref (int-array seq) (char-code char)))))
 
-#+nil
-(let ((2-bit-rna-sequence-char-map-acgt #(#\A #\C #\G #\T)))
-  (let ((char-list (coerce 2-bit-rna-sequence-char-map 'list)))
+(let ((acgt-2-bit-rna-sequence-char-map #(#\A #\C #\G #\T)))
+  (let ((char-list (coerce acgt-2-bit-rna-sequence-char-map'list)))
     
-    (defclass 2-bit-rna-sequence-encoding (rna-sequence-encoding)
-      ((char-map :reader char-map :allocation :class :initform 2-bit-rna-sequence-char-map)
+    (defclass acgt-2-bit-rna-sequence-encoding (rna-sequence-encoding)
+      ((char-map :reader char-map :allocation :class :initform acgt-2-bit-rna-sequence-char-map)
        (int-array :accessor int-array
                   :allocation :class
                   :initform (let ((arr (make-array (char-lookup-array-length char-list)
@@ -167,16 +166,16 @@ in sequence seq."))
                               (loop for c in char-list
                                  for i from 0
                                  do
-                                 (setf (aref arr (char-code (char-upcase c))) i)
-                                 (setf (aref arr (char-code (char-downcase c))) i))
+                                   (setf (aref arr (char-code (char-upcase c))) i)
+                                   (setf (aref arr (char-code (char-downcase c))) i))
                               arr))))
     
-    (defmethod seq-code-to-char ((seq 2-bit-rna-sequence-encoding) code)
+    (defmethod seq-code-to-char ((seq acgt-2-bit-rna-sequence-encoding) code)
       (aref (char-map seq) code))
     
-    (defmethod char-to-seq-code ((seq 2-bit-rna-sequence-encoding) char)
-      (when (char-equal char #\t)
-        (setf char #\u))
+    (defmethod char-to-seq-code ((seq acgt-2-bit-rna-sequence-encoding) char)
+      (when (char-equal char #\u)
+        (setf char #\t))
       (aref (int-array seq) (char-code char)))))
 
 

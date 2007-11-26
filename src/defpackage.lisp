@@ -155,6 +155,10 @@
 
                #:simple-pairwise-alignment
 
+               ;; utilities
+               #:split-string-into-lines-list
+               #:split-string-into-lines-string
+               
                . #1#)))
 
 (defpackage #:bio-user (:use #:cl #:bio))
