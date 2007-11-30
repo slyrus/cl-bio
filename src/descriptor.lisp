@@ -35,7 +35,7 @@
 (defclass descriptor () ())
 
 (defclass described-object ()
-  ((descriptors :accessor descriptors :initform (list))))
+  ((descriptors :accessor descriptors :initform nil)))
 
 (defgeneric get-descriptors (described &key type))
 (defgeneric add-descriptor (described descriptor))

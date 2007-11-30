@@ -68,3 +68,4 @@
 (defparameter df2 (make-instance 'adjustable-dna-sequence))
 (setf (residues-string df2) "AACCGG")
 (residues-string df2)
+
