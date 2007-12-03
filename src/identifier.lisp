@@ -41,6 +41,8 @@
    (version :accessor version :initarg :version)
    (authority :accessor authority :initarg :authority)))
 
+(defclass identifier-set (bio-set) ())
+
 ;;;
 ;;; identifier subclasses
 

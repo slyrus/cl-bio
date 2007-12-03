@@ -39,5 +39,5 @@
 (defclass bio-object (described-object) ())
 
 (defclass bio-set (bio-object)
-  ((members :initarg :members :accessor members)))
+  ((members :initarg :members :accessor members :initform nil)))
 
