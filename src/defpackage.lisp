@@ -158,6 +158,10 @@
                ;; utilities
                #:split-string-into-lines-list
                #:split-string-into-lines-string
+
+               ;; dictionary
+               #:lookup
+               #:fetch
                
                . #1#)))
 

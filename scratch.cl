@@ -2,8 +2,11 @@
 (in-package :bio-user)
 
 (defparameter d (make-random-dna-sequence 100))
-
 (residues-string d)
+
+(defparameter *dna-seq-1* (make-instance 'adjustable-dna-sequence))
+(insert-residues *dna-seq-1* 0 "GAATTC")
+(residues-string *dna-seq-1*)
 
 (defparameter df (make-instance 'adjustable-dna-sequence
                                 :initial-contents (residues-string (make-random-dna-sequence 1000))))

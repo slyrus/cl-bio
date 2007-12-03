@@ -34,7 +34,7 @@
 
 (defclass dictionary (bio-object) ())
 
-(defgeneric lookup (object dictionary))
+(defgeneric fetch (object dictionary &key &allow-other-keys))
 
-(defgeneric dictionary-search (object dictionary))
+(defgeneric lookup (object dictionary &key &allow-other-keys))
 

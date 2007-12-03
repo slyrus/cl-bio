@@ -52,3 +52,8 @@
                            (desc descriptor))
   (pushnew desc (descriptors described)))
 
+(defmethod remove-descriptor ((described described-object)
+                           (desc descriptor))
+  (setf (descriptors described)
+        (delete desc (descriptors described))))
+
