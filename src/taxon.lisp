@@ -145,8 +145,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; flat file parsing
 
+(defparameter *default-batch-size* 5000)
+
 (defun parse-tax-nodes (&key (file *tax-nodes-file*))
-  (let ((batch-size 500))
+  (let ((batch-size *default-batch-size*))
     (flet ((parse-batch (stream)
              (rucksack:with-rucksack (rucksack *bio-rucksack*)
                (print 'new-transaction)
@@ -196,10 +198,11 @@
       (with-open-file (stream file)
         (loop with eof = nil
            while (not eof)
+           ;; for i by batch-size below 20000
            do (setf eof (not (parse-batch stream))))))))
 
 (defun parse-tax-names (&key (file *tax-names-file*))
-  (let ((batch-size 500))
+  (let ((batch-size *default-batch-size*))
     (flet ((parse-batch (stream)
              (rucksack:with-rucksack (rucksack *bio-rucksack*)
                (print 'new-transaction)
@@ -228,8 +231,8 @@
                         
                     finally (return line))))))
       (with-open-file (stream file)
-           ;; for i by batch-size below 20000
         (loop with eof = nil
+           ;; for i by batch-size below 20000
            while (not eof)
            do (setf eof (not (parse-batch stream))))))))
 

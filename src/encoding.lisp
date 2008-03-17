@@ -59,27 +59,27 @@ in sequence seq."))
 (defclass dna-sequence-encoding (sequence-encoding) ())
 
 ;;; 2-bit dna sequence encoding
-(let ((2-bit-dna-sequence-char-map #(#\A #\C #\G #\T)))
-  (let ((char-list (coerce 2-bit-dna-sequence-char-map 'list)))
+(defparameter *2-bit-dna-sequence-char-map* #(#\A #\C #\G #\T))
+(defparameter *2-bit-dna-char-list* (coerce *2-bit-dna-sequence-char-map* 'list))
     
-    (defclass 2-bit-dna-sequence-encoding (dna-sequence-encoding)
-      ((char-map :reader char-map :allocation :class :initform 2-bit-dna-sequence-char-map)
-       (int-array :accessor int-array
-                  :allocation :class
-                  :initform (let ((arr (make-array (char-lookup-array-length char-list)
-                                                   :initial-element nil)))
-                              (loop for c in char-list
-                                 for i from 0
-                                 do
-                                   (setf (aref arr (char-code (char-upcase c))) i)
-                                   (setf (aref arr (char-code (char-downcase c))) i))
-                              arr))))
+(defclass 2-bit-dna-sequence-encoding (dna-sequence-encoding)
+  ((char-map :reader char-map :allocation :class :initform *2-bit-dna-sequence-char-map*)
+   (int-array :accessor int-array
+              :allocation :class
+              :initform (let ((arr (make-array (char-lookup-array-length *2-bit-dna-char-list*)
+                                               :initial-element nil)))
+                          (loop for c in *2-bit-dna-char-list*
+                             for i from 0
+                             do
+                             (setf (aref arr (char-code (char-upcase c))) i)
+                             (setf (aref arr (char-code (char-downcase c))) i))
+                          arr))))
     
-    (defmethod seq-code-to-char ((seq 2-bit-dna-sequence-encoding) code)
-      (aref (char-map seq) code))
+(defmethod seq-code-to-char ((seq 2-bit-dna-sequence-encoding) code)
+  (aref (char-map seq) code))
     
-    (defmethod char-to-seq-code ((seq 2-bit-dna-sequence-encoding) char)
-      (aref (int-array seq) (char-code char)))))
+(defmethod char-to-seq-code ((seq 2-bit-dna-sequence-encoding) char)
+  (aref (int-array seq) (char-code char)))
 
 ;;; 4-bit dna sequence encoding
 ;;; 4-bit extended IUPAC nucleic sequence
@@ -99,30 +99,30 @@ in sequence seq."))
 ;;;  13 Y - (or C T) (Pyrimidine)
 ;;;  14 N - (or A C G T)
 ;;;  15 . - (not (or A C G T))
-(let ((4-bit-dna-sequence-char-map #(#\A #\C #\G #\T
-                                      #\B #\D #\H #\V
-                                      #\S #\W #\K #\M
-                                      #\R #\Y #\N #\.)))
-  (let ((char-list (coerce 4-bit-dna-sequence-char-map 'list)))
+(defparameter *4-bit-dna-sequence-char-map* #(#\A #\C #\G #\T
+                                     #\B #\D #\H #\V
+                                     #\S #\W #\K #\M
+                                     #\R #\Y #\N #\.))
+(defparameter *4-bit-dna-char-list* (coerce *4-bit-dna-sequence-char-map* 'list))
     
-    (defclass 4-bit-dna-sequence-encoding (dna-sequence-encoding)
-      ((char-map :reader char-map :allocation :class :initform 4-bit-dna-sequence-char-map)
-       (int-array :accessor int-array
-                  :allocation :class
-                  :initform (let ((arr (make-array (char-lookup-array-length char-list)
-                                                   :initial-element nil)))
-                              (loop for c in char-list
-                                 for i from 0
-                                 do
-                                 (setf (aref arr (char-code (char-upcase c))) i)
-                                 (setf (aref arr (char-code (char-downcase c))) i))
-                              arr))))
+(defclass 4-bit-dna-sequence-encoding (dna-sequence-encoding)
+  ((char-map :reader char-map :allocation :class :initform *4-bit-dna-sequence-char-map*)
+   (int-array :accessor int-array
+              :allocation :class
+              :initform (let ((arr (make-array (char-lookup-array-length *4-bit-dna-char-list*)
+                                               :initial-element nil)))
+                          (loop for c in *4-bit-dna-char-list*
+                             for i from 0
+                             do
+                             (setf (aref arr (char-code (char-upcase c))) i)
+                             (setf (aref arr (char-code (char-downcase c))) i))
+                          arr))))
     
-    (defmethod seq-code-to-char ((seq 4-bit-dna-sequence-encoding) code)
-      (aref (char-map seq) code))
+(defmethod seq-code-to-char ((seq 4-bit-dna-sequence-encoding) code)
+  (aref (char-map seq) code))
     
-    (defmethod char-to-seq-code ((seq 4-bit-dna-sequence-encoding) char)
-      (aref (int-array seq) (char-code char)))))
+(defmethod char-to-seq-code ((seq 4-bit-dna-sequence-encoding) char)
+  (aref (int-array seq) (char-code char)))
 
 ;;; dna sequence encoding protocol class
 
@@ -130,53 +130,53 @@ in sequence seq."))
 
 ;;; 2-bit rna sequence encoding
 
-(let ((2-bit-rna-sequence-char-map #(#\A #\C #\G #\U)))
-  (let ((char-list (coerce 2-bit-rna-sequence-char-map 'list)))
+(defparameter *2-bit-rna-sequence-char-map* #(#\A #\C #\G #\U))
+(defparameter *2-bit-rna-char-list* (coerce *2-bit-rna-sequence-char-map* 'list))
     
-    (defclass 2-bit-rna-sequence-encoding (rna-sequence-encoding)
-      ((char-map :reader char-map :allocation :class :initform 2-bit-rna-sequence-char-map)
-       (int-array :accessor int-array
-                  :allocation :class
-                  :initform (let ((arr (make-array (char-lookup-array-length char-list)
-                                                   :initial-element nil)))
-                              (loop for c in char-list
-                                 for i from 0
-                                 do
-                                   (setf (aref arr (char-code (char-upcase c))) i)
-                                   (setf (aref arr (char-code (char-downcase c))) i))
-                              arr))))
+(defclass 2-bit-rna-sequence-encoding (rna-sequence-encoding)
+  ((char-map :reader char-map :allocation :class :initform *2-bit-rna-sequence-char-map*)
+   (int-array :accessor int-array
+              :allocation :class
+              :initform (let ((arr (make-array (char-lookup-array-length *2-bit-rna-char-list*)
+                                               :initial-element nil)))
+                          (loop for c in *2-bit-rna-char-list*
+                             for i from 0
+                             do
+                             (setf (aref arr (char-code (char-upcase c))) i)
+                             (setf (aref arr (char-code (char-downcase c))) i))
+                          arr))))
     
-    (defmethod seq-code-to-char ((seq 2-bit-rna-sequence-encoding) code)
-      (aref (char-map seq) code))
+(defmethod seq-code-to-char ((seq 2-bit-rna-sequence-encoding) code)
+  (aref (char-map seq) code))
     
-    (defmethod char-to-seq-code ((seq 2-bit-rna-sequence-encoding) char)
-      (when (char-equal char #\t)
-        (setf char #\u))
-      (aref (int-array seq) (char-code char)))))
+(defmethod char-to-seq-code ((seq 2-bit-rna-sequence-encoding) char)
+  (when (char-equal char #\t)
+    (setf char #\u))
+  (aref (int-array seq) (char-code char)))
 
-(let ((acgt-2-bit-rna-sequence-char-map #(#\A #\C #\G #\T)))
-  (let ((char-list (coerce acgt-2-bit-rna-sequence-char-map'list)))
+(defparameter *acgt-2-bit-rna-sequence-char-map* #(#\A #\C #\G #\T))
+(defparameter *acgt-2-bit-rna-char-list* (coerce *acgt-2-bit-rna-sequence-char-map* 'list))
     
-    (defclass acgt-2-bit-rna-sequence-encoding (rna-sequence-encoding)
-      ((char-map :reader char-map :allocation :class :initform acgt-2-bit-rna-sequence-char-map)
-       (int-array :accessor int-array
-                  :allocation :class
-                  :initform (let ((arr (make-array (char-lookup-array-length char-list)
-                                                   :initial-element nil)))
-                              (loop for c in char-list
-                                 for i from 0
-                                 do
-                                   (setf (aref arr (char-code (char-upcase c))) i)
-                                   (setf (aref arr (char-code (char-downcase c))) i))
-                              arr))))
+(defclass acgt-2-bit-rna-sequence-encoding (rna-sequence-encoding)
+  ((char-map :reader char-map :allocation :class :initform *acgt-2-bit-rna-sequence-char-map*)
+   (int-array :accessor int-array
+              :allocation :class
+              :initform (let ((arr (make-array (char-lookup-array-length *acgt-2-bit-rna-char-list*)
+                                               :initial-element nil)))
+                          (loop for c in *acgt-2-bit-rna-char-list*
+                             for i from 0
+                             do
+                             (setf (aref arr (char-code (char-upcase c))) i)
+                             (setf (aref arr (char-code (char-downcase c))) i))
+                          arr))))
     
-    (defmethod seq-code-to-char ((seq acgt-2-bit-rna-sequence-encoding) code)
-      (aref (char-map seq) code))
+(defmethod seq-code-to-char ((seq acgt-2-bit-rna-sequence-encoding) code)
+  (aref (char-map seq) code))
     
-    (defmethod char-to-seq-code ((seq acgt-2-bit-rna-sequence-encoding) char)
-      (when (char-equal char #\u)
-        (setf char #\t))
-      (aref (int-array seq) (char-code char)))))
+(defmethod char-to-seq-code ((seq acgt-2-bit-rna-sequence-encoding) char)
+  (when (char-equal char #\u)
+    (setf char #\t))
+  (aref (int-array seq) (char-code char)))
 
 
 ;;; amino acid sequence encoding protocol class
@@ -185,27 +185,27 @@ in sequence seq."))
 
 ;;; 5-bit amino acide sequence encoding
 
-(let ((5-bit-aa-sequence-char-map #(#\A #\C #\D #\E #\F
-                                      #\G #\H #\I #\K #\L
-                                      #\M #\N #\P #\Q #\R
-                                      #\S #\T #\V #\W #\Y)))
-  (let ((char-list (coerce 5-bit-aa-sequence-char-map 'list)))
+(defparameter *5-bit-aa-sequence-char-map* #(#\A #\C #\D #\E #\F
+                                    #\G #\H #\I #\K #\L
+                                    #\M #\N #\P #\Q #\R
+                                    #\S #\T #\V #\W #\Y))
+(defparameter *5-bit-aa-char-list* (coerce *5-bit-aa-sequence-char-map* 'list))
     
-    (defclass 5-bit-aa-sequence-encoding (aa-sequence-encoding)
-      ((char-map :reader char-map :allocation :class :initform 5-bit-aa-sequence-char-map)
-       (int-array :accessor int-array
-                  :allocation :class
-                  :initform (let ((arr (make-array (char-lookup-array-length char-list)
-                                                   :initial-element nil)))
-                              (loop for c in char-list
-                                 for i from 0
-                                 do
-                                   (setf (aref arr (char-code (char-upcase c))) i)
-                                   (setf (aref arr (char-code (char-downcase c))) i))
-                              arr))))
+(defclass 5-bit-aa-sequence-encoding (aa-sequence-encoding)
+  ((char-map :reader char-map :allocation :class :initform *5-bit-aa-sequence-char-map*)
+   (int-array :accessor int-array
+              :allocation :class
+              :initform (let ((arr (make-array (char-lookup-array-length *5-bit-aa-char-list*)
+                                               :initial-element nil)))
+                          (loop for c in *5-bit-aa-char-list*
+                             for i from 0
+                             do
+                               (setf (aref arr (char-code (char-upcase c))) i)
+                               (setf (aref arr (char-code (char-downcase c))) i))
+                          arr))))
     
-    (defmethod seq-code-to-char ((seq 5-bit-aa-sequence-encoding) code)
-      (aref (char-map seq) code))
+(defmethod seq-code-to-char ((seq 5-bit-aa-sequence-encoding) code)
+  (aref (char-map seq) code))
     
-    (defmethod char-to-seq-code ((seq 5-bit-aa-sequence-encoding) char)
-      (aref (int-array seq) (char-code char)))))
+(defmethod char-to-seq-code ((seq 5-bit-aa-sequence-encoding) char)
+  (aref (int-array seq) (char-code char)))

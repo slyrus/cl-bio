@@ -1,12 +1,13 @@
 
 (in-package :bio)
 
+
 ;;; find all taxa that start with "Canis" and return a list containing their
 ;;; rank (genus, species, etc...) and a list of (name . name-class) pairs
 (with-bio-rucksack (rucksack)
   (mapcar
    #'(lambda (x)
-       (let* ((id (tax-id x)))
+        (let* ((id (tax-id x)))
          (cons (rank (get-tax-node id :rucksack rucksack))
                (mapcar #'(lambda (y)
                            (cons
