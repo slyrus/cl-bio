@@ -1,0 +1,19 @@
+
+1. Annotations! This is the big missing feature at this point. We need
+to be able to represent complex annotations, or features, on
+sequences. This is tricky as we want to be able to, for example, model
+various biological entities such as chromsomes, along with conceptual
+entities such as genes and and representational entities such as
+sequences.
+
+Example 1: A protein annotated with functional domains
+
+Example 2: A gene with multiple sequences
+
+Example 3: An annotated piece of genomic sequence
+
+Example 4: A multiple sequence alignment
+
+Should annotations be nested? Do annotations get their own coordinate
+system or do the use the coordinate system of the underlying sequence?
+
