@@ -10,38 +10,36 @@
   :depends-on (ch-asdf alexandria cl-ppcre flexichain rucksack)
   :components
   ((:static-file "version" :pathname #p"version.lisp-expr")
-   (:module :src
-	    :components
-	    ((:cl-source-file "defpackage")
-	     (:cl-source-file "cl-bio" :depends-on ("defpackage"))
-             (:cl-source-file "bio-object" :depends-on ("defpackage"))
-             (:cl-source-file "rucksack" :depends-on ("defpackage" "bio-object"))
-             (:cl-source-file "gene" :depends-on ("defpackage" "bio-object"))
-             (:cl-source-file "range" :depends-on ("defpackage"))
-             (:cl-source-file "utilities" :depends-on ("defpackage"))
-             (:cl-source-file "encoding" :depends-on ("defpackage" "utilities"))
-             (:cl-source-file "descriptor" :depends-on ("defpackage" "utilities"))
-             (:cl-source-file "identifier" :depends-on ("defpackage" "utilities" "descriptor"))
-             (:cl-source-file "bio-sequence" :depends-on ("defpackage"
-                                                          "encoding"
-                                                          "range"
-                                                          "descriptor"
-                                                          "bio-object"))
-             (:cl-source-file "annotation" :depends-on ("defpackage"
-                                                          "encoding"
-                                                          "range"
-                                                          "descriptor"
-                                                          "bio-object"
-                                                          "bio-sequence"))
-             (:cl-source-file "taxon" :depends-on ("defpackage"
-                                                   "bio-object"
-                                                   "rucksack"))
-             (:cl-source-file "dictionary" :depends-on ("defpackage" "bio-object"))
-             (:module :io
-                      :components
-                      ((:cl-source-file "utilities")
-                       (:cl-source-file "fasta" :depends-on ("utilities")))
-                      :depends-on ("defpackage" "encoding" "range" "bio-sequence"))))
+   (:cl-source-file "defpackage")
+   (:cl-source-file "cl-bio" :depends-on ("defpackage"))
+   (:cl-source-file "bio-object" :depends-on ("defpackage"))
+   (:cl-source-file "rucksack" :depends-on ("defpackage" "bio-object"))
+   (:cl-source-file "gene" :depends-on ("defpackage" "bio-object"))
+   (:cl-source-file "range" :depends-on ("defpackage"))
+   (:cl-source-file "utilities" :depends-on ("defpackage"))
+   (:cl-source-file "encoding" :depends-on ("defpackage" "utilities"))
+   (:cl-source-file "descriptor" :depends-on ("defpackage" "utilities"))
+   (:cl-source-file "identifier" :depends-on ("defpackage" "utilities" "descriptor"))
+   (:cl-source-file "bio-sequence" :depends-on ("defpackage"
+                                                "encoding"
+                                                "range"
+                                                "descriptor"
+                                                "bio-object"))
+   (:cl-source-file "annotation" :depends-on ("defpackage"
+                                              "encoding"
+                                              "range"
+                                              "descriptor"
+                                              "bio-object"
+                                              "bio-sequence"))
+   (:cl-source-file "taxon" :depends-on ("defpackage"
+                                         "bio-object"
+                                         "rucksack"))
+   (:cl-source-file "dictionary" :depends-on ("defpackage" "bio-object"))
+   (:module :io
+            :components
+            ((:cl-source-file "utilities")
+             (:cl-source-file "fasta" :depends-on ("utilities")))
+            :depends-on ("defpackage" "encoding" "range" "bio-sequence"))
    (:module :align
             :components
             ((:cl-source-file "defpackage")
@@ -49,8 +47,8 @@
              (:module :matrix
                       :components
                       ((:static-file "blosum62" :pathname #p"blosum62.bla"))))
-            :depends-on (:src))
-   (:module :rucksack)
+            :depends-on (:bio-sequence))
+   (:module :rucksack-data)
    (:static-file "bootstrap" :pathname #p"bootstrap.lisp")
    (:static-file "COPYRIGHT")
    (:static-file "README")
