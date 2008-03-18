@@ -17,3 +17,4 @@ Example 4: A multiple sequence alignment
 Should annotations be nested? Do annotations get their own coordinate
 system or do the use the coordinate system of the underlying sequence?
 
+2. Unify bio-align:alignment and bio:alignment

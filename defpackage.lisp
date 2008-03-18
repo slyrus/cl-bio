@@ -101,6 +101,13 @@
                #:sequence-with-residues
                #:seq-reverse
 
+               ;; sequences with residue codes
+               #:sequence-with-residue-codes
+               #:residue-code
+
+               ;; annotated sequences
+               #:annotated-sequence
+
                ;; simple sequences
                #:simple-sequence
 
@@ -108,9 +115,12 @@
                #:adjustable-sequence
                #:insert-residue
                #:insert-residues
+               #:insert-residue-codes
                #:append-residue
                #:append-residues
+               #:append-residue-codes
                #:delete-residue
+               #:delete-residues
 
                ;; nucleic acid sequences
                #:na-sequence
@@ -118,9 +128,9 @@
 
                ;; DNA sequences
                #:dna-sequence
+               #:dna-sequence-with-residues
                #:simple-dna-sequence
                #:adjustable-dna-sequence
-               #:dna-sequence-with-residues
                #:reverse-complement
                #:make-simple-dna-sequence
                #:make-adjustable-dna-sequence

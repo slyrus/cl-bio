@@ -156,14 +156,104 @@
  (:span
   (:h1 "Bio-sequences")
 
-  (:p "")
+  (:p "The cl-bio Bio-sequence classes and generic functions are
+  provided for working with various classes of biological sequences,
+  such as DNA, RNA and protein sequences.")
 
   (:span
    (:h2 "bio-sequence class")
    
    (:p "The protocol class bio-sequence is a class that all
-  implementations of bio-sequence should inherit from."))
+  implementations of bio-sequence should inherit from. The only
+  property of bio-sequence that all sequences are expected to have is
+  a length, although the length may be nil or other arbitrary
+  values. It is generally intended that for sequences with residues
+  the length will be the number of residues in the sequence.")
+   
+   (:class bio:bio-sequence)
+   (:generic-function bio:seq-length))
+   
+  (:span
+   (:h2 "Sequences with Residues")
+    
+   (:p "The core bio-sequence is only required to have a (possibly
+   nil) length, it does not necessarily contain linearly addressable
+   subunits, or residues. The bio:sequence-with-residues class is
+   a protocol class for sequences that have associated residues.")
+    
+   (:class bio:sequence-with-residues)
+   (:generic-function bio:residues-string)
+   (:generic-function (setf bio:residues-string))
+   (:generic-function bio:residues-string-range)
+   (:generic-function bio:residue)
+   (:generic-function (setf bio:residue))
+   (:generic-function bio:seq-reverse)
+
+   (:span
+    (:h3 "Residue Codes")
+    (:p "Rather than using characters directly to code for residues,
+    the class bio:sequence-with-residue-codes is the protocol class
+    that classes that use residue-codes should inherit from.")
+    
+    (:class bio:sequence-with-residue-codes)
+    (:generic-function bio:residue-code)
+    (:generic-function (setf bio:residue-code))))
   
+
+  (:span
+   (:h2 "Annotated Sequences")
+   (:p "")
+
+   (:class bio:annotated-sequence))
+
+  (:span
+   (:h2 "Simple Sequences")
+   (:p "")
+
+   (:class bio:simple-sequence))
+
+  (:span
+   (:h2 "Adjustable Sequences")
+   (:p "")
+
+   (:class bio:adjustable-sequence)
+   (:generic-function bio:insert-residue)
+   (:generic-function bio:insert-residues)
+   (:generic-function bio:insert-residue-codes)
+   (:generic-function bio:append-residue)
+   (:generic-function bio:append-residues)
+   (:generic-function bio:append-residue-codes)
+   (:generic-function bio:delete-residues))
+  
+  (:span
+   (:h2 "Nucleic Acid Sequences")
+   (:p "")
+
+   (:class bio:na-sequence)
+   (:class bio:na-sequence-with-residues)
+
+   (:span
+    (:h3 "DNA Sequences")
+    (:class bio:dna-sequence)
+    (:class bio:dna-sequence-with-residues)
+    (:class bio:simple-dna-sequence)
+    (:class bio:adjustable-dna-sequence))
+
+   (:span
+    (:h3 "RNA Sequences")
+    (:class bio:rna-sequence)
+    (:class bio:rna-sequence-with-residues)
+    (:class bio:simple-rna-sequence)
+    (:class bio:adjustable-rna-sequence)))
+
+  (:span
+   (:h2 "Amino Acid Sequences")
+   (:p "")
+   (:class bio:aa-sequence)
+   (:class bio:simple-aa-sequence)
+   (:class bio:adjustable-aa-sequence)
+   (:class bio:aa-sequence-with-residues))
+
   (:span
 
    (:h2 "sequence-range class")

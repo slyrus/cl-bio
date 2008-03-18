@@ -9,11 +9,11 @@
 (residues-string *dna-seq-1*)
 
 (defparameter *df* (make-instance 'adjustable-dna-sequence
-                                :initial-contents (residues-string (make-random-dna-sequence 1000))))
+                                  :initial-contents (residues-string (make-random-dna-sequence 1000))))
 (defparameter *rf* (make-instance 'adjustable-rna-sequence
-                                :initial-contents (residues-string (make-random-rna-sequence 100))))
+                                  :initial-contents (residues-string (make-random-rna-sequence 100))))
 (defparameter *af* (make-instance 'adjustable-aa-sequence
-                                :initial-contents (residues-string (make-random-aa-sequence 100))))
+                                  :initial-contents (residues-string (make-random-aa-sequence 100))))
 
 (insert-residues *df* 0 "TTTT")
 (insert-residues *rf* 0 "UUUU")
