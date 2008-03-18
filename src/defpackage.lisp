@@ -56,6 +56,10 @@
              
                #:range-equal
                #:range-contains
+               #:range-start
+               #:range-end
+               #:range-min
+               #:range-max
              
                #:+plus-strand+
                #:+unknown-strand+
@@ -88,6 +92,7 @@
                
                ;; bio-sequences
                #:bio-sequence
+               #:residue
                #:residues-string
                #:residues-string-range
                #:seq-length

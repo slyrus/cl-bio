@@ -9,31 +9,43 @@
  (:html-metadata (:htmlcss "simple.css") )
  
  (:span
-  (:h1 "Abstract")
+  (:title "cl-bio")
  
   (:p "cl-bio is a library for the representation, processing, and
   analysis of various forms of biological data."))
+  
+  (:p "cl-bio was written by Cyrus Harmon and is available under a
+  BSD-style license.")
  
  (:span
-  (:h1 "Download and Installation")
-  (:p "[TBW]"))
+  (:h1 "Introduction")
+  (:p "cl-bio is a common lisp library for working with biological
+  sequences in the spirit of BioPERL. "))
 
  (:span
-  (:h1 "Foundational Biological Objects: ")
+  (:h1 "Download and Installation")
+  (:p "For the moment, cl-bio is only available through git. No formal
+  release has been made yet. The git repository can be found at "
+      :newline
+      (:a :href "http://git.cyrusharmon.org/cgi-bin/gitweb.cgi?p=cl-bio.git" 
+          "http://git.cyrusharmon.org/cgi-bin/gitweb.cgi?p=cl-bio.git")))
+
+ (:span
+  (:h1 "Foundational Biological Objects")
   (:p "")
   
   (:span
-   (:h2 "bio-object:")
+   (:h2 "bio-object")
    (:p "The bio-object class is a parent class for various biological
    classes. The bio-object class is a subclass of the described-object
    class."))
   
   (:span
-   (:h2 "bio-set:")
+   (:h2 "bio-set")
    (:p ""))
   
   (:span
-   (:h2 "descriptor:")
+   (:h2 "descriptor")
    (:p "")))
 
  (:span
@@ -41,7 +53,7 @@
   (:p ""))
 
  (:span
-  (:h2 "dictionary:")
+  (:h2 "dictionary")
   (:p ""))
  
  (:span
@@ -49,10 +61,8 @@
   (:p "")
   
   (:span
-   (:h2 "Taxonomies"))
+   (:h2 "Biological Sequences")
 
-  (:span
-   (:h2 "bio-sequence:")
    (:p "The concept of a sequence, or a linear arrangement of
    repeating elements is central to molecular biology. The central
    dogma dictates that DNA codes for RNA which codes for Proteins. All
@@ -91,18 +101,18 @@
     etc... for amino acid residues (for proteins).")
 
     (:p "When representing these sequences computationally, there is
-    no need to use a character such #\A or #\C to represnt, a compact
-    encoding using small integer values allows for a two-bit encoding
-    for DNA and RNA and a five-bit enconding for protein
-    sequences. Besides space efficiency, one would presumably like
-    efficient (roughly constant time) access to random elements in the
-    sequence. Fortunately, common lisp arrays provide both efficient
-    access through the aref accessor function and the ability to
-    sepcialize the array storage to particular types such as 8-bit
-    integers or, importantly, 2-bit integers. Therefore we can use
-    common lisp's built in arrays to represent DNA and RNA sequences
-    with a 2-bit per element encoding and get fast random access to
-    individual elements."))
+    no need to use a character such as #\\A or #\\C to represent a
+    subuint of the sequence; a compact encoding using small integer
+    values allows for a two-bit encoding for DNA and RNA and a
+    five-bit enconding for protein sequences. Besides space
+    efficiency, one would presumably like efficient (roughly constant
+    time) access to random elements in the sequence. Fortunately,
+    common lisp arrays provide both efficient access through the aref
+    accessor function and the ability to sepcialize the array storage
+    to particular types such as 8-bit integers or, importantly, 2-bit
+    integers. Therefore we can use common lisp's built in arrays to
+    represent DNA and RNA sequences with a 2-bit per element encoding
+    and get fast random access to individual elements."))
 
    (:span
     (:h3 "Editable Sequences")
@@ -113,25 +123,77 @@
     individual elements, but do not support the insertion of elements
     with the array, with the exception of the adjust-array function
     which allows for the appending of new elements to the end of the
-    array.")))
-
+    array."))
+   
+   (:span
+    (:h3 "Ranges")
+    (:p "The range class is used to specify a range on a biological sequence.")))
   
   (:span
-   (:h2 "gene:")
-   (:p ""))
+   (:h2 "Genes")
+   (:p "[TBW]"))
 
   (:span
-   (:h2 "annotation")
-   (:p "")))
+   (:h2 "Annotations")
+   (:p "[TBW]"))
+
+  (:span
+   (:h2 "Alignments")
+   (:p "[TBW]")))
+ 
+ (:span
+   (:h2 "Species Taxonomies")
+   (:p "It is often important to understand the origin of a given
+   biological entity, that is to say which species did the biological
+   entity come from. There are cases where this is implicit, such as
+   large databases from a single species, but, especially as the
+   number of organisms from which substantial amounts of sequences
+   have been generated, it is important to track not just the name of
+   the species from which the entity was derived, but also the
+   relationship of said species to other species, usually in the form
+   of a taxonomic tree."))
 
  (:span
+  (:h1 "Bio-sequences")
+
+  (:p "")
+
+  (:span
+   (:h2 "bio-sequence class")
+   
+   (:p "The protocol class bio-sequence is a class that all
+  implementations of bio-sequence should inherit from."))
+  
+  (:span
+
+   (:h2 "sequence-range class")
+
+   (:p "The sequence-range class is used to represent ranges on a
+   given sequence. It contains the slots sequence and range, with the
+   respective accessor sequence-range-sequence and
+   sequence-range-range.")
+   
+   (:class bio:range)
+   (:generic-function bio:range-equal)
+   (:generic-function bio:range-contains)
+   (:generic-function bio:range-start)
+   (:generic-function bio:range-end)
+   (:generic-function bio:range-min)
+   (:generic-function bio:range-max)))
+
+ 
+ (:span
   (:h1 "Examples")
+  
   (:p "To create an adjustable DNA sequence one could use the
   following code:")
-  (:lisp-no-results
-   #q{(defparameter *dna-seq-1* (make-instance 'bio:adjustable-dna-sequence))
-   (bio:insert-residues *dna-seq-1* 0 "GAATTC")
-   (bio:residues-string *dna-seq-1*)}))
- 
+  (:lisp
+   #q{(defparameter *dna-seq-1* (make-instance
+                              'bio:adjustable-dna-sequence
+                              :initial-contents "GAATTC"))})
+
+  (:p "And to retrieve all the residues of the sequence:")
+  (:lisp
+   #q{(bio:residues-string *dna-seq-1*)}))
 
 #+nil (:bibliography))

@@ -39,17 +39,41 @@
 ;;; from ranges whose end is greater than or equal to there start. A
 ;;; range whose end is equal to its start are considered to be points.
 
-(defgeneric range-equal (range1 range2))
-(defgeneric range-contains (range1 range2))
-(defgeneric range-min (range1))
-(defgeneric range-max (range1))
+(defgeneric range-equal (range1 range2)
+  (:documentation "Compares two ranges and returns t if they are
+  #'equal."))
+
+(defgeneric range-contains (range1 range2)
+  (:documentation "Returns t if range1 contains range2, that is if the
+  lowest edge of range2 is greater than or equal to the lowest edge of
+  range1 and the highest edge of range2 is less than or equal to the
+  highest edge of range1."))
+
+(defgeneric range-min (range)
+  (:documentation "Returns the lowest edge of range/"))
+
+(defgeneric range-max (range)
+  (:documentation "Returns the highest edge of range."))
+
+(defgeneric range-start (range)
+  (:documentation "Returns the start of range."))
+
+(defgeneric range-end (range)
+  (:documentation "Returns the end of range."))
 
 (defclass range ()
   ((start :accessor range-start :initarg :start)
-   (end :accessor range-end :initarg :end)))
+   (end :accessor range-end :initarg :end))
+  (:documentation "The RANGE class is used to specify spatial extent
+  along bio-sequences. Ranges are meant to be half-open, zero-based
+  intervals (like DAS sequences) such that the interval starting at i
+  and ending at j would include residue i but only the residues up to
+  but not including residue j. Therefore, the range 0,1 would specify
+  the first residue, or, alternatively addressing the same residues as
+  the residue at position 0."))
 
 (defmethod range-equal ((range1 range)
-                         (range2 range))
+                        (range2 range))
   (and (equal (range-start range1)
               (range-start range2))
        (equal (range-end range1)
