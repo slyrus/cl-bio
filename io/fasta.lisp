@@ -39,7 +39,6 @@
     (let ((terms (cl-ppcre:split #\| header)))
       (do ((term (pop terms) (pop terms)))
           ((null terms))
-        (print term)
         (cond ((equal term "gi")
                (let ((gi-id (pop terms)))
                  (add-descriptor
@@ -50,7 +49,7 @@
                  (add-descriptor
                   seq
                   (make-instance 'refseq-id :id refseq-id)))))))
-    (print header)))
+    header))
 
 (defun read-fasta-residues (stream seq &key (sequence-type :dna))
   (declare (ignore sequence-type))

@@ -487,21 +487,28 @@ uses a 2-bit sequence encoding."))
   (:documentation "A 4-bit adjustable"))
 
 (defun make-simple-dna-sequence (length)
+  "Returns a simple-dna-sequence of the specified length."
   (make-instance 'simple-dna-sequence :length length))
 
 (defun make-adjustable-dna-sequence (length)
+  "Returns an adjustable-dna-sequence of the specified length."
   (make-instance 'adjustable-dna-sequence :length length))
 
 (defun make-dna-sequence-from-string (residues)
+  "Returns a simple-dna-sequence initialized with residues as its
+contents."
   (make-instance 'simple-dna-sequence :initial-contents residues))
 
 (defun make-random-dna-sequence (length)
+  "Returns a simple-dna-sequence of the specified length whose
+contents are randomly chosen residues."
   (let* ((dna (make-simple-dna-sequence length)))
     (let ((k 4))
       (loop for i below length
          do (setf (residue-code dna i) (random k))))
     dna))
 
+;;; TODO: write reverse-complement for 4-bit-dna-sequences!
 (defmethod reverse-complement ((forward 2-bit-dna-sequence))
   (let* ((length (seq-length forward))
          (revcomp (make-instance (class-of forward) :length length)))
@@ -549,15 +556,21 @@ with a 2-bit representation for A, C, G and U."))
  (ACGU)"))
 
 (defun make-simple-rna-sequence (length)
+  "Returns a simple-rna-sequence of the specified length."
   (make-instance 'simple-rna-sequence :length length))
 
 (defun make-adjustable-rna-sequence (length)
+  "Returns an adjustable-rna-sequence of the specified length."
   (make-instance 'adjustable-rna-sequence :length length))
 
 (defun make-rna-sequence-from-string (residues)
+  "Returns a simple-rna-sequence whose residues have been set to the
+specified residues."
   (make-instance 'simple-rna-sequence :initial-contents residues))
 
 (defun make-random-rna-sequence (length)
+  "Returns a simple-rna-sequence of the specified length whose
+residues are randomly chosen."
   (let* ((rna (make-simple-rna-sequence length)))
     (let ((k 4))
       (loop for i below length
@@ -570,19 +583,20 @@ with a 2-bit representation for A, C, G and U."))
 ;;; amino acid sequence protocol class
 (defclass aa-sequence (bio-sequence)
   ()
-  (:documentation ""))
+  (:documentation "Protocol class for amino acid sequences (e.g. proteins)"))
 
 (defclass aa-sequence-with-residues (aa-sequence
                                      sequence-with-residues)
   ()
-  (:documentation ""))
+  (:documentation "Protocl class for amino acid sequences with residues."))
 
 ;;; 5-bit amino acid sequence protocol class
 (defclass 5-bit-aa-sequence (aa-sequence
                              5-bit-sequence
                              5-bit-aa-sequence-encoding)
   ()
-  (:documentation ""))
+  (:documentation "Implementation class for amino acid sequences
+backed by a 5-bit residue encoding."))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; implementation classes for amino acid sequences
@@ -592,22 +606,29 @@ with a 2-bit representation for A, C, G and U."))
                               simple-sequence
                               aa-sequence-with-residues)
   ()
-  (:documentation ""))
+  (:documentation "A subclass of simple-sequence for representing
+amino acid sequences using a 5-bit residue encoding."))
 
 ;;; adjustable amino acid sequence class
 (defclass adjustable-aa-sequence (5-bit-aa-sequence
                                   flexichain-sequence
                                   aa-sequence-with-residues)
   ()
-  (:documentation ""))
+  (:documentation "An adjustable sequence of amino acids using a 5-bit
+residue encoding."))
 
 (defun make-simple-aa-sequence (length)
+  "Returns a simple-aa-sequence of the specified length."
   (make-instance 'simple-aa-sequence :length length))
 
 (defun make-aa-sequence-from-string (residues)
+  "Returns a simple-aa-sequence whose contents are specified by
+residues."
   (make-instance 'simple-aa-sequence :initial-contents residues))
 
 (defun make-random-aa-sequence (length)
+  "Retruns a simple-aa-sequence of the specified length whose residues
+are set to random values."
   (let* ((aa (make-simple-aa-sequence length)))
     (let ((k 20))
       (loop for i below length

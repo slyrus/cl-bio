@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><div class="title">cl-bio</div>
+<link rel="stylesheet" type="text/css" href="simple.css"/></head>
+<body><span><div class="title">cl-bio</div>
+<p>cl-bio is a library for the representation, processing, and
+  analysis of various forms of biological data.</p>
+</span>
+<p>cl-bio was written by Cyrus Harmon and is available under a
+  BSD-style license.</p>
+<span><h1>Introduction</h1>
+<p>cl-bio is a common lisp library for working with biological
+  sequences in the spirit of BioPERL. </p>
+<span><h2>Download and Installation</h2>
+<p>For the moment, cl-bio is only available through git. No formal
+  release has been made yet. The git repository can be found at <br/><a href="http://git.cyrusharmon.org/cgi-bin/gitweb.cgi?p=cl-bio.git">http://git.cyrusharmon.org/cgi-bin/gitweb.cgi?p=cl-bio.git</a>
+</p>
+<span><h2>Requirements</h2>
+<p>cl-bio has only been tested on SBCL but, in theory, should be
+   relatively easily ported to other common lisp environments. cl-bio
+   depends on a number of external libraries, including: alexandria,
+   cl-ppcre, flexichain and rucksack.</p>
+</span>
+</span>
+</span>
+<span><h1>Foundational Biological Objects</h1>
+<p></p>
+<span><h2>bio-object</h2>
+<p>The bio-object class is a parent class for various biological
+   classes. The bio-object class is a subclass of the described-object
+   class.</p>
+</span>
+<span><h2>bio-set</h2>
+<p></p>
+</span>
+<span><h2>descriptor</h2>
+<p></p>
+</span>
+</span>
+<span><h1>Services</h1>
+<p></p>
+</span>
+<span><h2>dictionary</h2>
+<p></p>
+</span>
+<span><h1>Conceptual Biological Objects</h1>
+<p></p>
+<span><h2>Biological Sequences</h2>
+<p>The concept of a sequence, or a linear arrangement of
+   repeating elements is central to molecular biology. The central
+   dogma dictates that DNA codes for RNA which codes for Proteins. All
+   of these molecules can be viewed as sequences, based on a linear
+   ordering of the subunits that create these molecules. The concept
+   of sequence is so central to bioinformatics that it the
+   representation of the sequence is often conflated with other
+   biological concepts such as a chromosome, a gene, or a protein. In
+   general, in cl-bio we represent these biological entities as
+   distinct instances of various classes that have a sequence
+   associated, rather than being a gene. So instances of the gene
+   class, for instance, may have a sequence as a member, but do not
+   extend the sequence class directly.</p>
+<p>A sequence, at its most general, is a linear arrangement of
+   repeating subunits with a given length. Given that the common lisp
+   standard defines the class sequence to be an ordered collection of
+   objects, we use the term bio-sequence to describe biological
+   sequences.</p>
+<span><h3>Sequence Residues</h3>
+<p>The repeated element in biological sequences is usually
+   referred to as a residue and represents the portions of the
+   precursor molecules, nucleotide bases or amino acids, that are
+   incorporated into the polymer. The sequence-with-residues class is
+   designed to represent sequences that have an explicit
+   representation of the individual subunits in the sequence.</p>
+</span>
+<span><h3>Sequence Residue Encodings</h3>
+<p>Biological sequences are made up of repeated subunits and
+    generally represented by a concise encoding of the possible
+    subunits, such as A for Adenine, G for Guanine, etc... for
+    nucleotides (for DNA and RNA), or A for Alanine, C for Cytosine,
+    etc... for amino acid residues (for proteins).</p>
+<p>When representing these sequences computationally, there is
+    no need to use a character such as #\A or #\C to represent a
+    subuint of the sequence; a compact encoding using small integer
+    values allows for a two-bit encoding for DNA and RNA and a
+    five-bit enconding for protein sequences. Besides space
+    efficiency, one would presumably like efficient (roughly constant
+    time) access to random elements in the sequence. Fortunately,
+    common lisp arrays provide both efficient access through the aref
+    accessor function and the ability to sepcialize the array storage
+    to particular types such as 8-bit integers or, importantly, 2-bit
+    integers. Therefore we can use common lisp's built in arrays to
+    represent DNA and RNA sequences with a 2-bit per element encoding
+    and get fast random access to individual elements.</p>
+</span>
+<span><h3>Editable Sequences</h3>
+<p>Different representations of sequences or sets have different
+    properties such as efficiency of accessing random elments,
+    efficiency of inserting or appending elements, etc... Lisp arrays
+    offer efficient random access to elements and for the setting of
+    individual elements, but do not support the insertion of elements
+    with the array, with the exception of the adjust-array function
+    which allows for the appending of new elements to the end of the
+    array.</p>
+</span>
+<span><h3>Ranges</h3>
+<p>The range class is used to specify a range on a biological sequence.</p>
+</span>
+</span>
+<span><h2>Genes</h2>
+<p>[TBW]</p>
+</span>
+<span><h2>Annotations</h2>
+<p>[TBW]</p>
+</span>
+<span><h2>Alignments</h2>
+<p>[TBW]</p>
+</span>
+</span>
+<span><h2>Species Taxonomies</h2>
+<p>It is often important to understand the origin of a given
+   biological entity, that is to say which species did the biological
+   entity come from. There are cases where this is implicit, such as
+   large databases from a single species, but, especially as the
+   number of organisms from which substantial amounts of sequences
+   have been generated, it is important to track not just the name of
+   the species from which the entity was derived, but also the
+   relationship of said species to other species, usually in the form
+   of a taxonomic tree.</p>
+</span>
+<span><h1>Bio-sequences</h1>
+<p>The cl-bio Bio-sequence classes and generic functions are
+  provided for working with various classes of biological sequences,
+  such as DNA, RNA and protein sequences.</p>
+<span><h2>bio-sequence class</h2>
+<p>The protocol class bio-sequence is a class that all
+  implementations of bio-sequence should inherit from. The only
+  property of bio-sequence that all sequences are expected to have is
+  a length, although the length may be nil or other arbitrary
+  values. It is generally intended that for sequences with residues
+  the length will be the number of residues in the sequence.</p>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">BIO-SEQUENCE</p>
+<p class="doc-documentation class-documentation">A protocol class for representing biological
+sequences. It is intended that appropriate subclasses will represent
+distinct sequences such as nucleic acid and protein sequences.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(SEQ-LENGTH SEQ)</p>
+<p class="doc-documentation gf-documentation">Returns the length of a bio-sequence. Subclasses of
+bio-sequence are free to use arbitrary units for the length, although
+it is expected that sequences with residues will return the number
+of residues as the length.</p>
+</div>
+</span>
+<span><h2>Sequences with Residues</h2>
+<p>The core bio-sequence is only required to have a (possibly
+   nil) length, it does not necessarily contain linearly addressable
+   subunits, or residues. The bio:sequence-with-residues class is
+   a protocol class for sequences that have associated residues.</p>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">SEQUENCE-WITH-RESIDUES</p>
+<p class="doc-documentation class-documentation">The protocol class for sequences which have
+residues (or other individually linearly-addressable subunits)
+associated with them.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(RESIDUES-STRING SEQ)</p>
+<p class="doc-documentation gf-documentation">Returns all of the residues of the sequence as a
+single string.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(SETF (RESIDUES-STRING SEQ) VAL)</p>
+<p class="doc-documentation gf-documentation">Sets the residues of the sequence to be the residues
+contained in the string. The sequence may or may not modify the
+string or use the provided string as the storage for the reisdues.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(RESIDUES-STRING-RANGE SEQ RANGE)</p>
+<p class="doc-documentation gf-documentation">Returns the residues of the sequence in a particular
+range.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(RESIDUE SEQ I)</p>
+<p class="doc-documentation gf-documentation">Returns the residue of seq at position i. Note
+that for residue-coded sequences this is the external character
+representation of the residues, not the internal integer
+representation.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(SETF (RESIDUE SEQ) VAL)</p>
+<p class="doc-documentation gf-documentation">Sets the ith residue of seq to val.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(SEQ-REVERSE SEQ)</p>
+<p class="doc-documentation gf-documentation">Returns a new instance of the same class as seq
+whose residues have been reversed (AACCGT -&gt; TGCCAA)</p>
+</div>
+<span><h3>Residue Codes</h3>
+<p>Rather than using characters directly to code for residues,
+    the class bio:sequence-with-residue-codes is the protocol class
+    that classes that use residue-codes should inherit from.</p>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">SEQUENCE-WITH-RESIDUE-CODES</p>
+<p class="doc-documentation class-documentation">Protocol class for sequences with residues that
+store the value of the residue as a residue code, rather than as a
+character.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(RESIDUE-CODE SEQ I)</p>
+<p class="doc-documentation gf-documentation">Returns the residue code value (the internal
+integer representation) of the ith residue of seq.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(SETF (RESIDUE-CODE SEQ) VAL)</p>
+<p class="doc-documentation gf-documentation">Sets the internal interger representation of the
+ith residue of seq to the residue code val.</p>
+</div>
+</span>
+</span>
+<span><h2>Annotated Sequences</h2>
+<p></p>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">ANNOTATED-SEQUENCE</p>
+<p class="doc-documentation class-documentation">A protocol class for sequences that can have
+  annotations attached to them.</p>
+</div>
+</span>
+<span><h2>Simple Sequences</h2>
+<p></p>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">SIMPLE-SEQUENCE</p>
+<p class="doc-documentation class-documentation">A simple sequence is a sequence that extends
+ sequence-with-residue-codes (and therefore sequence-with-residues and
+ bio-sequence) that stores its residues using an array. Simple
+ operations such as getting and setting residue values are supported,
+ but more involved operations such as inesrtion and deletion are
+ not.</p>
+</div>
+</span>
+<span><h2>Adjustable Sequences</h2>
+<p></p>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">ADJUSTABLE-SEQUENCE</p>
+<p class="doc-documentation class-documentation">An adjustable sequence is a sequence that supports
+ operations for insertion, deletion and appening of residues</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(INSERT-RESIDUE SEQ POS RES)</p>
+<p class="doc-documentation gf-documentation">Insert reside res at position pos in sequence
+  seq.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(INSERT-RESIDUES SEQ POS STR)</p>
+<p class="doc-documentation gf-documentation">Insert the residues corresponding the characters in
+  str at position pos in sequence seq.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(INSERT-RESIDUE-CODES SEQ POS VEC)</p>
+<p class="doc-documentation gf-documentation">Insert the residue codes contained in vec at
+  position pos in sequence seq.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(APPEND-RESIDUE SEQ RES)</p>
+<p class="doc-documentation gf-documentation">Append the residue res to the and of seq.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(APPEND-RESIDUES SEQ STR)</p>
+<p class="doc-documentation gf-documentation">Append the residues corresponding to the characters
+  in str to the end of seq.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(APPEND-RESIDUE-CODES SEQ VEC)</p>
+<p class="doc-documentation gf-documentation">Append the the residue codes contained in vec to
+  the end of seq.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(DELETE-RESIDUES SEQ POS COUNT)</p>
+<p class="doc-documentation gf-documentation">Delete count residues starting at position pos in
+  seq.</p>
+</div>
+</span>
+<span><h2>Nucleic Acid Sequences</h2>
+<p></p>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">NA-SEQUENCE</p>
+<p class="doc-documentation class-documentation">Nucleic acid sequence protocol class</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">NA-SEQUENCE-WITH-RESIDUES</p>
+<p class="doc-documentation class-documentation">Nucleic acid sequence with residues protocol class.</p>
+</div>
+<span><h3>DNA Sequences</h3>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">DNA-SEQUENCE</p>
+<p class="doc-documentation class-documentation">DNA sequence protocol class</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">DNA-SEQUENCE-WITH-RESIDUES</p>
+<p class="doc-documentation class-documentation">DNA sequence with residues protocol class.</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">SIMPLE-DNA-SEQUENCE</p>
+<p class="doc-documentation class-documentation">A DNA sequence that is a simple-sequence and which
+uses a 2-bit sequence encoding.</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">ADJUSTABLE-DNA-SEQUENCE</p>
+<p class="doc-documentation class-documentation">An adjustable DNA sequence using a
+2-bit-dna-sequence, implemented using the flexichain-sequence.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(REVERSE-COMPLEMENT SEQ)</p>
+<p class="doc-documentation gf-documentation">Returns a new sequence that is the reverse
+complement of seq.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-SIMPLE-DNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-dna-sequence of the specified length.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-ADJUSTABLE-DNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns an adjustable-dna-sequence of the specified length.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-DNA-SEQUENCE-FROM-STRING RESIDUES)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-dna-sequence initialized with residues as its
+contents.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-RANDOM-DNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-dna-sequence of the specified length whose
+contents are randomly chosen residues.</p>
+</div>
+<p>To create an adjustable DNA sequence one could use the
+  following code:</p>
+<div class="lisp"><code><pre>(defparameter *dna-seq-1*
+  (make-instance 'adjustable-dna-sequence :initial-contents "GAATTC"))
+</pre>
+</code>
+<code class="results">*DNA-SEQ-1*
+</code>
+</div>
+<p>And to retrieve all the residues of the sequence:</p>
+<div class="lisp"><code><pre>(residues-string *dna-seq-1*)
+</pre>
+</code>
+<code class="results">"GAATTC"
+</code>
+</div>
+</span>
+<span><h3>RNA Sequences</h3>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">RNA-SEQUENCE</p>
+<p class="doc-documentation class-documentation">RNA seqeunce protocol class.</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">RNA-SEQUENCE-WITH-RESIDUES</p>
+<p class="doc-documentation class-documentation">RNA sequence with residues protocol class.</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">SIMPLE-RNA-SEQUENCE</p>
+<p class="doc-documentation class-documentation">Simple RNA sequence class with a 2-bit encoding (ACGU).</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">ADJUSTABLE-RNA-SEQUENCE</p>
+<p class="doc-documentation class-documentation">Adjustable RNA sequence class with a 2-bit encoding
+ (ACGU)</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-SIMPLE-RNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-rna-sequence of the specified length.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-ADJUSTABLE-RNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns an adjustable-rna-sequence of the specified length.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-RNA-SEQUENCE-FROM-STRING RESIDUES)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-rna-sequence whose residues have been set to the
+specified residues.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-RANDOM-RNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-rna-sequence of the specified length whose
+residues are randomly chosen.</p>
+</div>
+<p>To create an adjustable RNA sequence one could use the
+  following code:</p>
+<div class="lisp"><code><pre>(defparameter *rna-seq-1*
+  (make-instance 'adjustable-rna-sequence :initial-contents "AAGUUUUAG"))
+</pre>
+</code>
+<code class="results">*RNA-SEQ-1*
+</code>
+</div>
+<p>And to retrieve all the residues of the sequence:</p>
+<div class="lisp"><code><pre>(residues-string *rna-seq-1*)
+</pre>
+</code>
+<code class="results">"AAGUUUUAG"
+</code>
+</div>
+</span>
+</span>
+<span><h2>Amino Acid Sequences</h2>
+<p></p>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">AA-SEQUENCE</p>
+<p class="doc-documentation class-documentation">Protocol class for amino acid sequences (e.g. proteins)</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">AA-SEQUENCE-WITH-RESIDUES</p>
+<p class="doc-documentation class-documentation">Protocl class for amino acid sequences with residues.</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">SIMPLE-AA-SEQUENCE</p>
+<p class="doc-documentation class-documentation">A subclass of simple-sequence for representing
+amino acid sequences using a 5-bit residue encoding.</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">ADJUSTABLE-AA-SEQUENCE</p>
+<p class="doc-documentation class-documentation">An adjustable sequence of amino acids using a 5-bit
+residue encoding.</p>
+</div>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">AA-SEQUENCE-WITH-RESIDUES</p>
+<p class="doc-documentation class-documentation">Protocl class for amino acid sequences with residues.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-SIMPLE-AA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-aa-sequence of the specified length.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-AA-SEQUENCE-FROM-STRING RESIDUES)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-aa-sequence whose contents are specified by
+residues.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-RANDOM-AA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Retruns a simple-aa-sequence of the specified length whose residues
+are set to random values.</p>
+</div>
+<p>To create an adjustable amino acid sequence one could use the
+  following code:</p>
+<div class="lisp"><code><pre>(defparameter *aa-seq-1*
+  (make-instance 'adjustable-aa-sequence :initial-contents "MYRSTVLKCDQCLP"))
+</pre>
+</code>
+<code class="results">*AA-SEQ-1*
+</code>
+</div>
+<p>And to retrieve all the residues of the sequence:</p>
+<div class="lisp"><code><pre>(residues-string *aa-seq-1*)
+</pre>
+</code>
+<code class="results">"MYRSTVLKCDQCLP"
+</code>
+</div>
+</span>
+<span><h2>sequence-range class</h2>
+<p>The sequence-range class is used to represent ranges on a
+   given sequence. It contains the slots sequence and range, with the
+   respective accessor sequence-range-sequence and
+   sequence-range-range.</p>
+<div class="doc class"><p class="doc-type">[CLASS]</p>
+<p class="doc-name class-name">RANGE</p>
+<p class="doc-documentation class-documentation">The RANGE class is used to specify spatial extent
+  along bio-sequences. Ranges are meant to be half-open, zero-based
+  intervals (like DAS sequences) such that the interval starting at i
+  and ending at j would include residue i but only the residues up to
+  but not including residue j. Therefore, the range 0,1 would specify
+  the first residue, or, alternatively addressing the same residues as
+  the residue at position 0.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(RANGE-EQUAL RANGE1 RANGE2)</p>
+<p class="doc-documentation gf-documentation">Compares two ranges and returns t if they are
+  #'equal.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(RANGE-CONTAINS RANGE1 RANGE2)</p>
+<p class="doc-documentation gf-documentation">Returns t if range1 contains range2, that is if the
+  lowest edge of range2 is greater than or equal to the lowest edge of
+  range1 and the highest edge of range2 is less than or equal to the
+  highest edge of range1.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(RANGE-START RANGE)</p>
+<p class="doc-documentation gf-documentation">Returns the start of range.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(RANGE-END RANGE)</p>
+<p class="doc-documentation gf-documentation">Returns the end of range.</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(RANGE-MIN RANGE)</p>
+<p class="doc-documentation gf-documentation">Returns the lowest edge of range/</p>
+</div>
+<div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
+<p class="doc-name gf-name">(RANGE-MAX RANGE)</p>
+<p class="doc-documentation gf-documentation">Returns the highest edge of range.</p>
+</div>
+</span>
+</span>
+<span><h1>Input and Output</h1>
+<span><h2>FASTA Files</h2>
+<p>The sequence similarity searching program FASTA uses a simple
+   file format for storing biological sequences, consisting of a
+   header line, starting with "&gt;", followed by the sequence
+   itself. FASTA files can be read with read-fasta-file function</p>
+<div class="lisp"><code><pre>(defparameter *dpp* (read-fasta-file "data/dpp.fasta"))
+</pre>
+</code>
+<code class="results">*DPP*
+</code>
+</div>
+<div class="lisp"><code><pre>(append
+ (subseq
+  (split-string-into-lines-list (residues-string (car *dpp*)) :max-line-length
+                                60)
+  0 3)
+ '("..."))
+</pre>
+</code>
+<code class="results">("GAAAGATCGCTGGTTACAACCGAATATACAGCCTCTAATCACTTTTTTTCTGCTCTGTAA"
+ "TCGTTCGCGGTTTCTGCGGCCATAAAATAAAGTAAATCCGAGTTAAACGCTGATAGTCGC"
+ "GCCTGAAGAACCACAGAAAAAACAGAAAATATCTCCCGTCGTTTCTCGTTCTCGTTTCCG" "...")
+</code>
+</div>
+</span>
+</span>
+<span><h1>Dictionaries</h1>
+</span>
+<span><h1>Examples</h1>
+</span>
+</body>
+</html>

@@ -20,16 +20,22 @@
  (:span
   (:h1 "Introduction")
   (:p "cl-bio is a common lisp library for working with biological
-  sequences in the spirit of BioPERL. "))
+  sequences in the spirit of BioPERL. ")
 
- (:span
-  (:h1 "Download and Installation")
-  (:p "For the moment, cl-bio is only available through git. No formal
+  (:span
+   (:h2 "Download and Installation")
+   (:p "For the moment, cl-bio is only available through git. No formal
   release has been made yet. The git repository can be found at "
-      :newline
-      (:a :href "http://git.cyrusharmon.org/cgi-bin/gitweb.cgi?p=cl-bio.git" 
-          "http://git.cyrusharmon.org/cgi-bin/gitweb.cgi?p=cl-bio.git")))
-
+       :newline
+       (:a :href "http://git.cyrusharmon.org/cgi-bin/gitweb.cgi?p=cl-bio.git" 
+           "http://git.cyrusharmon.org/cgi-bin/gitweb.cgi?p=cl-bio.git"))
+   (:span 
+    (:h2 "Requirements")
+    (:p "cl-bio has only been tested on SBCL but, in theory, should be
+   relatively easily ported to other common lisp environments. cl-bio
+   depends on a number of external libraries, including: alexandria,
+   cl-ppcre, flexichain and rucksack."))))
+ 
  (:span
   (:h1 "Foundational Biological Objects")
   (:p "")
@@ -237,22 +243,72 @@
     (:class bio:dna-sequence)
     (:class bio:dna-sequence-with-residues)
     (:class bio:simple-dna-sequence)
-    (:class bio:adjustable-dna-sequence))
+    (:class bio:adjustable-dna-sequence)
+    
+    (:generic-function bio:reverse-complement)
+    
+    (:function bio:make-simple-dna-sequence)
+    (:function bio:make-adjustable-dna-sequence)
+    (:function bio:make-dna-sequence-from-string)
+    (:function bio:make-random-dna-sequence)
 
+    (:p "To create an adjustable DNA sequence one could use the
+  following code:")
+    (:lisp
+   #q{(defparameter *dna-seq-1* (make-instance
+                                 'bio:adjustable-dna-sequence
+                                 :initial-contents "GAATTC"))})
+    
+    (:p "And to retrieve all the residues of the sequence:")
+    (:lisp
+     #q{(bio:residues-string *dna-seq-1*)}))
+   
    (:span
     (:h3 "RNA Sequences")
     (:class bio:rna-sequence)
     (:class bio:rna-sequence-with-residues)
     (:class bio:simple-rna-sequence)
-    (:class bio:adjustable-rna-sequence)))
+    (:class bio:adjustable-rna-sequence)
+    
+    (:function bio:make-simple-rna-sequence)
+    (:function bio:make-adjustable-rna-sequence)
+    (:function bio:make-rna-sequence-from-string)
+    (:function bio:make-random-rna-sequence)
+    
+    (:p "To create an adjustable RNA sequence one could use the
+  following code:")
+    (:lisp
+   #q{(defparameter *rna-seq-1* (make-instance
+                                 'bio:adjustable-rna-sequence
+                                 :initial-contents "AAGUUUUAG"))})
+    
+    (:p "And to retrieve all the residues of the sequence:")
+    (:lisp
+     #q{(bio:residues-string *rna-seq-1*)})))
 
   (:span
    (:h2 "Amino Acid Sequences")
    (:p "")
    (:class bio:aa-sequence)
+   (:class bio:aa-sequence-with-residues)
    (:class bio:simple-aa-sequence)
    (:class bio:adjustable-aa-sequence)
-   (:class bio:aa-sequence-with-residues))
+   (:class bio:aa-sequence-with-residues)
+   
+   (:function bio:make-simple-aa-sequence)
+   (:function bio:make-aa-sequence-from-string)
+   (:function bio:make-random-aa-sequence)
+   
+   (:p "To create an adjustable amino acid sequence one could use the
+  following code:")
+    (:lisp
+   #q{(defparameter *aa-seq-1* (make-instance
+                                 'bio:adjustable-aa-sequence
+                                 :initial-contents "MYRSTVLKCDQCLP"))})
+    
+    (:p "And to retrieve all the residues of the sequence:")
+    (:lisp
+     #q{(bio:residues-string *aa-seq-1*)}))
 
   (:span
 
@@ -271,19 +327,31 @@
    (:generic-function bio:range-min)
    (:generic-function bio:range-max)))
 
- 
+ (:span
+  (:h1 "Input and Output")
+  
+  (:span
+   (:h2 "FASTA Files")
+   (:p "The sequence similarity searching program FASTA uses a simple
+   file format for storing biological sequences, consisting of a
+   header line, starting with \">\", followed by the sequence
+   itself. FASTA files can be read with read-fasta-file function")
+
+   (:lisp
+    #q{(defparameter *dpp* (read-fasta-file "data/dpp.fasta"))})
+   
+   (:lisp
+    #q{(append (subseq (split-string-into-lines-list
+                     (residues-string (car *dpp*)) :max-line-length 60)
+                    0 3)
+            '("..."))})))
+
+ (:span
+  (:h1 "Dictionaries"))
+
  (:span
   (:h1 "Examples")
   
-  (:p "To create an adjustable DNA sequence one could use the
-  following code:")
-  (:lisp
-   #q{(defparameter *dna-seq-1* (make-instance
-                              'bio:adjustable-dna-sequence
-                              :initial-contents "GAATTC"))})
-
-  (:p "And to retrieve all the residues of the sequence:")
-  (:lisp
-   #q{(bio:residues-string *dna-seq-1*)}))
+  )
 
 #+nil (:bibliography))
