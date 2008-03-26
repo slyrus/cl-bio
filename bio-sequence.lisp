@@ -2,7 +2,7 @@
 ;;; Classes, generic functions, methods and functions for working
 ;;; with biological sequences
 ;;;
-;;; Copyright (c) 2006 Cyrus Harmon (ch-lisp@bobobeach.com)
+;;; Copyright (c) 2006-2008 Cyrus Harmon (ch-lisp@bobobeach.com)
 ;;; All rights reserved.
 ;;;
 ;;; Redistribution and use in source and binary forms, with or without
@@ -634,4 +634,276 @@ are set to random values."
       (loop for i below length
          do (setf (residue-code aa i) (random k))))
     aa))
+
+
+;;;
+;;; Codons, Translation and Friends
+(eval-when (:compile-toplevel :load-toplevel :execute)
+
+  (defclass codon-target ()
+    ((1-letter :initarg :1-letter :accessor 1-letter)
+     (3-letter :initarg :3-letter :accessor 3-letter)
+     (name :initarg :name :accessor codon-target-name))
+    (:documentation "A protocol class to serve as the parent class of
+    both stop-codons and amino-acids."))
+  
+  (defclass amino-acid (codon-target)
+    ((name :initarg :name :accessor amino-acid-name))
+    (:documentation "A representation of one of the 20 standard amino acids"))
+  
+  (defparameter *aa-name-hash-table* (make-hash-table :test 'equalp)
+    "hash-table used to (case-insensitively) look up amino-acids by
+    name.")
+
+  (defparameter *aa-1-letter-hash-table* (make-hash-table :test 'equalp)
+    "hash-table used to (case-insensitively) look up amino-acids by
+    single letter code.")
+
+  (defparameter *aa-3-letter-hash-table* (make-hash-table :test 'equalp)
+    "hash-table used to (case-insensitively) look up amino-acids by
+    three letter code.")
+  
+  (macrolet ((defaa (var one-letter three-letter name)
+               `(let ((aa (make-instance 'amino-acid
+                                        :1-letter ,one-letter
+                                        :3-letter ,three-letter
+                                        :name ,name)))
+                  (defparameter ,var aa)
+                  (setf (gethash ,name *aa-name-hash-table*) aa
+                        (gethash ,one-letter *aa-1-letter-hash-table*) aa
+                        (gethash ,three-letter *aa-3-letter-hash-table*) aa))))
+    
+    (progn
+      (defaa *ala* #\a "ala" "alanine")
+      (defaa *arg* #\r "arg" "arginine")
+      (defaa *asn* #\n "asn" "asparagine")
+      (defaa *asp* #\d "asp" "aspartic acid")
+      (defaa *cys* #\c "cys" "cysteine")
+      (defaa *gln* #\q "gln" "glutamine")
+      (defaa *glu* #\e "glu" "glutamic acid")
+      (defaa *gly* #\g "gly" "glycine")
+      (defaa *his* #\h "his" "histidine")
+      (defaa *ile* #\i "ile" "isoleucine")
+      (defaa *leu* #\l "leu" "leucine")
+      (defaa *lys* #\k "lys" "lysine")
+      (defaa *met* #\m "met" "methionine")
+      (defaa *phe* #\f "phe" "phenylalanine")
+      (defaa *pro* #\p "pro" "proline")
+      (defaa *ser* #\s "ser" "serine")
+      (defaa *thr* #\t "thr" "threonine")
+      (defaa *trp* #\w "trp" "tryptophan")
+      (defaa *tyr* #\y "tyr" "tyrosine")
+      (defaa *val* #\v "val" "valine"))))
+
+(defmethod print-object ((object codon-target) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (format stream "~A" 
+            (codon-target-name object))))
+
+(defclass stop-codon (codon-target)
+  ((name :initarg :name :accessor stop-codon-name))
+  (:documentation "stop-codons are codon-targets that signal that
+  translation should stop."))
+
+(defparameter *stop* (make-instance 'stop-codon :name "stop"
+                                    :1-letter #\*
+                                    :3-letter "***"))
+(defparameter *amber* (make-instance 'stop-codon :name "amber"
+                                     :1-letter #\*
+                                     :3-letter "***"))
+(defparameter *opal* (make-instance 'stop-codon :name "opal"
+                                    :1-letter #\*
+                                    :3-letter "***"))
+(defparameter *ochre* (make-instance 'stop-codon :name "ochre"
+                                     :1-letter #\*
+                                     :3-letter "***"))
+
+(defun 1-letter-aa (letter)
+  "Returns an amino acid instance specified by the given letter."
+  (case letter
+    (#\* *stop*)
+    (t (nth-value 0 (gethash letter *aa-1-letter-hash-table*)))))
+
+(defun 3-letter-aa (letter)
+  "Returns an amino acid instance specified by the given 3-letter
+abbreviation."
+  (if (equal letter "***")
+      *stop*
+      (nth-value 0 (gethash letter *aa-3-letter-hash-table*))))
+
+(defclass codon ()
+  ((triplet :accessor codon-triplet :initarg :triplet)
+   (target :accessor codon-target :initarg :target))
+  (:documentation "Instances of the codon class map between a given
+  nucleotide triplet (e.g. AUG) and a given codon-target, either an
+  amino acid or a stop codon."))
+
+(defclass codon-table ()
+  ((name :initarg :name :accessor codon-table-name)
+   (codon-table-hash-table
+    :accessor codon-table-hash-table
+    :initarg :hash-table
+    :initform (make-hash-table :test 'equalp)))
+  (:documentation "A codon-table maps contains a hash-table whose keys
+  are the nucleotide triplets and whose values are instances of the
+  codon class."))
+
+(defparameter *standard-codon-table*
+  (make-instance 'codon-table)
+  "An instance of the codon-table class for the standard genetic
+  code.")
+
+(defun make-codon-target (target triplets
+                          &key
+                          (codon-table *standard-codon-table*))
+  (loop for triplet in triplets
+     do
+       (let ((codon (make-instance 'codon :triplet triplet :target target)))
+         (setf (gethash triplet (codon-table-hash-table codon-table))
+               codon))))
+  
+(progn
+  (make-codon-target *ala* '("gcu" "gcc" "gca" "gcg"))
+  (make-codon-target *arg* '("cgu" "cgc" "cga" "cgg" "aga" "agg"))
+  (make-codon-target *asn* '("aau" "aac"))
+  (make-codon-target *asp* '("gau" "gac"))
+  (make-codon-target *cys* '("ugu" "ugc"))
+  (make-codon-target *gln* '("caa" "cag"))
+  (make-codon-target *glu* '("gaa" "gag"))
+  (make-codon-target *gly* '("ggu" "ggc" "gga" "ggg"))
+  (make-codon-target *his* '("cau" "cac"))
+  (make-codon-target *ile* '("auu" "auc" "aua"))
+  (make-codon-target *leu* '("uua" "uug" "cuu" "cuc" "cua" "cug"))
+  (make-codon-target *lys* '("aaa" "aag"))
+  (make-codon-target *met* '("aug"))
+  (make-codon-target *phe* '("uuu" "uuc"))
+  (make-codon-target *pro* '("ccu" "ccc" "cca" "ccg"))
+  (make-codon-target *ser* '("ucu" "ucc" "uca" "ucg" "agu" "agc"))
+  (make-codon-target *thr* '("acu" "acc" "aca" "acg"))
+  (make-codon-target *trp* '("ugg"))
+  (make-codon-target *tyr* '("uau" "uac"))
+  (make-codon-target *val* '("guu" "guc" "gua" "gug"))
+  (make-codon-target *amber* '("uag"))
+  (make-codon-target *opal* '("uga"))
+  (make-codon-target *ochre* '("uaa")))
+
+(defclass genetic-code ()
+  ((codon-table :accessor codon-table :initarg :codon-table)))
+
+(defparameter *standard-genetic-code*
+  (make-instance 'genetic-code :codon-table *standard-codon-table*))
+
+(defgeneric translate (na-sequence
+                       &key
+                       range
+                       genetic-code
+                       &allow-other-keys)
+  (:documentation "Translates the nucleic acid sequence na-sequence
+  into an amino acid sequence."))
+
+(defun enumerate-triplets (&key (letters '(#\a #\c #\g #\u)))
+  (loop for l1 in letters
+     nconc (loop for l2 in letters
+              nconc (loop for l3 in letters
+                       collect (concatenate 'string
+                                            (string l1)
+                                            (string l2)
+                                            (string l3))))))
+
+(defun get-codon-target (triplet &key (genetic-code
+                                       *standard-genetic-code*))
+  (let ((codon (gethash triplet
+                        (codon-table-hash-table
+                         (codon-table genetic-code)))))
+    (when codon (codon-target codon))))
+
+
+(defun check-triplets ()
+  (loop for triplet in (enumerate-triplets)
+     nconc (let ((codon (get-codon-target triplet)))
+             (unless codon
+               (list triplet)))))
+
+(defgeneric dna->rna (dna-seqeunce &key &allow-other-keys))
+
+(defmethod dna->rna ((dna dna-sequence-with-residues)
+                     &key
+                     (rna-class (etypecase dna
+                                  (simple-dna-sequence
+                                   'simple-rna-sequence)
+                                  (adjustable-dna-sequence 
+                                   'adjustable-rna-sequence))))
+  (let ((rna (make-instance rna-class
+                            :length (seq-length dna))))
+    (loop for i below (seq-length rna)
+       do (setf (residue-code rna i)
+                (residue-code dna i)))
+    rna))
+
+(defmethod translate ((rna rna-sequence-with-residues)
+                      &key
+                      (range (range 0 (seq-length rna)))
+                      genetic-code
+                      (aa-class 'simple-aa-sequence)
+                      truncate-on-stop)
+  (let ((len (ceiling (range-length range) 3)))
+    (let ((aa (make-instance aa-class :length len)))
+      (loop for i from (range-start range) to (- (range-end range) 3)
+         by 3
+         for j below len
+         do
+           (let ((residues
+                  (let ((r (range i (+ i 3))))
+                    (residues-string-range rna r))))
+             (let ((target (apply #'get-codon-target residues
+                                  (when genetic-code
+                                    `(:genetic-code ,genetic-code)))))
+               (when target
+                 (when truncate-on-stop
+                   (typecase target
+                     (stop-codon 
+                      (setf aa (make-instance aa-class :length j
+                                              :initial-contents
+                                              (residues-string-range
+                                               aa (range 0 j))))
+                      (return))))
+                 (setf (residue aa j)
+                       (1-letter target))))))
+      aa)))
+
+(defmethod translate ((dna dna-sequence-with-residues)
+                      &key
+                      range
+                      genetic-code
+                      aa-class
+                      truncate-on-stop)
+  (apply #'translate (dna->rna dna)
+         (append
+          (when range `(:range ,range))
+          (when genetic-code `(:genetic-code ,genetic-code))
+          (when aa-class `(:aa-class ,aa-class))
+          (when truncate-on-stop `(:truncate-on-stop ,truncate-on-stop)))))
+
+(defgeneric 3-letter-residues-list (aa-sequence)
+  (:documentation "Returns a list containing the three letter residue
+  codes for the given amino acid sequence."))
+
+(defmethod 3-letter-residues-list ((aa-sequence aa-sequence-with-residues))
+  (map 'list
+       (lambda (c) (nstring-upcase (3-letter (1-letter-aa c)) :start 0 :end 1))
+       (residues-string aa-sequence)))
+
+(defmethod 3-letter-residues-list ((aa-sequence string))
+  (map 'list
+       (lambda (c) (nstring-upcase (3-letter (1-letter-aa c)) :start 0 :end 1))
+       aa-sequence))
+
+(defgeneric 3-letter-residues-string (aa-sequence &optional stream)
+  (:documentation "Returns a string consisting of the concatenation of
+  the three letter codes for the given amino acid sequence."))
+
+(defmethod 3-letter-residues-string (aa-sequence  &optional stream)
+  (format stream "~{~A~}"
+          (3-letter-residues-list aa-sequence)))
+
 

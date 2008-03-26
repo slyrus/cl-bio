@@ -186,9 +186,9 @@ in sequence seq."))
 ;;; 5-bit amino acide sequence encoding
 
 (defparameter *5-bit-aa-sequence-char-map* #(#\A #\C #\D #\E #\F
-                                    #\G #\H #\I #\K #\L
-                                    #\M #\N #\P #\Q #\R
-                                    #\S #\T #\V #\W #\Y))
+                                             #\G #\H #\I #\K #\L
+                                             #\M #\N #\P #\Q #\R
+                                             #\S #\T #\V #\W #\Y #\*))
 (defparameter *5-bit-aa-char-list* (coerce *5-bit-aa-sequence-char-map* 'list))
     
 (defclass 5-bit-aa-sequence-encoding (aa-sequence-encoding)
