@@ -72,3 +72,34 @@
 (setf (residues-string df2) "AACCGG")
 (residues-string df2)
 
+
+(in-package :bio)
+
+
+(dna->rna (make-instance 'simple-dna-sequence :initial-contents "ATGCAGTAA"))
+
+
+(defparameter *moose* (make-instance 'simple-aa-sequence :initial-contents "ASTRYWPQ"))
+
+(translate (dna->rna (make-instance 'simple-dna-sequence :initial-contents "ATGCAGTAACCCTCTGGAGTC")))
+
+(let ((dna (make-random-dna-sequence 200)))
+  (list
+   (residues-string dna)
+   (residues-string (translate dna))
+   (residues-string (translate dna :range (range 1 (seq-length dna))))
+   (residues-string (translate dna :range (range 2 (seq-length dna))))))
+
+(format nil "~{~A~}"
+        (map 'list
+             (lambda (c) (nstring-upcase (3-letter (1-letter-aa c)) :start 0 :end 1))
+             (residues-string
+              (translate
+               (make-instance 'simple-dna-sequence
+                              :initial-contents "ATGCAGCAACCCTCTGGAGTCTAA")))))
+
+
+(3-letter-residues-string
+ (translate
+  (make-instance 'simple-dna-sequence
+                 :initial-contents "ATGCAGCAACCCTCTGGAGTCTAA")))
