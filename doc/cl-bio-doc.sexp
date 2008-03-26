@@ -20,8 +20,10 @@
  (:span
   (:h1 "Introduction")
   (:p "cl-bio is a common lisp library for working with biological
-  sequences in the spirit of BioPERL. ")
-
+  data such as nucleic acid and protein sequences, annotations on
+  sequences, sequence alignments, species databases, etc... in the
+  spirit of " (:a :href "http://www.bioperl.org" "BioPERL") ".")
+  
   (:span
    (:h2 "Download and Installation")
    (:p "For the moment, cl-bio is only available through git. No formal
@@ -33,8 +35,13 @@
     (:h2 "Requirements")
     (:p "cl-bio has only been tested on SBCL but, in theory, should be
    relatively easily ported to other common lisp environments. cl-bio
-   depends on a number of external libraries, including: alexandria,
-   cl-ppcre, flexichain and rucksack."))))
+   depends on a number of external libraries, including:")
+
+    (:list
+     (:item (:a :href "http://common-lisp.net/project/alexandria/" "alexandria"))
+     (:item (:a :href "http://www.weitz.de/cl-ppcre/" "cl-ppcre"))
+     (:item (:a :href "http://common-lisp.net/project/flexichain/" "flexichain"))
+     (:item (:a :href "http://common-lisp.net/project/rucksack/" "rucksack"))))))
  
  (:span
   (:h1 "Foundational Biological Objects")
@@ -149,6 +156,7 @@
  
  (:span
    (:h2 "Species Taxonomies")
+
    (:p "It is often important to understand the origin of a given
    biological entity, that is to say which species did the biological
    entity come from. There are cases where this is implicit, such as
@@ -158,6 +166,24 @@
    the species from which the entity was derived, but also the
    relationship of said species to other species, usually in the form
    of a taxonomic tree."))
+
+ (:span
+  :h1 "Common Bioinformatics Tasks with cl-bio"
+  
+  (:p "The following sections contain examples of performing a number
+ of common (and not so common, completely contrived) bioinformatics
+ tasks with the cl-bio library.")
+  
+  (:span
+   (:h2 "Loading a FASTA file")
+   (:lisp
+    #q{(defparameter *dpp* (read-fasta-file "data/dpp.fasta"))})
+   
+   (:lisp
+    #q{(append (subseq (split-string-into-lines-list
+                        (residues-string (car *dpp*)) :max-line-length 60)
+                       0 3)
+               '("..."))})))
 
  (:span
   (:h1 "Bio-sequences")
@@ -337,14 +363,7 @@
    header line, starting with \">\", followed by the sequence
    itself. FASTA files can be read with read-fasta-file function")
 
-   (:lisp
-    #q{(defparameter *dpp* (read-fasta-file "data/dpp.fasta"))})
-   
-   (:lisp
-    #q{(append (subseq (split-string-into-lines-list
-                     (residues-string (car *dpp*)) :max-line-length 60)
-                    0 3)
-            '("..."))})))
+   ))
 
  (:span
   (:h1 "Dictionaries"))
