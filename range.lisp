@@ -118,3 +118,5 @@
        (equal (strand range1)
               (strand range2))))
 
+(defun range (start end)
+  (make-instance 'range :start start :end end))
