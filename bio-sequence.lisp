@@ -173,17 +173,6 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
        (annotations seq))
       (annotations seq)))
 
-#+nil
-(defmethod get-annotations ((seq bio-sequence) &key type)
-  (if type
-      (remove-if-not
-       (lambda (x)
-         (typecase x
-           (simple-pairwise-alignment
-            (subtypep (class-name (class-of (beta-sequence x))) type))))
-       (annotations seq))
-      (annotations seq)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; Residue codes. Rather than just using characters to represent the
