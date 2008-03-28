@@ -39,8 +39,12 @@
 ;;; gene protocol class
 (defclass gene (bio-object)
   ((type :accessor gene-type :initarg :type)
-   (source :accessor gene-source :initarg :source)))
+   (source :accessor gene-source :initarg :source)
+   (products :accessor gene-products :initarg :products :initform nil)))
+
+(defclass gene-product (bio-object)
+  ((type :accessor gene-product-type :initarg :type)))
 
 ;;; gene-set protocol class
 (defclass gene-set (bio-set)
-  ((members :initarg :genes :accessor genes)))
+  ((members :initarg :genes :accessor genes :initform nil)))
