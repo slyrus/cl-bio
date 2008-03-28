@@ -76,6 +76,14 @@ of residues as the length."))
   (:documentation "A simple pairwise alignment between portions of two
   sequences."))
 
+(defun filter-alignments (list type)
+  (remove-if-not
+   (lambda (x)
+     (etypecase x
+       (simple-pairwise-alignment
+        (subtypep (class-name (class-of (beta-sequence x))) type))))
+   list))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 
 ;;; Sequence with residues. Anticipating the need for sequences
@@ -156,6 +164,25 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
                 :initform nil))
   (:documentation "A protocol class for sequences that can have
   annotations attached to them."))
+
+(defmethod get-annotations ((seq bio-sequence) &key type)
+  (if type
+      (remove-if-not
+       (lambda (x)
+         (subtypep (class-name (class-of x)) type))
+       (annotations seq))
+      (annotations seq)))
+
+#+nil
+(defmethod get-annotations ((seq bio-sequence) &key type)
+  (if type
+      (remove-if-not
+       (lambda (x)
+         (typecase x
+           (simple-pairwise-alignment
+            (subtypep (class-name (class-of (beta-sequence x))) type))))
+       (annotations seq))
+      (annotations seq)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -243,7 +270,7 @@ ith residue of seq to the residue code val."))
 (defclass adjustable-sequence (sequence-with-residue-codes)
   ()
   (:documentation "An adjustable sequence is a sequence that supports
- operations for insertion, deletion and appening of residues"))
+ operations for insertion, deletion and appending of residues"))
 
 (defgeneric insert-residue (seq pos res)
   (:documentation "Insert reside res at position pos in sequence
