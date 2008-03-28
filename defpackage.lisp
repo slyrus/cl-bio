@@ -163,12 +163,23 @@
                #:genes
                #:gene-type
                #:gene-source
+               #:gene-product
+               #:gene-products
                
                #:annotation
                #:annotations
+               #:get-annotations
                #:exon
+               #:cds
+               #:sts
+               #:get-genbank-accessions
 
                #:simple-pairwise-alignment
+               #:alpha-sequence
+               #:alpha-range
+               #:beta-sequence
+               #:beta-range
+               #:filter-alignments
 
                ;; utilities
                #:split-string-into-lines-list
@@ -178,6 +189,8 @@
                #:lookup
                #:fetch
                
+               #:translate
+
                . #1#)))
 
 (defpackage #:bio-user (:use #:cl #:bio))
