@@ -45,6 +45,9 @@
 (defclass exon (annotation)
   ((type :accessor annotation-type :initarg type :initform "exon")))
 
+(defclass cds (annotation)
+  ((type :accessor annotation-type :initarg type :initform "cds")))
+
 (defclass sts (annotation)
   ((type :accessor annotation-type :initarg type :initform "sts")))
 
