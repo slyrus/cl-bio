@@ -121,7 +121,7 @@
     efficiency, one would presumably like efficient (roughly constant
     time) access to random elements in the sequence. Fortunately,
     common lisp arrays provide both efficient access through the aref
-    accessor function and the ability to sepcialize the array storage
+    accessor function and the ability to specialize the array storage
     to particular types such as 8-bit integers or, importantly, 2-bit
     integers. Therefore we can use common lisp's built in arrays to
     represent DNA and RNA sequences with a 2-bit per element encoding

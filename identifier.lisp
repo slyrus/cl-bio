@@ -77,7 +77,7 @@
    (type :accessor identity-type :initarg :type :initform "accession")
    (authority :accessor authority :initarg :authority :initform "genbank")))
 
-(defmethod get-genbank-accesions ((described described-object))
+(defmethod get-genbank-accessions ((described described-object))
   (get-descriptors described :type 'genbank-accession))
 
 (defclass affymetrix-probe-set-id (identifier)
