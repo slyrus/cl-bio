@@ -43,6 +43,13 @@
 
 (defclass identifier-set (bio-set) ())
 
+;;; generic functions
+
+(defgeneric get-ncbi-gis (described-object))
+(defgeneric get-ncbi-loci (described-object))
+(defgeneric get-refseq-ids (described-object))
+(defgeneric get-genbank-accessions (described-object))
+
 ;;;
 ;;; identifier subclasses
 

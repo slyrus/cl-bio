@@ -55,6 +55,9 @@
 (defgeneric range-max (range)
   (:documentation "Returns the highest edge of range."))
 
+(defgeneric range-length (range)
+  (:documentation "Returns the length of range."))
+
 (defgeneric range-start (range)
   (:documentation "Returns the start of range."))
 
