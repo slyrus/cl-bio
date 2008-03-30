@@ -1,4 +1,6 @@
 
+(asdf:oos 'asdf:load-op :bio)
+
 (in-package :bio-user)
 
 (defparameter *d* (make-random-dna-sequence 100))
@@ -24,19 +26,13 @@
 (residues-string *af*)
 (seq-length *df*)
 
-(bio::residue *df* 0)
+(bio:residue *df* 0)
 
 (append-residues *df* "TTTT")
 (append-residues *rf* "CUCU")
 (append-residues *af* "YYYY")
 
 (insert-residues *df* 1 "AAAA")
-
-#+nil
-(array-element-type (map '(vector (unsigned-byte 2))
-                         #'(lambda (x)
-                             (char-to-seq-code df x))
-                         "TACGT"))
 
 (flexichain:insert-vector*
  (bio::residues df) 0 (map '(vector (unsigned-byte 2))
@@ -73,11 +69,7 @@
 (residues-string df2)
 
 
-(in-package :bio)
-
-
 (dna->rna (make-instance 'simple-dna-sequence :initial-contents "ATGCAGTAA"))
-
 
 (defparameter *moose* (make-instance 'simple-aa-sequence :initial-contents "ASTRYWPQ"))
 
@@ -90,16 +82,8 @@
    (residues-string (translate dna :range (range 1 (seq-length dna))))
    (residues-string (translate dna :range (range 2 (seq-length dna))))))
 
-(format nil "~{~A~}"
-        (map 'list
-             (lambda (c) (nstring-upcase (3-letter (1-letter-aa c)) :start 0 :end 1))
-             (residues-string
-              (translate
-               (make-instance 'simple-dna-sequence
-                              :initial-contents "ATGCAGCAACCCTCTGGAGTCTAA")))))
-
-
 (3-letter-residues-string
  (translate
   (make-instance 'simple-dna-sequence
                  :initial-contents "ATGCAGCAACCCTCTGGAGTCTAA")))
+
