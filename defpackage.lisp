@@ -189,7 +189,11 @@
                #:lookup
                #:fetch
                
+               #:dna->rna
                #:translate
+
+               #:3-letter-residues-string
+               #:3-letter-residues-list
 
                . #1#)))
 
