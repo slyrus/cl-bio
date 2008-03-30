@@ -165,6 +165,8 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
   (:documentation "A protocol class for sequences that can have
   annotations attached to them."))
 
+(defgeneric get-annotations (bio-sequence &key type))
+
 (defmethod get-annotations ((seq bio-sequence) &key type)
   (if type
       (remove-if-not
