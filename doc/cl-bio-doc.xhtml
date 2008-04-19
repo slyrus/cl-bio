@@ -98,7 +98,7 @@
     efficiency, one would presumably like efficient (roughly constant
     time) access to random elements in the sequence. Fortunately,
     common lisp arrays provide both efficient access through the aref
-    accessor function and the ability to sepcialize the array storage
+    accessor function and the ability to specialize the array storage
     to particular types such as 8-bit integers or, importantly, 2-bit
     integers. Therefore we can use common lisp's built in arrays to
     represent DNA and RNA sequences with a 2-bit per element encoding
@@ -138,6 +138,31 @@
    the species from which the entity was derived, but also the
    relationship of said species to other species, usually in the form
    of a taxonomic tree.</p>
+</span>
+<span h1="Common Bioinformatics Tasks with cl-bio"><p>The following sections contain examples of performing a number
+ of common (and not so common, completely contrived) bioinformatics
+ tasks with the cl-bio library.</p>
+<span><h2>Loading a FASTA file</h2>
+<div class="lisp"><code><pre>(defparameter *dpp* (read-fasta-file "data/dpp.fasta"))
+</pre>
+</code>
+<code class="results">*DPP*
+</code>
+</div>
+<div class="lisp"><code><pre>(append
+ (subseq
+  (split-string-into-lines-list (residues-string (car *dpp*)) :max-line-length
+                                60)
+  0 3)
+ '("..."))
+</pre>
+</code>
+<code class="results">("GAAAGATCGCTGGTTACAACCGAATATACAGCCTCTAATCACTTTTTTTCTGCTCTGTAA"
+ "TCGTTCGCGGTTTCTGCGGCCATAAAATAAAGTAAATCCGAGTTAAACGCTGATAGTCGC"
+ "GCCTGAAGAACCACAGAAAAAACAGAAAATATCTCCCGTCGTTTCTCGTTCTCGTTTCCG" "...")
+</code>
+</div>
+</span>
 </span>
 <span><h1>Bio-sequences</h1>
 <p>The cl-bio Bio-sequence classes and generic functions are
@@ -254,7 +279,7 @@ ith residue of seq to the residue code val.</p>
 <div class="doc class"><p class="doc-type">[CLASS]</p>
 <p class="doc-name class-name">ADJUSTABLE-SEQUENCE</p>
 <p class="doc-documentation class-documentation">An adjustable sequence is a sequence that supports
- operations for insertion, deletion and appening of residues</p>
+ operations for insertion, deletion and appending of residues</p>
 </div>
 <div class="doc generic-function"><p class="doc-type">[GENERIC FUNCTION]</p>
 <p class="doc-name gf-name">(INSERT-RESIDUE SEQ POS RES)</p>
@@ -520,25 +545,6 @@ are set to random values.</p>
    file format for storing biological sequences, consisting of a
    header line, starting with "&gt;", followed by the sequence
    itself. FASTA files can be read with read-fasta-file function</p>
-<div class="lisp"><code><pre>(defparameter *dpp* (read-fasta-file "data/dpp.fasta"))
-</pre>
-</code>
-<code class="results">*DPP*
-</code>
-</div>
-<div class="lisp"><code><pre>(append
- (subseq
-  (split-string-into-lines-list (residues-string (car *dpp*)) :max-line-length
-                                60)
-  0 3)
- '("..."))
-</pre>
-</code>
-<code class="results">("GAAAGATCGCTGGTTACAACCGAATATACAGCCTCTAATCACTTTTTTTCTGCTCTGTAA"
- "TCGTTCGCGGTTTCTGCGGCCATAAAATAAAGTAAATCCGAGTTAAACGCTGATAGTCGC"
- "GCCTGAAGAACCACAGAAAAAACAGAAAATATCTCCCGTCGTTTCTCGTTCTCGTTTCCG" "...")
-</code>
-</div>
 </span>
 </span>
 <span><h1>Dictionaries</h1>

@@ -177,11 +177,11 @@
   (:span
    (:h2 "Loading a FASTA file")
    (:lisp
-    #q{(defparameter *dpp* (read-fasta-file "data/dpp.fasta"))})
+    #q{(defparameter *dpp* (bio:read-fasta-file "data/dpp.fasta"))})
    
    (:lisp
     #q{(append (subseq (split-string-into-lines-list
-                        (residues-string (car *dpp*)) :max-line-length 60)
+                        (bio:residues-string (car *dpp*)) :max-line-length 60)
                        0 3)
                '("..."))})))
 
