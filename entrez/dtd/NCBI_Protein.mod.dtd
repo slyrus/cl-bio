@@ -1,0 +1,70 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqfeat.asn"
+     ::DATATOOL:: by application DATATOOL version 1.8.1
+     ::DATATOOL:: on 01/18/2007 23:07:18
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Protein"
+================================================= -->
+
+<!--
+**********************************************************************
+
+  NCBI Protein
+  by James Ostell, 1990
+  version 0.8
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Prot-ref -->
+
+<!-- Elements referenced from other modules:
+          Dbtag FROM NCBI-General -->
+<!-- ============================================ -->
+
+<!--
+*** Prot-ref ***********************************************
+*
+*  Reference to a protein name
+*
+-->
+<!ELEMENT Prot-ref (
+        Prot-ref_name?, 
+        Prot-ref_desc?, 
+        Prot-ref_ec?, 
+        Prot-ref_activity?, 
+        Prot-ref_db?, 
+        Prot-ref_processed?)>
+
+<!ELEMENT Prot-ref_name (Prot-ref_name_E*)> <!-- protein name -->
+
+
+<!ELEMENT Prot-ref_name_E (#PCDATA)>
+
+<!ELEMENT Prot-ref_desc (#PCDATA)> <!-- description (instead of name) -->
+
+<!ELEMENT Prot-ref_ec (Prot-ref_ec_E*)> <!-- E.C. number(s) -->
+
+
+<!ELEMENT Prot-ref_ec_E (#PCDATA)>
+
+<!ELEMENT Prot-ref_activity (Prot-ref_activity_E*)> <!-- activities -->
+
+
+<!ELEMENT Prot-ref_activity_E (#PCDATA)>
+
+<!ELEMENT Prot-ref_db (Dbtag*)> <!-- ids in other dbases -->
+<!-- processing status -->
+<!ELEMENT Prot-ref_processed %ENUM;>
+<!ATTLIST Prot-ref_processed value (
+        not-set |
+        preprotein |
+        mature |
+        signal-peptide |
+        transit-peptide
+        ) #REQUIRED >
+
+

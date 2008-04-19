@@ -1,0 +1,36 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqfeat.asn"
+     ::DATATOOL:: by application DATATOOL version 1.8.1
+     ::DATATOOL:: on 01/18/2007 23:07:18
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Rsite"
+================================================= -->
+
+<!--
+**********************************************************************
+
+  NCBI Restriction Sites
+  by James Ostell, 1990
+  version 0.8
+
+**********************************************************************
+-->
+
+<!-- Elements used by other modules:
+          Rsite-ref -->
+
+<!-- Elements referenced from other modules:
+          Dbtag FROM NCBI-General -->
+<!-- ============================================ -->
+
+
+<!ELEMENT Rsite-ref (
+        Rsite-ref_str | 
+        Rsite-ref_db)>
+
+<!ELEMENT Rsite-ref_str (#PCDATA)> <!-- may be unparsable -->
+
+<!ELEMENT Rsite-ref_db (Dbtag)> <!-- pointer to a restriction site database -->
+

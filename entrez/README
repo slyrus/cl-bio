@@ -1,0 +1,28 @@
+
+cl-entrez
+Cyrus Harmon
+ch-lisp@bobobeach.com
+Wed Nov 21 11:10:57 2007
+
+This package is for retrieving biological sequence data from the
+National Center for Biotechnology Infomration (NCBI) via their entrez
+web service.
+
+* HTTP retrieval
+
+HTTP retrieval is done using Edi Weitz's fine DRAKMA package
+
+* XML
+
+closure-xml
+
+* DTDs
+
+The NCBI entrez XML data formats make use of XML DTDs which means
+that these DTDs need to be available to the system at the time the XML
+files are loaded. This can either be done over the web by fetching the
+DTDs via http or they can be found locally by looking up the
+corresponding based on its public identifier. Local copies of NCBIs
+DTDs are stored in the DTD directory.
+
+
