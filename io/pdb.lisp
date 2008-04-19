@@ -236,7 +236,7 @@
   (print (parse-specification-list (print (data record)))))
 (defgeneric write-pdb-record (record-type data stream))
 
-(defmethod write-pdb-header (entry stream)
+(defun write-pdb-header (entry stream)
   (format stream "~A~10,0T~A~50,0T~A~62,0T~A~80,0T~%"
           "HEADER"
           (classification entry)
