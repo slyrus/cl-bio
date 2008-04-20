@@ -1,32 +1,7 @@
 
 (in-package :entrez)
 
-(defun parse-entrez-gene-xmls (xmls)
-  (when (equal (element-type xmls) "Entrezgene")
-    (let ((obj (make-instance 'bio:gene)))
-      (let ((type (child xmls :type "Entrezgene_type")))
-        (when type
-          (let ((type-value (cadr (assoc "value" (attributes type) :test 'equal))))
-            (when type-value
-              (setf (bio:gene-type obj) type-value)))))
-      (let ((source (child xmls :type "Entrezgene_source")))
-        (when source
-          (let ((source-value (cadr (assoc "value" (attributes source) :test 'equal))))
-            (when source-value
-              (setf (bio:gene-source obj) source-value)))))
-      (print obj)
-      obj)))
-
-(defun parse-entrez-gene-set-xmls (xmls)
-  (when (equal (element-type xmls) "Entrezgene-Set")
-    (let ((obj (make-instance 'bio:gene-set)))
-      (setf (bio:genes obj)
-            (mapcar #'parse-entrez-gene-xmls
-                    (children xmls :type "Entrezgene")))
-      obj)))
-
 (defun parse-entrez-gene-rifs (node gene)
-  (declare (optimize (debug 3)))
   (xpath:do-node-set
       (rif-node
        (xpath:evaluate
