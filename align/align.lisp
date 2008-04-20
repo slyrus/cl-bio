@@ -1,3 +1,34 @@
+;;; align.lisp
+;;; Classes, generic functions, methods and functions for aligning
+;;; biological sequences
+;;;
+;;; Copyright (c) 2002-2008 Cyrus Harmon (ch-lisp@bobobeach.com)
+;;; All rights reserved.
+;;;
+;;; Redistribution and use in source and binary forms, with or without
+;;; modification, are permitted provided that the following conditions
+;;; are met:
+;;;
+;;;   * Redistributions of source code must retain the above copyright
+;;;     notice, this list of conditions and the following disclaimer.
+;;;
+;;;   * Redistributions in binary form must reproduce the above
+;;;     copyright notice, this list of conditions and the following
+;;;     disclaimer in the documentation and/or other materials
+;;;     provided with the distribution.
+;;;
+;;; THIS SOFTWARE IS PROVIDED BY THE AUTHOR 'AS IS' AND ANY EXPRESSED
+;;; OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+;;; WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+;;; ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+;;; DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+;;; DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+;;; GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+;;; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+;;; WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+;;; NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+;;;
 
 (in-package :bio-align)
 
@@ -77,10 +108,10 @@
   (get-score scoring-matrix k l))
 
 (defparameter transition-table (make-hash-table :test #'equal))
-(setf (gethash #\A transition-table) #\G)
-(setf (gethash #\C transition-table) #\T)
-(setf (gethash #\G transition-table) #\A)
-(setf (gethash #\T transition-table) #\C)
+(setf (gethash #\A transition-table) #\G
+      (gethash #\C transition-table) #\T
+      (gethash #\G transition-table) #\A
+      (gethash #\T transition-table) #\C)
 
 (defun transition (residue)
   (let ((c (gethash (char-upcase residue) transition-table)))
@@ -325,7 +356,9 @@
   (%global-align-dna (residues-string seq1)
                      (residues-string seq2)))
 
-(defun global-align-affine-gaps (a b score-fn)
+(defgeneric global-align-affine-gaps (a b score-fn))
+
+(defmethod global-align-affine-gaps (a b score-fn)
   (let ((m (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
         (n (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
         (d (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
@@ -352,8 +385,14 @@
        :dp-matrix m
        :dp-down-matrix d
        :dp-right-matrix r
-       :dp-traceback n))
-    ))
+       :dp-traceback n))))
+
+(defmethod global-align-affine-gaps ((seq1 aa-sequence-with-residues)
+                                     (seq2 aa-sequence-with-residues)
+                                     score-fn)
+  (global-align-affine-gaps (residues-string seq1)
+                            (residues-string seq2)
+                            score-fn))
 
 (defun global-align-aa-affine-gaps (a b)
   (global-align-affine-gaps a b #'aa-score))
@@ -421,15 +460,16 @@
        (t
         (setf (aref m i j) z) (setf (aref n i j) +left+) z))))))
 
-(defun local-align-affine-gaps (a b score-fn)
+(defgeneric local-align-affine-gaps (a b score-fn))
+
+(defmethod local-align-affine-gaps (a b score-fn)
   (let ((m (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
         (n (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
         (d (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
         (r (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
         (maxscore 0)
         (maxi 0)
-        (maxj 0)
-        )
+        (maxj 0))
     (dotimes (i (+ (length a) 1))
              (setf (aref m i 0) 0))
     (dotimes (j (+ (length b) 1))
@@ -461,6 +501,13 @@
 
 (defun local-align-na-affine-gaps (a b)
   (local-align-affine-gaps a b #'na-score))
+
+(defmethod local-align-affine-gaps ((seq1 aa-sequence-with-residues)
+                                     (seq2 aa-sequence-with-residues)
+                                     score-fn)
+  (local-align-affine-gaps (residues-string seq1)
+                           (residues-string seq2)
+                           score-fn))
 
 (defun local-align (a b score-fn)
   (let ((m (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
