@@ -34,7 +34,11 @@
 
 (defclass dictionary (bio-object) ())
 
-(defgeneric fetch (object dictionary &key &allow-other-keys))
+(defgeneric lookup (object dictionary &key &allow-other-keys)
+  (:documentation "Looks for object in dictionary and returns an object
+  containing information about object, but not necessarily a
+  representation of the obejct itself."))
 
-(defgeneric lookup (object dictionary &key &allow-other-keys))
+(defgeneric fetch (object dictionary &key &allow-other-keys)
+  (:documentation "Retrieves object from dictionary."))
 
