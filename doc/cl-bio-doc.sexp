@@ -54,7 +54,27 @@
      are automatically loaded when cl-bio is loaded, such as the io
      module and laodable modules that modules must be explicitly
      loaded by code that expects to use the functionality provided by
-     the module, such as the align and entrez modules."))))
+     the module, such as the align and entrez modules.")
+    (:span
+     (:h3 "Module Requirements")
+     (:span
+      (:h4 "cl-bio-rucksack")
+      (:list
+       (:item (:a :href "http://common-lisp.net/project/rucksack/"
+                  "rucksack"))))
+     (:span
+      (:h4 "cl-bio-taxonomy")
+      (:list
+       (:item (:a :href "http://common-lisp.net/project/rucksack/"
+                  "bio-rucksack"))))
+     (:span
+      (:h4 "cl-bio-entrez")
+      (:list
+       (:item (:a :href "http://puri.b9.com/" "puri"))
+       (:item (:a :href "http://weitz.de/drakma/" "drakma"))
+       (:item (:a :href "http://common-lisp.net/project/cxml/" "cxml"))
+       (:item (:a :href "http://www.lichteblau.com/cxml-stp/" "cxml-stp"))
+       (:item (:a :href "http://common-lisp.net/project/plexippus-xpath/" "plexippus xpath"))))))))
  
  (:span
   (:h1 "Foundational Biological Objects")
@@ -167,19 +187,7 @@
    (:h2 "Alignments")
    (:p "[TBW]")))
  
- (:span
-   (:h2 "Species Taxonomies")
-
-   (:p "It is often important to understand the origin of a given
-   biological entity, that is to say which species did the biological
-   entity come from. There are cases where this is implicit, such as
-   large databases from a single species, but, especially as the
-   number of organisms from which substantial amounts of sequences
-   have been generated, it is important to track not just the name of
-   the species from which the entity was derived, but also the
-   relationship of said species to other species, usually in the form
-   of a taxonomic tree."))
-
+ 
  (:span
   :h1 "Common Bioinformatics Tasks with cl-bio"
   
@@ -379,15 +387,37 @@
    ))
 
  (:span
-  (:h1 "Dictionaries"))
+  (:h1 "Dictionaries")
+  (:p "Dictionaries provide two simple operations, lookup and
+  fetch. The idea behind lookup is that one can use lookup to see if
+  the dictionary contains information about an object without
+  explicitly retrieving the object. (I suppose we could use other
+  names like, say, search and retrieve here.)"))
+
+ 
+ (:span
+  (:h1 "Loadable Module: cl-bio-rucksack")
+  (:p "The cl-bio-rucksack module exposes a rucksack for use by other
+  cl-bio modules for persistently storing lisp objects."))
 
  (:span
-  (:h1 "Loadable Module: Entrez")
+  (:h1 "Loadable Module: cl-bio-taxonomy")
+  (:p "It is often important to understand the origin of a given
+  biological entity, that is to say which species did the biological
+  entity come from. There are cases where this is implicit, such as
+  large databases from a single species, but, especially as the number
+  of organisms from which substantial amounts of sequences have been
+  generated, it is important to track not just the name of the species
+  from which the entity was derived, but also the relationship of said
+  species to other species, usually in the form of a taxonomic
+  tree."))
+
+ (:span
+  (:h1 "Loadable Module: cl-bio-entrez")
   (:p "The entrez module provides functions and classes for
   interfacing with NCBI's " (:a :href
   "http://ncbi.nlm.nih.gov/sites/entrez" "Entrez") " database and
-  services. Entrez provides a web interface for accessing " 
-  ))
+  services. Entrez provides a web interface for accessing "))
 
  (:span
   (:h1 "Examples")
