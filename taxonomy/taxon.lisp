@@ -2,7 +2,7 @@
 ;;; Classes, generic functions, methods and functions for working
 ;;; with taxonomy data
 ;;;
-;;; Copyright (c) 2006 Cyrus Harmon (ch-lisp@bobobeach.com)
+;;; Copyright (c) 2006-2008 Cyrus Harmon (ch-lisp@bobobeach.com)
 ;;; All rights reserved.
 ;;;
 ;;; Redistribution and use in source and binary forms, with or without
@@ -84,7 +84,7 @@
 ;;; rucksack macros
 
 (defmacro with-bio-rucksack ((rucksack) &body body)
-  `(rucksack:with-rucksack (,rucksack bio-rucksack::*bio-rucksack*)
+  `(rucksack:with-rucksack (,rucksack *bio-rucksack*)
      (rucksack:with-transaction ()
        (progn
          ,@body))))
@@ -112,7 +112,7 @@
 ;;; rucksack persistent classes
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (rucksack:with-rucksack (rucksack bio-rucksack::*bio-rucksack*)
+  (rucksack:with-rucksack (rucksack *bio-rucksack*)
     (rucksack:with-transaction ()
       (defclass p-taxon (taxon)
         ((tax-id :accessor tax-id :initarg :tax-id :unique t :index :number-index)
@@ -132,7 +132,7 @@
         (:metaclass rucksack:persistent-class)))))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (rucksack:with-rucksack (rucksack bio-rucksack::*bio-rucksack*)
+  (rucksack:with-rucksack (rucksack *bio-rucksack*)
     (rucksack:with-transaction ()
       (defclass p-tax-name (tax-name)
         ((tax-id :accessor tax-id :initarg :tax-id :index :number-index)
@@ -150,7 +150,7 @@
 (defun parse-tax-nodes (&key (file *tax-nodes-file*))
   (let ((batch-size *default-batch-size*))
     (flet ((parse-batch (stream)
-             (rucksack:with-rucksack (rucksack bio-rucksack::*bio-rucksack*)
+             (rucksack:with-rucksack (rucksack *bio-rucksack*)
                (print 'new-transaction)
                (rucksack:with-transaction (:inhibit-gc t)
                  (loop for i below batch-size
@@ -204,7 +204,7 @@
 (defun parse-tax-names (&key (file *tax-names-file*))
   (let ((batch-size *default-batch-size*))
     (flet ((parse-batch (stream)
-             (rucksack:with-rucksack (rucksack bio-rucksack::*bio-rucksack*)
+             (rucksack:with-rucksack (rucksack *bio-rucksack*)
                (print 'new-transaction)
                (rucksack:with-transaction (:inhibit-gc t)
                  (loop for i below batch-size

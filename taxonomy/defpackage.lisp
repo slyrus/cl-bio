@@ -31,5 +31,5 @@
 
 (defpackage #:bio-taxonomy
   (:nicknames #:taxonomy)
-  (:use #:cl #:bio))
+  (:use #:cl #:bio #:bio-rucksack))
 

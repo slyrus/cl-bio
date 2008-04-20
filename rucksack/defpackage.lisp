@@ -30,5 +30,6 @@
 (in-package #:cl-user)
 
 (defpackage #:bio-rucksack
-  (:use #:cl #:bio))
+  (:use #:cl #:bio)
+  (:export #:*bio-rucksack*))
 
