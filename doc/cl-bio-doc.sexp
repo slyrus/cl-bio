@@ -34,14 +34,27 @@
    (:span 
     (:h2 "Requirements")
     (:p "cl-bio has only been tested on SBCL but, in theory, should be
-   relatively easily ported to other common lisp environments. cl-bio
-   depends on a number of external libraries, including:")
+   relatively easily ported to other common lisp environments. The
+   core cl-bio library depends on a number of external libraries,
+   including:")
 
     (:list
-     (:item (:a :href "http://common-lisp.net/project/alexandria/" "alexandria"))
+     (:item (:a :href "http://common-lisp.net/project/alexandria/"
+                "alexandria"))
      (:item (:a :href "http://www.weitz.de/cl-ppcre/" "cl-ppcre"))
-     (:item (:a :href "http://common-lisp.net/project/flexichain/" "flexichain"))
-     (:item (:a :href "http://common-lisp.net/project/rucksack/" "rucksack"))))))
+     (:item (:a :href "http://common-lisp.net/project/flexichain/"
+                "flexichain")) 
+     (:item (:a :href "http://common-lisp.net/project/rucksack/"
+                "rucksack"))))
+
+   (:span
+    (:h2 "Modules")
+    (:p "cl-bio is organized as a core library that is extended by
+     additional module libraries. There are both core modules which
+     are automatically loaded when cl-bio is loaded, such as the io
+     module and laodable modules that modules must be explicitly
+     loaded by code that expects to use the functionality provided by
+     the module, such as the align and entrez modules."))))
  
  (:span
   (:h1 "Foundational Biological Objects")
@@ -180,7 +193,7 @@
     #q{(defparameter *dpp* (bio:read-fasta-file "data/dpp.fasta"))})
    
    (:lisp
-    #q{(append (subseq (split-string-into-lines-list
+    #q{(append (subseq (bio:split-string-into-lines-list
                         (bio:residues-string (car *dpp*)) :max-line-length 60)
                        0 3)
                '("..."))})))
@@ -367,6 +380,14 @@
 
  (:span
   (:h1 "Dictionaries"))
+
+ (:span
+  (:h1 "Loadable Module: Entrez")
+  (:p "The entrez module provides functions and classes for
+  interfacing with NCBI's " (:a :href
+  "http://ncbi.nlm.nih.gov/sites/entrez" "Entrez") " database and
+  services. Entrez provides a web interface for accessing " 
+  ))
 
  (:span
   (:h1 "Examples")

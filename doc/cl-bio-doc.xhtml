@@ -143,7 +143,7 @@
  of common (and not so common, completely contrived) bioinformatics
  tasks with the cl-bio library.</p>
 <span><h2>Loading a FASTA file</h2>
-<div class="lisp"><code><pre>(defparameter *dpp* (read-fasta-file "data/dpp.fasta"))
+<div class="lisp"><code><pre>(defparameter *dpp* (bio-io:read-fasta-file "data/dpp.fasta"))
 </pre>
 </code>
 <code class="results">*DPP*
@@ -151,8 +151,8 @@
 </div>
 <div class="lisp"><code><pre>(append
  (subseq
-  (split-string-into-lines-list (residues-string (car *dpp*)) :max-line-length
-                                60)
+  (bio:split-string-into-lines-list (bio:residues-string (car *dpp*))
+                                    :max-line-length 60)
   0 3)
  '("..."))
 </pre>
@@ -371,14 +371,14 @@ contents are randomly chosen residues.</p>
 <p>To create an adjustable DNA sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *dna-seq-1*
-  (make-instance 'adjustable-dna-sequence :initial-contents "GAATTC"))
+  (make-instance 'bio:adjustable-dna-sequence :initial-contents "GAATTC"))
 </pre>
 </code>
 <code class="results">*DNA-SEQ-1*
 </code>
 </div>
 <p>And to retrieve all the residues of the sequence:</p>
-<div class="lisp"><code><pre>(residues-string *dna-seq-1*)
+<div class="lisp"><code><pre>(bio:residues-string *dna-seq-1*)
 </pre>
 </code>
 <code class="results">"GAATTC"
@@ -424,14 +424,14 @@ residues are randomly chosen.</p>
 <p>To create an adjustable RNA sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *rna-seq-1*
-  (make-instance 'adjustable-rna-sequence :initial-contents "AAGUUUUAG"))
+  (make-instance 'bio:adjustable-rna-sequence :initial-contents "AAGUUUUAG"))
 </pre>
 </code>
 <code class="results">*RNA-SEQ-1*
 </code>
 </div>
 <p>And to retrieve all the residues of the sequence:</p>
-<div class="lisp"><code><pre>(residues-string *rna-seq-1*)
+<div class="lisp"><code><pre>(bio:residues-string *rna-seq-1*)
 </pre>
 </code>
 <code class="results">"AAGUUUUAG"
@@ -480,14 +480,15 @@ are set to random values.</p>
 <p>To create an adjustable amino acid sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *aa-seq-1*
-  (make-instance 'adjustable-aa-sequence :initial-contents "MYRSTVLKCDQCLP"))
+  (make-instance 'bio:adjustable-aa-sequence :initial-contents
+                 "MYRSTVLKCDQCLP"))
 </pre>
 </code>
 <code class="results">*AA-SEQ-1*
 </code>
 </div>
 <p>And to retrieve all the residues of the sequence:</p>
-<div class="lisp"><code><pre>(residues-string *aa-seq-1*)
+<div class="lisp"><code><pre>(bio:residues-string *aa-seq-1*)
 </pre>
 </code>
 <code class="results">"MYRSTVLKCDQCLP"
