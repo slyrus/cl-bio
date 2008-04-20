@@ -8,17 +8,8 @@
   (:bibtex-style "Science"))
  (:html-metadata (:htmlcss "simple.css") )
  
- (:span
-  (:h1 "Abstract")
- 
-  (:p "cl-entrez is ..."))
- 
- (:span
-  (:h1 "Introduction")
-  (:p ""))
-
-  (:span
-   (:h1 "Searching the entrez database")
-   (:p ""))
+ (:p "Now that cl-entrez is part of cl-bio-entrez, there's no need for
+ separate documentation. At least not for the moment anyway. Check the
+ cl-bio documentation")
 
  #+nil (:bibliography))
