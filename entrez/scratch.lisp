@@ -1,7 +1,7 @@
 
 (asdf:oos 'asdf:load-op :cl-bio-entrez)
 
-(in-package :entrez)
+(in-package :entrez-user)
 
 (http-get-entrez-dtds)
 
@@ -174,14 +174,14 @@
 
 (join-xpath-result
  (car (xpath:map-node-set->list
-       #'get-gbseq-feature-nodes
+       #'entrez::get-gbseq-feature-nodes
        (xpath:evaluate "GBSet/GBSeq" *esr1-nucleotide-node*))))
 
 (join-xpath-result
  (car (let ((gb-seqs
              (xpath:all-nodes
               (xpath:evaluate "GBSet/GBSeq" *esr1-nucleotide-node*))))
-        (mapcar #'(lambda (x) (get-gbseq-feature-nodes x :type "CDS")) gb-seqs))))
+        (mapcar #'(lambda (x) (entrez::get-gbseq-feature-nodes x :type "CDS")) gb-seqs))))
 
 (xpath:map-node-set->list
  #'(lambda (seq)
@@ -201,7 +201,7 @@
                    "GBFeature_intervals/GBInterval/GBInterval_to/text()"
                    feat)))
                 list))
-        (get-gbseq-feature-nodes seq :type "CDS"))
+        (entrez::get-gbseq-feature-nodes seq :type "CDS"))
        (nreverse list)))
    (xpath:evaluate "GBSet/GBSeq" *esr1-nucleotide-node*))
 
@@ -307,7 +307,6 @@
                                    "/Entrezgene_comments"
                                    "/Gene-commentary[Gene-commentary_type/attribute::value=\"generif\"]")
                       *dpp-node*))
-
 
 (xpath:string-value
    (xpath:evaluate (concatenate 'string "Entrezgene-Set"
