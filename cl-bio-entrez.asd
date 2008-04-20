@@ -14,15 +14,14 @@
             ((:cl-source-file "defpackage")
              (:cl-source-file "classes" :depends-on ("defpackage"))
              (:cl-source-file "utilities" :depends-on ("defpackage"))
-             (:cl-source-file "xml" :depends-on ("defpackage"))
-             (:cl-source-file "entrez" :depends-on ("defpackage" "classes" "utilities" "xml"))
+             (:cl-source-file "entrez" :depends-on ("defpackage" "classes" "utilities"))
              (:cl-source-file "search"
-                              :depends-on ("defpackage" "classes" "utilities" "xml" "entrez"))
+                              :depends-on ("defpackage" "classes" "utilities" "entrez"))
              (:cl-source-file "entrez-gene"
-                              :depends-on ("defpackage" "classes" "utilities" "xml" "entrez"))
-             (:cl-source-file "gbseq" :depends-on ("defpackage" "classes" "utilities" "xml" "entrez"))
+                              :depends-on ("defpackage" "classes" "utilities" "entrez"))
+             (:cl-source-file "gbseq" :depends-on ("defpackage" "classes" "utilities" "entrez"))
              (:cl-source-file "entrez-dictionary"
-                              :depends-on ("defpackage" "classes" "utilities" "xml" "entrez" "search"))
+                              :depends-on ("defpackage" "classes" "utilities" "entrez" "search"))
              (:static-file "README")))
    (:module "cache"
             :components
