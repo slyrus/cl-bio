@@ -38,7 +38,6 @@
      (xpath:evaluate "GBFeature_key/text()" node))))
 
 (defun get-gbseq-feature-ranges (node)
-  (declare (optimize (debug 3)))
   (xpath:with-namespaces ()
     (mapcar
      (lambda (interval)
