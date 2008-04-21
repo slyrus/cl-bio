@@ -83,7 +83,8 @@
       (mapcar
        (lambda (node)
          (let ((id (xpath-protocol:node-text node)))
-           (push (make-instance 'bio:ncbi-gi :id id)
+           (push (make-instance 'bio:ncbi-gi :id (or (parse-integer id :junk-allowed t)
+                                                     id))
                  (bio:members idset))))
        (xpath:all-nodes
         (xpath:evaluate
