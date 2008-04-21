@@ -101,6 +101,8 @@
              *entrez-xml-dictionary*
              :database "gene"))
 
+(entrez::stp-document->list *esr1-node*)
+
 (join-xpath-result
  (xpath:evaluate
   (concatenate 'string "Entrezgene-Set"
@@ -246,6 +248,9 @@
 (defparameter *dpp-gene-search*
   (bio:lookup "dpp" *entrez-dictionary* :database "gene"))
 
+(defparameter *dpp-gene-search-node*
+  (bio:lookup "dpp" *entrez-xml-dictionary* :database "gene"))
+
 (defparameter *dpp-node*
   (bio:fetch (bio:id (car (bio:members *dpp-gene-search*)))
              *entrez-xml-dictionary*
@@ -349,3 +354,4 @@
                 :database "structure"
                 :copy-to-file "data/esr1-structure.xml"
                 :builder (cxml-stp:make-builder)))
+
