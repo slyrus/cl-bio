@@ -1,19 +1,36 @@
 
-(in-package :bio)
+(in-package :bio-taxonomy)
+
+;;; to load the taxonomies:
+;;;  1. download the taxonomy data dump from NCBI
+;;;  2. update the location of *taxonomy-data-directory*
+(taxonomy::load-taxon-data)
 
 
-;;; find all taxa that start with "Canis" and return a list containing their
-;;; rank (genus, species, etc...) and a list of (name . name-class) pairs
+;;; find all taxa that start with "Canis" and return a list containing the
+;;; rank (genus, species, etc...) and a list of (name . name-class)
+;;; pairs for the names containing "Canis".
 (with-bio-rucksack (rucksack)
   (mapcar
-   #'(lambda (x)
-        (let* ((id (tax-id x)))
-         (cons (rank (get-tax-node id :rucksack rucksack))
-               (mapcar #'(lambda (y)
-                           (cons
-                            (name y)
-                            (name-class y)))
-                       (get-tax-names id :rucksack rucksack)))))
+   (lambda (x)
+     (cons (rank (get-tax-node (tax-id x) :rucksack rucksack))
+           (cons (name x)
+                 (name-class x))))
+   (lookup-tax-name "Canis" :partial t :rucksack rucksack)))
+
+;;; find all taxa that start with "Canis" and return a list containing the
+;;; rank (genus, species, etc...) and a list of (name . name-class)
+;;; pairs for all of the names corresponding to each taxon.
+(with-bio-rucksack (rucksack)
+  (mapcar
+   (lambda (x)
+     (let* ((id (tax-id x)))
+       (cons (rank (get-tax-node id :rucksack rucksack))
+             (mapcar #'(lambda (y)
+                         (cons
+                          (name y)
+                          (name-class y)))
+                     (get-tax-names id :rucksack rucksack)))))
    (lookup-tax-name "Canis" :partial t :rucksack rucksack)))
 
 ;;; show the path from the root of the tree to Drosophila melanogaster

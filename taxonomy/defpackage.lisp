@@ -30,6 +30,13 @@
 (in-package #:cl-user)
 
 (defpackage #:bio-taxonomy
-  (:nicknames #:taxonomy)
-  (:use #:cl #:bio #:bio-rucksack))
+  (:nicknames #:taxonomy #:tax)
+  (:use #:cl #:bio #:bio-rucksack)
+  (:export #:with-bio-rucksack
+           #:get-tax-node
+           #:name
+           #:name-class
+           #:tax-id
+           #:rank
+           #:lookup-tax-name))
 
