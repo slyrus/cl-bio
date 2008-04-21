@@ -402,6 +402,7 @@
 
  (:span
   (:h1 "Loadable Module: cl-bio-taxonomy")
+
   (:p "It is often important to understand the origin of a given
   biological entity, that is to say which species did the biological
   entity come from. There are cases where this is implicit, such as
@@ -410,18 +411,61 @@
   generated, it is important to track not just the name of the species
   from which the entity was derived, but also the relationship of said
   species to other species, usually in the form of a taxonomic
-  tree."))
+  tree.")
 
+  (:p "The taxonomy module is a set of simple classes and functions to
+  work with data from the NCBI taxonomy database. The core object of
+  the taxonomy are instances of the taxon class. Instances of the
+  taxon class represent nodes in a taxonomic tree. Instances of the
+  tax-name class represent names for a given instance of the taxon
+  class (currently referenced by the tax-id slot of the tax-name
+  object). Instances are stored using the rucksack persistent class
+  mechanism and indexed using rucksack's indexing facility.")
+
+  (:span
+   (:h2 "Loading taxonomy data"))
+
+  (:span
+   (:h2 "Accessing the taxonomy")
+   (:p "The following code can be used to retrieve all the taxa
+   containing the word Canis")
+   (:pre
+    (:lisp #q{(tax:with-bio-rucksack (rucksack)
+  (mapcar
+   (lambda (x)
+     (cons (tax:rank (tax:get-tax-node (tax:tax-id x) :rucksack rucksack))
+           (cons (tax:name x)
+                 (tax:name-class x))))
+   (tax:lookup-tax-name "Canis" :partial t :rucksack rucksack)))}))))
+ 
+  
  (:span
   (:h1 "Loadable Module: cl-bio-entrez")
+   
   (:p "The entrez module provides functions and classes for
   interfacing with NCBI's " (:a :href
-  "http://ncbi.nlm.nih.gov/sites/entrez" "Entrez") " database and
-  services. Entrez provides a web interface for accessing "))
+                                "http://ncbi.nlm.nih.gov/sites/entrez" "Entrez") "
+  database and services. Entrez provides a web interface for accessing
+  data in the entrez database. The cl-bio-entrez module uses the
+  drakma http library to access the Entrez web services.")
+
+  (:p "To search the entrez database, one can use the bio:lookup
+  method against the entrez:*entrez-dictionary*. The following example
+  searches the entrez gene database and returns a bio:indentifer-set.")
+  
+  (:lisp #q{(defparameter *esr1-gene-search*
+  (bio:lookup "ESR1 estrogen" entrez:*entrez-dictionary* :database
+  "gene"))})
+  
+  (:p "The members of set can be accessed using the bio:members
+  accessor and are instances of the bio:ncbi-gi class. To
+  retrieve the id of the ncbi-gi objects, one can use the bio:id
+  function on the ncbi-gi objects as shown in the following example:")
+  
+  (:lisp
+   #q{(mapcar #'bio:id (bio:members *esr1-gene-search*))}))
 
  (:span
-  (:h1 "Examples")
-  
-  )
-
-#+nil (:bibliography))
+  (:h1 "Examples"))
+ 
+ #+nil (:bibliography))

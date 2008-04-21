@@ -21,8 +21,9 @@
 </p>
 <span><h2>Requirements</h2>
 <p>cl-bio has only been tested on SBCL but, in theory, should be
-   relatively easily ported to other common lisp environments. cl-bio
-   depends on a number of external libraries, including:</p>
+   relatively easily ported to other common lisp environments. The
+   core cl-bio library depends on a number of external libraries,
+   including:</p>
 <ul><li><a href="http://common-lisp.net/project/alexandria/">alexandria</a>
 </li>
 <li><a href="http://www.weitz.de/cl-ppcre/">cl-ppcre</a>
@@ -32,6 +33,39 @@
 <li><a href="http://common-lisp.net/project/rucksack/">rucksack</a>
 </li>
 </ul>
+</span>
+<span><h2>Modules</h2>
+<p>cl-bio is organized as a core library that is extended by
+     additional module libraries. There are both core modules which
+     are automatically loaded when cl-bio is loaded, such as the io
+     module and laodable modules that modules must be explicitly
+     loaded by code that expects to use the functionality provided by
+     the module, such as the align and entrez modules.</p>
+<span><h3>Module Requirements</h3>
+<span><h4>cl-bio-rucksack</h4>
+<ul><li><a href="http://common-lisp.net/project/rucksack/">rucksack</a>
+</li>
+</ul>
+</span>
+<span><h4>cl-bio-taxonomy</h4>
+<ul><li><a href="http://common-lisp.net/project/rucksack/">bio-rucksack</a>
+</li>
+</ul>
+</span>
+<span><h4>cl-bio-entrez</h4>
+<ul><li><a href="http://puri.b9.com/">puri</a>
+</li>
+<li><a href="http://weitz.de/drakma/">drakma</a>
+</li>
+<li><a href="http://common-lisp.net/project/cxml/">cxml</a>
+</li>
+<li><a href="http://www.lichteblau.com/cxml-stp/">cxml-stp</a>
+</li>
+<li><a href="http://common-lisp.net/project/plexippus-xpath/">plexippus xpath</a>
+</li>
+</ul>
+</span>
+</span>
 </span>
 </span>
 </span>
@@ -128,22 +162,11 @@
 <p>[TBW]</p>
 </span>
 </span>
-<span><h2>Species Taxonomies</h2>
-<p>It is often important to understand the origin of a given
-   biological entity, that is to say which species did the biological
-   entity come from. There are cases where this is implicit, such as
-   large databases from a single species, but, especially as the
-   number of organisms from which substantial amounts of sequences
-   have been generated, it is important to track not just the name of
-   the species from which the entity was derived, but also the
-   relationship of said species to other species, usually in the form
-   of a taxonomic tree.</p>
-</span>
 <span h1="Common Bioinformatics Tasks with cl-bio"><p>The following sections contain examples of performing a number
  of common (and not so common, completely contrived) bioinformatics
  tasks with the cl-bio library.</p>
 <span><h2>Loading a FASTA file</h2>
-<div class="lisp"><code><pre>(defparameter *dpp* (bio-io:read-fasta-file "data/dpp.fasta"))
+<div class="lisp"><code><pre>(defparameter *dpp* (read-fasta-file "data/dpp.fasta"))
 </pre>
 </code>
 <code class="results">*DPP*
@@ -151,8 +174,8 @@
 </div>
 <div class="lisp"><code><pre>(append
  (subseq
-  (bio:split-string-into-lines-list (bio:residues-string (car *dpp*))
-                                    :max-line-length 60)
+  (split-string-into-lines-list (residues-string (car *dpp*)) :max-line-length
+                                60)
   0 3)
  '("..."))
 </pre>
@@ -371,14 +394,14 @@ contents are randomly chosen residues.</p>
 <p>To create an adjustable DNA sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *dna-seq-1*
-  (make-instance 'bio:adjustable-dna-sequence :initial-contents "GAATTC"))
+  (make-instance 'adjustable-dna-sequence :initial-contents "GAATTC"))
 </pre>
 </code>
 <code class="results">*DNA-SEQ-1*
 </code>
 </div>
 <p>And to retrieve all the residues of the sequence:</p>
-<div class="lisp"><code><pre>(bio:residues-string *dna-seq-1*)
+<div class="lisp"><code><pre>(residues-string *dna-seq-1*)
 </pre>
 </code>
 <code class="results">"GAATTC"
@@ -424,14 +447,14 @@ residues are randomly chosen.</p>
 <p>To create an adjustable RNA sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *rna-seq-1*
-  (make-instance 'bio:adjustable-rna-sequence :initial-contents "AAGUUUUAG"))
+  (make-instance 'adjustable-rna-sequence :initial-contents "AAGUUUUAG"))
 </pre>
 </code>
 <code class="results">*RNA-SEQ-1*
 </code>
 </div>
 <p>And to retrieve all the residues of the sequence:</p>
-<div class="lisp"><code><pre>(bio:residues-string *rna-seq-1*)
+<div class="lisp"><code><pre>(residues-string *rna-seq-1*)
 </pre>
 </code>
 <code class="results">"AAGUUUUAG"
@@ -480,15 +503,14 @@ are set to random values.</p>
 <p>To create an adjustable amino acid sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *aa-seq-1*
-  (make-instance 'bio:adjustable-aa-sequence :initial-contents
-                 "MYRSTVLKCDQCLP"))
+  (make-instance 'adjustable-aa-sequence :initial-contents "MYRSTVLKCDQCLP"))
 </pre>
 </code>
 <code class="results">*AA-SEQ-1*
 </code>
 </div>
 <p>And to retrieve all the residues of the sequence:</p>
-<div class="lisp"><code><pre>(bio:residues-string *aa-seq-1*)
+<div class="lisp"><code><pre>(residues-string *aa-seq-1*)
 </pre>
 </code>
 <code class="results">"MYRSTVLKCDQCLP"
@@ -549,6 +571,120 @@ are set to random values.</p>
 </span>
 </span>
 <span><h1>Dictionaries</h1>
+<p>Dictionaries provide two simple operations, lookup and
+  fetch. The idea behind lookup is that one can use lookup to see if
+  the dictionary contains information about an object without
+  explicitly retrieving the object. (I suppose we could use other
+  names like, say, search and retrieve here.)</p>
+</span>
+<span><h1>Loadable Module: cl-bio-rucksack</h1>
+<p>The cl-bio-rucksack module exposes a rucksack for use by other
+  cl-bio modules for persistently storing lisp objects.</p>
+</span>
+<span><h1>Loadable Module: cl-bio-taxonomy</h1>
+<p>It is often important to understand the origin of a given
+  biological entity, that is to say which species did the biological
+  entity come from. There are cases where this is implicit, such as
+  large databases from a single species, but, especially as the number
+  of organisms from which substantial amounts of sequences have been
+  generated, it is important to track not just the name of the species
+  from which the entity was derived, but also the relationship of said
+  species to other species, usually in the form of a taxonomic
+  tree.</p>
+<p>The taxonomy module is a set of simple classes and functions to
+  work with data from the NCBI taxonomy database. The core object of
+  the taxonomy are instances of the taxon class. Instances of the
+  taxon class represent nodes in a taxonomic tree. Instances of the
+  tax-name class represent names for a given instance of the taxon
+  class (currently referenced by the tax-id slot of the tax-name
+  object). Instances are stored using the rucksack persistent class
+  mechanism and indexed using rucksack's indexing facility.</p>
+<span><h2>Loading taxonomy data</h2>
+</span>
+<span><h2>Accessing the taxonomy</h2>
+<p>The following code can be used to retrieve all the taxa
+   containing the word Canis</p>
+<pre><div class="lisp"><code><pre>(bio-taxonomy:with-bio-rucksack (rucksack)
+                                (mapcar
+                                 (lambda (x)
+                                   (cons
+                                    (bio-taxonomy:rank
+                                     (bio-taxonomy:get-tax-node
+                                      (bio-taxonomy:tax-id x) :rucksack
+                                      rucksack))
+                                    (cons (bio-taxonomy:name x)
+                                          (bio-taxonomy:name-class x))))
+                                 (bio-taxonomy:lookup-tax-name "Canis" :partial
+                                                               t :rucksack
+                                                               rucksack)))
+</pre>
+</code>
+<code class="results">(("genus" "Canis" . "scientific name")
+ ("species" "Canis adustus" . "scientific name")
+ ("species" "Canis aureus" . "scientific name")
+ ("subspecies" "Canis canis" . "synonym")
+ ("subspecies" "Canis domesticus" . "synonym")
+ ("subspecies" "Canis familiaris" . "synonym")
+ ("subspecies" "Canis familiaris dingo" . "synonym")
+ ("subspecies" "Canis himalayensis" . "scientific name")
+ ("subspecies" "Canis indica" . "scientific name")
+ ("species" "Canis latrans" . "scientific name")
+ ("species" "Canis lupus" . "scientific name")
+ ("subspecies" "Canis lupus baileyi" . "scientific name")
+ ("subspecies" "Canis lupus chanco" . "scientific name")
+ ("subspecies" "Canis lupus dingo" . "scientific name")
+ ("subspecies" "Canis lupus familiaris" . "scientific name")
+ ("subspecies" "Canis lupus himalayensis" . "synonym")
+ ("subspecies" "Canis lupus hodophilax" . "scientific name")
+ ("subspecies" "Canis lupus indica" . "synonym")
+ ("subspecies" "Canis lupus lupus" . "scientific name")
+ ("species" "Canis lupus lycaon" . "synonym")
+ ("subspecies" "Canis lupus pallipes" . "scientific name")
+ ("subspecies" "Canis lupus signatus" . "scientific name")
+ ("species" "Canis lycaon" . "scientific name")
+ ("species" "Canis mesomelas" . "scientific name")
+ ("subspecies" "Canis mesomelas elongae" . "scientific name")
+ ("species" "Canis procyonoides" . "synonym")
+ ("species" "Canis rufus" . "scientific name")
+ ("species" "Canis simensis" . "scientific name")
+ ("species" "Canis sp." . "scientific name")
+ ("genus" "Canistrum" . "scientific name")
+ ("species" "Canistrum fosterianum" . "scientific name")
+ ("species" "Canistrum giganteum" . "scientific name"))
+</code>
+</div>
+</pre>
+</span>
+</span>
+<span><h1>Loadable Module: cl-bio-entrez</h1>
+<p>The entrez module provides functions and classes for
+  interfacing with NCBI's <a href="http://ncbi.nlm.nih.gov/sites/entrez">Entrez</a>
+
+  database and services. Entrez provides a web interface for accessing
+  data in the entrez database. The cl-bio-entrez module uses the
+  drakma http library to access the Entrez web services.</p>
+<p>To search the entrez database, one can use the bio:lookup
+  method against the entrez:*entrez-dictionary*. The following example
+  searches the entrez gene database and returns a bio:indentifer-set.</p>
+<div class="lisp"><code><pre>(defparameter *esr1-gene-search*
+  (lookup "ESR1 estrogen" *entrez-dictionary* :database "gene"))
+</pre>
+</code>
+<code class="results">*ESR1-GENE-SEARCH*
+</code>
+</div>
+<p>The members of set can be accessed using the bio:members
+  accessor and are instances of the bio:ncbi-gi class. To
+  retrieve the id of the ncbi-gi objects, one can use the bio:id
+  function on the ncbi-gi objects as shown in the following example:</p>
+<div class="lisp"><code><pre>(mapcar #'id (members *esr1-gene-search*))
+</pre>
+</code>
+<code class="results">("2099" "24890" "13982" "397435" "443228" "394461" "259252" "407238" "396099"
+ "552888" "751998" "281145" "463079" "791249" "100136461" "613025" "403640"
+ "100136026" "2100" "133522")
+</code>
+</div>
 </span>
 <span><h1>Examples</h1>
 </span>

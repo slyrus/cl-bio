@@ -13,7 +13,8 @@
   :version #.(with-open-file
                  (vers (merge-pathnames "version.lisp-expr" *load-truename*))
                (read vers))
-  :depends-on (ch-asdf ch-bib ch-util puri smarkup cl-graph)
+  :depends-on (ch-asdf ch-bib ch-util puri smarkup cl-graph cl-bio
+               cl-bio-taxonomy cl-bio-entrez)
   :components
   ((:module
     "doc"
