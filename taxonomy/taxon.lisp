@@ -44,13 +44,13 @@
   (merge-pathnames #p"data/taxonomy/"
                    (user-homedir-pathname)))
 
-(defparameter *tax-nodes-file*
-  (merge-pathnames #p"taxdump/nodes.dmp"
-                   *taxonomy-data-directory*))
+(define-symbol-macro *tax-nodes-file*
+    (merge-pathnames #p"taxdump/nodes.dmp"
+                     *taxonomy-data-directory*))
 
-(defparameter *tax-names-file*
-  (merge-pathnames #p"taxdump/names.dmp"
-                   *taxonomy-data-directory*))
+(define-symbol-macro *tax-names-file*
+    (merge-pathnames #p"taxdump/names.dmp"
+                     *taxonomy-data-directory*))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; taxon classes
