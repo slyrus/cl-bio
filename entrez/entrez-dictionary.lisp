@@ -52,7 +52,7 @@
   (let ((directory (merge-pathnames (make-pathname :directory (list :relative database))
                                     *entrez-data-cache-directory*)))
     (ensure-directories-exist directory)
-    (let* ((file (merge-pathnames (make-pathname :name object :type "xml") directory))
+    (let* ((file (merge-pathnames (make-pathname :name (princ-to-string object) :type "xml") directory))
            (file-exists (probe-file file)))
       (if (and file-exists (not refresh))
           (with-open-file (stream file :element-type :default)
