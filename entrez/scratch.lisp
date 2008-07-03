@@ -49,9 +49,9 @@
 
 (defparameter *esr1-protein*
   (car (bio:members
-        (bio:fetch 
-         (bio:id (car (bio:members *esr1-protein-search*)))
-         *entrez-dictionary* :database "protein"))))
+        (bio:fetch (bio:id (car (bio:members *esr1-protein-search*)))
+                   *entrez-dictionary*
+                   :database "protein"))))
 
 (mapcar #'generif-text
         (bio:get-descriptors *esr1-gene* :type 'generif))
@@ -163,9 +163,9 @@
                "/Gene-commentary")
   *esr1-node*))
 
-(bio:split-string-into-lines-string (bio:residues-string *esr1-nucleotide*))
+(bio:split-string-into-lines (bio:residues-string *esr1-nucleotide*))
 
-(bio:split-string-into-lines-string
+(bio:split-string-into-lines
  (bio:residues-string *esr1-protein*))
 
 (defparameter *esr1-nucleotide-node*
@@ -241,7 +241,7 @@
 
 (defparameter *genomic-bioseq* (car (bio:members *genomic*)))
 
-(bio:split-string-into-lines-string (bio:residues-string *genomic-bioseq*))
+(bio:split-string-into-lines (bio:residues-string *genomic-bioseq*))
 
 
 ;;; dpp
@@ -251,10 +251,14 @@
 (defparameter *dpp-gene-search-node*
   (bio:lookup "dpp" *entrez-xml-dictionary* :database "gene"))
 
-(defparameter *dpp-node*
+(entrez::stp-document->list *dpp-gene-search-node*)
+
+(defparameter *dpp-gene-node*
   (bio:fetch (bio:id (car (bio:members *dpp-gene-search*)))
              *entrez-xml-dictionary*
              :database "gene"))
+
+(entrez::stp-document->list *dpp-gene-node*)
 
 (defparameter *dpp-gene*
   (car (bio:members
