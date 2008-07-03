@@ -39,7 +39,9 @@
                .
                #1=(
                    #:read-fast-sequences
-                   #:read-fasta-file)))
+                   #:read-fasta-file
+                   
+                   #:write-fasta-file)))
 
   (defpackage #:bio (:use #:cl #:bio-io)
 
@@ -183,7 +185,7 @@
 
                ;; utilities
                #:split-string-into-lines-list
-               #:split-string-into-lines-string
+               #:split-string-into-lines
 
                ;; dictionary
                #:lookup
