@@ -10,12 +10,14 @@
 (insert-residues *dna-seq-1* 0 "GAATTC")
 (residues-string *dna-seq-1*)
 
-(defparameter *df* (make-instance 'adjustable-dna-sequence
-                                  :initial-contents (residues-string (make-random-dna-sequence 1000))))
-(defparameter *rf* (make-instance 'adjustable-rna-sequence
-                                  :initial-contents (residues-string (make-random-rna-sequence 100))))
-(defparameter *af* (make-instance 'adjustable-aa-sequence
-                                  :initial-contents (residues-string (make-random-aa-sequence 100))))
+(defparameter *df* (change-class (make-random-dna-sequence 1000)
+                                 'adjustable-dna-sequence))
+
+(defparameter *rf* (change-class (make-random-rna-sequence 100)
+                                 'adjustable-rna-sequence))
+
+(defparameter *af* (change-class (make-random-aa-sequence 100)
+                                 'adjustable-aa-sequence))
 
 (insert-residues *df* 0 "TTTT")
 (insert-residues *rf* 0 "UUUU")
@@ -34,11 +36,12 @@
 
 (insert-residues *df* 1 "AAAA")
 
-(flexichain:insert-vector*
- (bio::residues df) 0 (map '(vector (unsigned-byte 2))
-                      #'(lambda (x)
-                          (bio::char-to-seq-code df x))
-                      "AAAAA"))
+(flexichain:insert-vector* (bio::residues df) 
+                           0
+                           (map '(vector (unsigned-byte 2))
+                                #'(lambda (x)
+                                    (bio::char-to-seq-code df x))
+                                "AAAAA"))
 
 
 (array-element-type (make-array 5 :initial-contents '(0 0 0 0 0) :element-type '(unsigned-byte 2)))
@@ -86,4 +89,12 @@
  (translate
   (make-instance 'simple-dna-sequence
                  :initial-contents "ATGCAGCAACCCTCTGGAGTCTAA")))
+
+;;; bioperl example
+(defparameter *seq*
+  (make-dna-sequence-from-string "CATGTAGATAG"))
+(add-descriptor *seq* (make-instance 'identifier :id "testseq"))
+(format t "seq is ~A bases long~&" (seq-length *seq*))
+(format t "revomp seq is ~A~&" (residues-string (reverse-complement *seq*)))
+(bio-io:write-fasta-file *seq* "testseq.fsa")
 
