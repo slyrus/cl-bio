@@ -463,7 +463,19 @@
   function on the ncbi-gi objects as shown in the following example:")
   
   (:lisp
-   #q{(mapcar #'bio:id (bio:members *esr1-gene-search*))}))
+   #q{(mapcar #'bio:id (bio:members *esr1-gene-search*))})
+  
+  (:p "To retrieve a gene from entrez, one can use the bio:fetch
+  function, as in the following example:")
+  
+  (:lisp
+   #q{(defparameter *esr1-gene*
+  (car (bio:members
+        (bio:fetch (bio:id (car (bio:members *esr1-gene-search*)))
+                   entrez:*entrez-dictionary*
+                   :database "gene"))))})
+  (:p "In this case, if the object identifier is found in the entrez
+  database, an instance of the bio:gene class is returned."))
 
  (:span
   (:h1 "Examples"))
