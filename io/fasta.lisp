@@ -1,6 +1,6 @@
 ;;; FASTA sequence parser
 ;;;
-;;; Copyright (c) 2006 Cyrus Harmon (ch-lisp@bobobeach.com)
+;;; Copyright (c) 2006-2008 Cyrus Harmon (ch-lisp@bobobeach.com)
 ;;; All rights reserved.
 ;;;
 ;;; Redistribution and use in source and binary forms, with or without
@@ -83,7 +83,18 @@
             (when sequence-type-supplied-p
               `(:sequence-type ,sequence-type)))))
 
-(defun read-fasta-file (file)
-  (with-open-file (stream file)
+(defun read-fasta-file (filespec)
+  (with-open-file (stream filespec)
     (read-fasta-sequences stream)))
 
+(defun write-fasta-file (sequence filespec &key header)
+  (with-open-file (stream filespec :direction :output :if-exists :supersede)
+    (unless header
+      (setf header (format nil "~{~A~^|~}" (mapcar (lambda (x)
+                                                     (typecase x
+                                                       (identifier (id x))))
+                                                   (get-descriptors sequence)))))
+    (format stream "~&>~A~%" header)
+    (split-string-into-lines (residues-string sequence)
+                             :stream stream)
+    (terpri stream)))
