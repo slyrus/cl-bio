@@ -10,8 +10,8 @@
            while (plusp count)
          collect (subseq line-buffer 0 count)))))
 
-(defun split-string-into-lines-string (string &key max-line-length)
-  (format nil
+(defun split-string-into-lines (string &key stream max-line-length)
+  (format stream
           "~{~A~^~&~}"
           (apply #'split-string-into-lines-list string
                  (when max-line-length `(:max-line-length ,max-line-length)))))
