@@ -615,6 +615,20 @@ residue encoding.</p>
  281145 463079 791249 100136461 613025 403640 100136026 2100 133522)
 </code>
 </div>
+<p>To retrieve a gene from entrez, one can use the bio:fetch
+  function, as in the following example:</p>
+<div class="lisp"><code><pre>(defparameter *esr1-gene*
+  (car
+   (bio:members
+    (bio:fetch (bio:id (car (bio:members *esr1-gene-search*)))
+               bio-entrez:*entrez-dictionary* :database "gene"))))
+</pre>
+</code>
+<code class="results">*ESR1-GENE*
+</code>
+</div>
+<p>In this case, if the object identifier is found in the entrez
+  database, an instance of the bio:gene class is returned.</p>
 </span>
 <span><h1>Examples</h1>
 </span>

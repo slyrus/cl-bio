@@ -52,3 +52,18 @@
          while line
          do (write-line line out)))))
 
+(defun stp-node->list (node)
+  (typecase node
+    (stp:element
+     (list* (stp:local-name node)
+            (stp:map-attributes 'list
+                                (lambda (attr)
+                                  (list (stp:local-name attr)
+                                        (stp:value attr)))
+                                node)
+            (stp:map-children 'list #'stp-node->list node)))
+    (stp:text
+     (stp:string-value node))))
+
+(defun stp-document->list (document)
+  (stp-node->list (stp:document-element document)))

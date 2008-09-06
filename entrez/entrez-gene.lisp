@@ -54,8 +54,7 @@
                                 (xpath:evaluate
                                  "Gene-commentary_accession/text()"
                                  commentary-node))))
-                (when (and (equalp type "mRNA")
-                           accession)
+                (when (and accession)
                   (let ((id
                          (make-instance 'bio:genbank-accession
                                         :accession accession))

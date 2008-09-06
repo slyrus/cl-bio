@@ -158,7 +158,7 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
 ;;; Annotated sequences. Sequences that can have annotations attached
 ;;; to them.
 
-(defclass annotated-sequence (bio-sequence described-object)
+(defclass annotated-sequence (bio-sequence)
   ((annotations :accessor annotations
                 :initarg :annotations
                 :initform nil))
@@ -225,9 +225,11 @@ ith residue of seq to the residue code val."))
  but more involved operations such as inesrtion and deletion are
  not."))
 
-(defmethod initialize-instance :after ((seq simple-sequence) &rest initargs
-                                       &key length initial-contents)
-  (declare (ignore initargs))
+(defmethod shared-initialize :after ((seq simple-sequence)
+                                     slot-names
+                                     &rest initargs
+                                     &key length initial-contents)
+  (declare (ignore slot-names initargs))
   (let ((element-type (slot-value seq 'element-type))
         (length (or (and initial-contents
                          (length initial-contents))
@@ -323,13 +325,15 @@ flexichains to store their residues."))
                          (when length `(:initial-nb-elements ,length))
                          (when element-type `(:element-type ,element-type)))))
 
-(defmethod initialize-instance :after ((seq flexichain-sequence) &rest initargs
-                                       &key
-                                       length
-                                       initial-contents
-                                       initial-residue-codes
-                                       initial-element)
-  (declare (ignore initargs))
+(defmethod shared-initialize :after ((seq flexichain-sequence)
+                                     slot-names
+                                     &rest initargs
+                                     &key
+                                     length
+                                     initial-contents
+                                     initial-residue-codes
+                                     initial-element)
+  (declare (ignore slot-names initargs))
   (let ((element-type (slot-value seq 'element-type))
         (length (or (and initial-contents
                          (length initial-contents))
@@ -634,6 +638,22 @@ amino acid sequences using a 5-bit residue encoding."))
   ()
   (:documentation "An adjustable sequence of amino acids using a 5-bit
 residue encoding."))
+
+(defmethod update-instance-for-different-class :after ((old simple-sequence)
+                                                       (new adjustable-sequence)
+                                                       &rest initargs
+                                                       &key
+                                                       initial-contents
+                                                       initial-residue-codes)
+  (declare (ignore initargs))
+  (unless (or initial-contents initial-residue-codes)
+    (typecase (residues old)
+      (array
+       (setf (residues new)
+             (make-residues-flexichain
+              new
+              :initial-residue-codes (residues old)))))))
+
 
 (defun make-simple-aa-sequence (length)
   "Returns a simple-aa-sequence of the specified length."
