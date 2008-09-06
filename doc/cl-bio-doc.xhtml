@@ -166,7 +166,7 @@
  of common (and not so common, completely contrived) bioinformatics
  tasks with the cl-bio library.</p>
 <span><h2>Loading a FASTA file</h2>
-<div class="lisp"><code><pre>(defparameter *dpp* (read-fasta-file "data/dpp.fasta"))
+<div class="lisp"><code><pre>(defparameter *dpp* (bio-io:read-fasta-file "data/dpp.fasta"))
 </pre>
 </code>
 <code class="results">*DPP*
@@ -174,8 +174,8 @@
 </div>
 <div class="lisp"><code><pre>(append
  (subseq
-  (split-string-into-lines-list (residues-string (car *dpp*)) :max-line-length
-                                60)
+  (bio:split-string-into-lines-list (bio:residues-string (car *dpp*))
+                                    :max-line-length 60)
   0 3)
  '("..."))
 </pre>
@@ -373,35 +373,21 @@ uses a 2-bit sequence encoding.</p>
 <p class="doc-documentation gf-documentation">Returns a new sequence that is the reverse
 complement of seq.</p>
 </div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-SIMPLE-DNA-SEQUENCE LENGTH)</p>
-<p class="doc-documentation fn-documentation">Returns a simple-dna-sequence of the specified length.</p>
-</div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-ADJUSTABLE-DNA-SEQUENCE LENGTH)</p>
-<p class="doc-documentation fn-documentation">Returns an adjustable-dna-sequence of the specified length.</p>
-</div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-DNA-SEQUENCE-FROM-STRING RESIDUES)</p>
-<p class="doc-documentation fn-documentation">Returns a simple-dna-sequence initialized with residues as its
-contents.</p>
-</div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-RANDOM-DNA-SEQUENCE LENGTH)</p>
-<p class="doc-documentation fn-documentation">Returns a simple-dna-sequence of the specified length whose
-contents are randomly chosen residues.</p>
-</div>
+<function><make-simple-dna-sequence/></function>
+<function><make-adjustable-dna-sequence/></function>
+<function><make-dna-sequence-from-string/></function>
+<function><make-random-dna-sequence/></function>
 <p>To create an adjustable DNA sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *dna-seq-1*
-  (make-instance 'adjustable-dna-sequence :initial-contents "GAATTC"))
+  (make-instance 'bio:adjustable-dna-sequence :initial-contents "GAATTC"))
 </pre>
 </code>
 <code class="results">*DNA-SEQ-1*
 </code>
 </div>
 <p>And to retrieve all the residues of the sequence:</p>
-<div class="lisp"><code><pre>(residues-string *dna-seq-1*)
+<div class="lisp"><code><pre>(bio:residues-string *dna-seq-1*)
 </pre>
 </code>
 <code class="results">"GAATTC"
@@ -426,35 +412,21 @@ contents are randomly chosen residues.</p>
 <p class="doc-documentation class-documentation">Adjustable RNA sequence class with a 2-bit encoding
  (ACGU)</p>
 </div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-SIMPLE-RNA-SEQUENCE LENGTH)</p>
-<p class="doc-documentation fn-documentation">Returns a simple-rna-sequence of the specified length.</p>
-</div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-ADJUSTABLE-RNA-SEQUENCE LENGTH)</p>
-<p class="doc-documentation fn-documentation">Returns an adjustable-rna-sequence of the specified length.</p>
-</div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-RNA-SEQUENCE-FROM-STRING RESIDUES)</p>
-<p class="doc-documentation fn-documentation">Returns a simple-rna-sequence whose residues have been set to the
-specified residues.</p>
-</div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-RANDOM-RNA-SEQUENCE LENGTH)</p>
-<p class="doc-documentation fn-documentation">Returns a simple-rna-sequence of the specified length whose
-residues are randomly chosen.</p>
-</div>
+<function><make-simple-rna-sequence/></function>
+<function><make-adjustable-rna-sequence/></function>
+<function><make-rna-sequence-from-string/></function>
+<function><make-random-rna-sequence/></function>
 <p>To create an adjustable RNA sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *rna-seq-1*
-  (make-instance 'adjustable-rna-sequence :initial-contents "AAGUUUUAG"))
+  (make-instance 'bio:adjustable-rna-sequence :initial-contents "AAGUUUUAG"))
 </pre>
 </code>
 <code class="results">*RNA-SEQ-1*
 </code>
 </div>
 <p>And to retrieve all the residues of the sequence:</p>
-<div class="lisp"><code><pre>(residues-string *rna-seq-1*)
+<div class="lisp"><code><pre>(bio:residues-string *rna-seq-1*)
 </pre>
 </code>
 <code class="results">"AAGUUUUAG"
@@ -486,31 +458,21 @@ residue encoding.</p>
 <p class="doc-name class-name">AA-SEQUENCE-WITH-RESIDUES</p>
 <p class="doc-documentation class-documentation">Protocl class for amino acid sequences with residues.</p>
 </div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-SIMPLE-AA-SEQUENCE LENGTH)</p>
-<p class="doc-documentation fn-documentation">Returns a simple-aa-sequence of the specified length.</p>
-</div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-AA-SEQUENCE-FROM-STRING RESIDUES)</p>
-<p class="doc-documentation fn-documentation">Returns a simple-aa-sequence whose contents are specified by
-residues.</p>
-</div>
-<div class="doc function"><p class="doc-type">[FUNCTION]</p>
-<p class="doc-name fn-name">(MAKE-RANDOM-AA-SEQUENCE LENGTH)</p>
-<p class="doc-documentation fn-documentation">Retruns a simple-aa-sequence of the specified length whose residues
-are set to random values.</p>
-</div>
+<function><make-simple-aa-sequence/></function>
+<function><make-aa-sequence-from-string/></function>
+<function><make-random-aa-sequence/></function>
 <p>To create an adjustable amino acid sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *aa-seq-1*
-  (make-instance 'adjustable-aa-sequence :initial-contents "MYRSTVLKCDQCLP"))
+  (make-instance 'bio:adjustable-aa-sequence :initial-contents
+                 "MYRSTVLKCDQCLP"))
 </pre>
 </code>
 <code class="results">*AA-SEQ-1*
 </code>
 </div>
 <p>And to retrieve all the residues of the sequence:</p>
-<div class="lisp"><code><pre>(residues-string *aa-seq-1*)
+<div class="lisp"><code><pre>(bio:residues-string *aa-seq-1*)
 </pre>
 </code>
 <code class="results">"MYRSTVLKCDQCLP"
@@ -619,38 +581,7 @@ are set to random values.</p>
                                                                rucksack)))
 </pre>
 </code>
-<code class="results">(("genus" "Canis" . "scientific name")
- ("species" "Canis adustus" . "scientific name")
- ("species" "Canis aureus" . "scientific name")
- ("subspecies" "Canis canis" . "synonym")
- ("subspecies" "Canis domesticus" . "synonym")
- ("subspecies" "Canis familiaris" . "synonym")
- ("subspecies" "Canis familiaris dingo" . "synonym")
- ("subspecies" "Canis himalayensis" . "scientific name")
- ("subspecies" "Canis indica" . "scientific name")
- ("species" "Canis latrans" . "scientific name")
- ("species" "Canis lupus" . "scientific name")
- ("subspecies" "Canis lupus baileyi" . "scientific name")
- ("subspecies" "Canis lupus chanco" . "scientific name")
- ("subspecies" "Canis lupus dingo" . "scientific name")
- ("subspecies" "Canis lupus familiaris" . "scientific name")
- ("subspecies" "Canis lupus himalayensis" . "synonym")
- ("subspecies" "Canis lupus hodophilax" . "scientific name")
- ("subspecies" "Canis lupus indica" . "synonym")
- ("subspecies" "Canis lupus lupus" . "scientific name")
- ("species" "Canis lupus lycaon" . "synonym")
- ("subspecies" "Canis lupus pallipes" . "scientific name")
- ("subspecies" "Canis lupus signatus" . "scientific name")
- ("species" "Canis lycaon" . "scientific name")
- ("species" "Canis mesomelas" . "scientific name")
- ("subspecies" "Canis mesomelas elongae" . "scientific name")
- ("species" "Canis procyonoides" . "synonym")
- ("species" "Canis rufus" . "scientific name")
- ("species" "Canis simensis" . "scientific name")
- ("species" "Canis sp." . "scientific name")
- ("genus" "Canistrum" . "scientific name")
- ("species" "Canistrum fosterianum" . "scientific name")
- ("species" "Canistrum giganteum" . "scientific name"))
+<code class="results">NIL
 </code>
 </div>
 </pre>
@@ -667,7 +598,7 @@ are set to random values.</p>
   method against the entrez:*entrez-dictionary*. The following example
   searches the entrez gene database and returns a bio:indentifer-set.</p>
 <div class="lisp"><code><pre>(defparameter *esr1-gene-search*
-  (lookup "ESR1 estrogen" *entrez-dictionary* :database "gene"))
+  (bio:lookup "ESR1 estrogen" bio-entrez:*entrez-dictionary* :database "gene"))
 </pre>
 </code>
 <code class="results">*ESR1-GENE-SEARCH*
@@ -677,12 +608,11 @@ are set to random values.</p>
   accessor and are instances of the bio:ncbi-gi class. To
   retrieve the id of the ncbi-gi objects, one can use the bio:id
   function on the ncbi-gi objects as shown in the following example:</p>
-<div class="lisp"><code><pre>(mapcar #'id (members *esr1-gene-search*))
+<div class="lisp"><code><pre>(mapcar #'bio:id (bio:members *esr1-gene-search*))
 </pre>
 </code>
-<code class="results">("2099" "24890" "13982" "397435" "443228" "394461" "259252" "407238" "396099"
- "552888" "751998" "281145" "463079" "791249" "100136461" "613025" "403640"
- "100136026" "2100" "133522")
+<code class="results">(2099 24890 13982 397435 443228 394461 259252 407238 396099 552888 751998
+ 281145 463079 791249 100136461 613025 403640 100136026 2100 133522)
 </code>
 </div>
 </span>
