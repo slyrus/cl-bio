@@ -64,10 +64,10 @@
           (when dp-right-matrix `(:dp-right-matrix ,dp-right-matrix))
           (when dp-traceback `(:dp-traceback ,dp-traceback)))))
 
-(defun print-alignment (a)
-  (print (alignment-score a))
-  (print (alignment-seq1 a))
-  (print (alignment-seq2 a)))
+(defun alignment-results (a)
+  (values (alignment-score a)
+          (alignment-seq1 a)
+          (alignment-seq2 a)))
 
 (defun print-alignment-matrices (a)
   (print (alignment-dp-matrix a))
@@ -359,7 +359,7 @@
 
 (defgeneric global-align-affine-gaps (a b score-fn))
 
-(defmethod global-align-affine-gaps (a b score-fn)
+(defmethod global-align-affine-gaps ((a vector) (b vector) score-fn)
   (let ((m (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
         (n (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
         (d (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
@@ -395,12 +395,25 @@
                             (residues-string seq2)
                             score-fn))
 
-(defun global-align-aa-affine-gaps (a b)
+(defun %global-align-aa-affine-gaps (a b)
   (global-align-affine-gaps a b #'aa-score))
 
-(defun global-align-na-affine-gaps (a b)
+(defgeneric global-align-aa-affine-gaps (seq1 seq2))
+(defmethod global-align-aa-affine-gaps ((seq1 aa-sequence-with-residues)
+                                        (seq2 aa-sequence-with-residues))
+  (%global-align-aa-affine-gaps (residues-string seq1)
+                                (residues-string seq2)))
+
+(defun %global-align-na-affine-gaps (a b)
   (global-align-affine-gaps a b #'na-score))
-   
+
+(defgeneric global-align-na-affine-gaps (seq1 seq2))
+(defmethod global-align-na-affine-gaps ((seq1 na-sequence-with-residues)
+                                        (seq2 na-sequence-with-residues))
+  (%global-align-na-affine-gaps (residues-string seq1)
+                                (residues-string seq2)))
+
+
 (defun local-align-score-affine-gaps (m n d r i j k l score-fn)
   (cond
    ((and (> i 0) (= j 0))

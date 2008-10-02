@@ -55,11 +55,14 @@
 (bio:residues-string *esr2-nucleotide*)
 
 (defparameter *global-align-esr1-esr2-rna*
-  (bio-align::global-align-na *esr1-nucleotide* *esr2-nucleotide*))
-(bio-align::print-alignment *global-align-esr1-esr2-rna*)
+  (align:global-align-na *esr1-nucleotide* *esr2-nucleotide*))
+(align:alignment-results *global-align-esr1-esr2-rna*)
 
+(defparameter *global-align-affine-esr1-esr2-rna*
+  (align:global-align-na-affine-gaps *esr1-nucleotide* *esr2-nucleotide*))
+(align:alignment-results *global-align-affine-esr1-esr2-rna*)
 
 (defparameter *local-align-esr1-esr2-rna*
-  (bio-align::local-align-na *esr1-nucleotide* *esr2-nucleotide*))
-(bio-align::print-alignment *local-align-esr1-esr2-rna*)
+  (align:local-align-na *esr1-nucleotide* *esr2-nucleotide*))
+(align:alignment-results *local-align-esr1-esr2-rna*)
 

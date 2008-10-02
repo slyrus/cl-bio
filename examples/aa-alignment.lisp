@@ -39,10 +39,14 @@
 (bio:residues-string *esr2-protein*)
 
 (defparameter *global-align-esr1-esr2-aa*
-  (bio-align::global-align-aa *esr1-protein* *esr2-protein*))
-(bio-align::print-alignment *global-align-esr1-esr2-aa*)
+  (align:global-align-aa *esr1-protein* *esr2-protein*))
+(align:alignment-results *global-align-esr1-esr2-aa*)
+
+(defparameter *global-align-affine-esr1-esr2-aa*
+  (align:global-align-aa-affine-gaps *esr1-protein* *esr2-protein*))
+(align:alignment-results *global-align-esr1-esr2-aa*)
 
 (defparameter *local-align-esr1-esr2-aa*
-  (bio-align::local-align-aa *esr1-protein* *esr2-protein*))
-(bio-align::print-alignment *local-align-esr1-esr2-aa*)
+  (align:local-align-aa *esr1-protein* *esr2-protein*))
+(align:alignment-results *local-align-esr1-esr2-aa*)
 
