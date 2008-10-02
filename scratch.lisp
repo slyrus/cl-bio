@@ -1,5 +1,6 @@
 
-(asdf:oos 'asdf:load-op :bio)
+(asdf:oos 'asdf:load-op :cl-bio)
+(asdf:oos 'asdf:load-op :cl-bio-entrez)
 
 (in-package :bio-user)
 
@@ -36,41 +37,23 @@
 
 (insert-residues *df* 1 "AAAA")
 
-(flexichain:insert-vector* (bio::residues df) 
+(flexichain:insert-vector* (bio::residues *df*) 
                            0
                            (map '(vector (unsigned-byte 2))
                                 #'(lambda (x)
-                                    (bio::char-to-seq-code df x))
+                                    (bio::char-to-seq-code *df* x))
                                 "AAAAA"))
 
+(slot-value (bio::residues *df*) 'flexichain::element-type)
 
-(array-element-type (make-array 5 :initial-contents '(0 0 0 0 0) :element-type '(unsigned-byte 2)))
-(slot-value (bio::residues df) 'flexichain::element-type)
-
-(residues-string df)
+(residues-string *df*)
 
 (let ((r (make-instance 'range :start 10 :end 15)))
-  (residues-string-range df r))
+  (residues-string-range *df* r))
 
-
-(entrez::gb-set-get-gb-seqs esr1)
-
-(bio::find-matches "t" (entrez::gb-seq-sequence-get-residues (entrez::gb-seq-get-sequence (car (entrez::gb-set-get-gb-seqs esr1)))))
-
-
-(entrez::gb-seq-get-sequence (car (entrez::gb-set-get-gb-seqs esr1)))
-
-(defparameter esrseq (car (entrez::gb-set-get-gb-seqs esr1)))
-
-(cdr esrseq)
-(cadr (assoc :|GBSeq_moltype| (cdr esrseq)))
-
-(bio-io::convert-entrez-seq-to-bio-seq esrseq)
-
-(defparameter df2 (make-instance 'adjustable-dna-sequence))
-(setf (residues-string df2) "AACCGG")
-(residues-string df2)
-
+(defparameter *df2* (make-instance 'adjustable-dna-sequence))
+(setf (residues-string *df2*) "AACCGG")
+(residues-string *df2*)
 
 (dna->rna (make-instance 'simple-dna-sequence :initial-contents "ATGCAGTAA"))
 
