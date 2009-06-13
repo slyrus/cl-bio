@@ -67,6 +67,8 @@
       range
     (bio:residues-string (bio:translate *esr1-nucleotide* :range range))))
 
+(bio::find-matches "AUA" (bio:residues-string *esr1-nucleotide*))
+
 ;;; ESR2
 (defparameter *esr2-gene-search*
   (bio:lookup "ESR2 estrogen" *entrez-dictionary* :database "gene"))

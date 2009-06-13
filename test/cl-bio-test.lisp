@@ -80,3 +80,4 @@
 (defun test-load-trunc-2l ()
   (let ((2l (car (read-fasta-file "data/trunc-2l.fasta"))))
     2l))
+

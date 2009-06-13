@@ -31,5 +31,16 @@
 
 (defpackage #:bio-align 
   (:nicknames #:align)
-  (:use #:cl #:bio))
+  (:use #:cl #:bio)
+  (:export #:global-align-na
+           #:global-align-aa
+           #:global-align-na-affine-gaps
+           #:global-align-aa-affine-gaps
+
+           #:local-align-na
+           #:local-align-aa
+           #:local-align-na-affine-gaps
+           #:local-align-aa-affine-gaps
+           
+           #:alignment-results))
 
