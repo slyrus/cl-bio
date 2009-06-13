@@ -1,9 +1,157 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><div class="title">cl-bio</div>
-<link rel="stylesheet" type="text/css" href="simple.css"/></head>
-<body><span><div class="title">cl-bio</div>
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><title>cl-bio</title>
+<link rel="stylesheet" type="text/css" href="simple.css"><style>
+body {
+    color: #333;
+    background-color: #FFF;
+    background-attachment: fixed;
+    font-size: 12px;
+    font-family: "helvetica neue", "helvetica" sans-serif;
+    padding: 12px;
+    counter-reset: chapter;
+}
+
+div[class&#xa0;="title"] {
+   font-style: normal;
+   font-weight: bold;
+   padding: 0px;
+   margin-top: 0px;
+   margin-bottom: 0px;
+   font-size: 20px;
+   border-bottom: 1px solid;
+}
+
+h1 {
+   padding: 2px;
+   margin-top: 2px;
+   padding-top: 4px;
+   font-size: 14px;
+   font-style: italic;
+   padding-bottom: 6px;
+}
+
+h2[class&#xa0;="author"] {
+   padding-top: 0px;
+   padding-bottom: 0px;
+   margin-top: 2px;
+   margin-bottom: 2px;
+}
+
+h2[class&#xa0;="date"] {
+   padding-top: 0px;
+   padding-bottom: 0px;
+   margin-top: 2px;
+   margin-bottom: 2px;
+}
+
+h2 {
+   font-size: 16px;
+}
+
+h3 {
+   font-size: 14px;
+}
+
+h4 {
+   font-size: 12px;
+}
+
+ul {
+   padding-left: 6px;
+   margin-left: 6px;
+}
+
+li {
+   margin-left: 12px;
+}
+
+li[class&#xa0;="pub"] {
+   padding-top: 3px;
+   margin-left: 6px;
+   font-size: 9px;
+}
+
+tbody[class&#xa0;="nav2"] { 
+   text-align: left;
+}
+
+table[class&#xa0;="nav2"] {
+   padding-top: 24px;
+}
+
+tr, td, tbody, table {
+   border-collapse: collapse;
+   vertical-align: top;
+}
+
+tbody {
+   vertical-align: top;
+}
+
+td {
+   vertical-align: top;
+   padding: 4px;
+}
+
+pre {
+  background: #ccc;
+  padding: 12px;
+}
+
+p {
+    line-height: 125%;
+  }
+
+div[class&#xa0;="lisp"] {
+    background: #DDD;
+    font-size: 12px;
+    padding: 12px;
+    margin: 4px;
+}
+
+div[class&#xa0;="lisp"] &gt; code &gt; pre {
+ margin: 0px;
+}
+
+div[class&#xa0;="lisp"] code[class&#xa0;="results"] {
+  font-style: italic;
+}
+
+div[class&#xa0;="doc"] {
+    border: solid green 1px;
+    margin: 4px;
+    padding: 2px;
+}
+
+div[class&#xa0;="doc"] p {
+    margin: 4px;
+}
+
+div[class&#xa0;="doc"] p[class&#xa0;="doc-name"] {
+    font-weight: bold;
+}
+
+
+h3, h4 { text-decoration: underline; }
+a { text-decoration: none; padding: 1px 2px 1px 2px; }
+a:visited { text-decoration: none; padding: 1px 2px 1px 2px; }
+a:hover { text-decoration: none; padding: 1px 1px 1px 1px; border: 1px solid #000000; } 
+a:focus { text-decoration: none; padding: 1px 2px 1px 2px; border: none; }
+a.none { text-decoration: none; padding: 0; }
+a.none:visited { text-decoration: none; padding: 0; } 
+a.none:hover { text-decoration: none; border: none; padding: 0; } 
+a.none:focus { text-decoration: none; border: none; padding: 0; } 
+a.noborder { text-decoration: none; padding: 0; } 
+a.noborder:visited { text-decoration: none; padding: 0; } 
+a.noborder:hover { text-decoration: none; border: none; padding: 0; } 
+a.noborder:focus { text-decoration: none; border: none; padding: 0; }  
+pre.none { padding:5px; background-color:#ffffff }
+</style>
+</link>
+</head>
+<body><span><title>cl-bio</title>
 <p>cl-bio is a library for the representation, processing, and
   analysis of various forms of biological data.</p>
 </span>
@@ -171,7 +319,7 @@
 </code>
 <code class="results">*DPP*
 </code>
-</div>
+<br/></div>
 <div class="lisp"><code><pre>(append
  (subseq
   (bio:split-string-into-lines-list (bio:residues-string (car *dpp*))
@@ -184,7 +332,7 @@
  "TCGTTCGCGGTTTCTGCGGCCATAAAATAAAGTAAATCCGAGTTAAACGCTGATAGTCGC"
  "GCCTGAAGAACCACAGAAAAAACAGAAAATATCTCCCGTCGTTTCTCGTTCTCGTTTCCG" "...")
 </code>
-</div>
+<br/></div>
 </span>
 </span>
 <span><h1>Bio-sequences</h1>
@@ -373,10 +521,24 @@ uses a 2-bit sequence encoding.</p>
 <p class="doc-documentation gf-documentation">Returns a new sequence that is the reverse
 complement of seq.</p>
 </div>
-<function><make-simple-dna-sequence/></function>
-<function><make-adjustable-dna-sequence/></function>
-<function><make-dna-sequence-from-string/></function>
-<function><make-random-dna-sequence/></function>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-SIMPLE-DNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-dna-sequence of the specified length.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-ADJUSTABLE-DNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns an adjustable-dna-sequence of the specified length.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-DNA-SEQUENCE-FROM-STRING RESIDUES)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-dna-sequence initialized with residues as its
+contents.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-RANDOM-DNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-dna-sequence of the specified length whose
+contents are randomly chosen residues.</p>
+</div>
 <p>To create an adjustable DNA sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *dna-seq-1*
@@ -385,14 +547,14 @@ complement of seq.</p>
 </code>
 <code class="results">*DNA-SEQ-1*
 </code>
-</div>
+<br/></div>
 <p>And to retrieve all the residues of the sequence:</p>
 <div class="lisp"><code><pre>(bio:residues-string *dna-seq-1*)
 </pre>
 </code>
 <code class="results">"GAATTC"
 </code>
-</div>
+<br/></div>
 </span>
 <span><h3>RNA Sequences</h3>
 <div class="doc class"><p class="doc-type">[CLASS]</p>
@@ -412,10 +574,24 @@ complement of seq.</p>
 <p class="doc-documentation class-documentation">Adjustable RNA sequence class with a 2-bit encoding
  (ACGU)</p>
 </div>
-<function><make-simple-rna-sequence/></function>
-<function><make-adjustable-rna-sequence/></function>
-<function><make-rna-sequence-from-string/></function>
-<function><make-random-rna-sequence/></function>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-SIMPLE-RNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-rna-sequence of the specified length.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-ADJUSTABLE-RNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns an adjustable-rna-sequence of the specified length.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-RNA-SEQUENCE-FROM-STRING RESIDUES)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-rna-sequence whose residues have been set to the
+specified residues.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-RANDOM-RNA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-rna-sequence of the specified length whose
+residues are randomly chosen.</p>
+</div>
 <p>To create an adjustable RNA sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *rna-seq-1*
@@ -424,14 +600,14 @@ complement of seq.</p>
 </code>
 <code class="results">*RNA-SEQ-1*
 </code>
-</div>
+<br/></div>
 <p>And to retrieve all the residues of the sequence:</p>
 <div class="lisp"><code><pre>(bio:residues-string *rna-seq-1*)
 </pre>
 </code>
 <code class="results">"AAGUUUUAG"
 </code>
-</div>
+<br/></div>
 </span>
 </span>
 <span><h2>Amino Acid Sequences</h2>
@@ -458,9 +634,20 @@ residue encoding.</p>
 <p class="doc-name class-name">AA-SEQUENCE-WITH-RESIDUES</p>
 <p class="doc-documentation class-documentation">Protocl class for amino acid sequences with residues.</p>
 </div>
-<function><make-simple-aa-sequence/></function>
-<function><make-aa-sequence-from-string/></function>
-<function><make-random-aa-sequence/></function>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-SIMPLE-AA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-aa-sequence of the specified length.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-AA-SEQUENCE-FROM-STRING RESIDUES)</p>
+<p class="doc-documentation fn-documentation">Returns a simple-aa-sequence whose contents are specified by
+residues.</p>
+</div>
+<div class="doc function"><p class="doc-type">[FUNCTION]</p>
+<p class="doc-name fn-name">(MAKE-RANDOM-AA-SEQUENCE LENGTH)</p>
+<p class="doc-documentation fn-documentation">Retruns a simple-aa-sequence of the specified length whose residues
+are set to random values.</p>
+</div>
 <p>To create an adjustable amino acid sequence one could use the
   following code:</p>
 <div class="lisp"><code><pre>(defparameter *aa-seq-1*
@@ -470,14 +657,14 @@ residue encoding.</p>
 </code>
 <code class="results">*AA-SEQ-1*
 </code>
-</div>
+<br/></div>
 <p>And to retrieve all the residues of the sequence:</p>
 <div class="lisp"><code><pre>(bio:residues-string *aa-seq-1*)
 </pre>
 </code>
 <code class="results">"MYRSTVLKCDQCLP"
 </code>
-</div>
+<br/></div>
 </span>
 <span><h2>sequence-range class</h2>
 <p>The sequence-range class is used to represent ranges on a
@@ -581,9 +768,35 @@ residue encoding.</p>
                                                                rucksack)))
 </pre>
 </code>
-<code class="results">NIL
+<code class="results">(("genus" "Canis" . "scientific name")
+ ("species" "Canis adustus" . "scientific name")
+ ("species" "Canis aureus" . "scientific name")
+ ("species" "Canis canis" . "synonym")
+ ("species" "Canis domesticus" . "synonym")
+ ("species" "Canis familiaris" . "scientific name")
+ ("subspecies" "Canis familiaris dingo" . "scientific name")
+ ("species" "Canis latrans" . "scientific name")
+ ("species" "Canis lupus" . "scientific name")
+ ("subspecies" "Canis lupus baileyi" . "scientific name")
+ ("subspecies" "Canis lupus chanco" . "scientific name")
+ ("species" "Canis lupus familiaris" . "synonym")
+ ("subspecies" "Canis lupus himalayensis" . "scientific name")
+ ("subspecies" "Canis lupus hodophilax" . "scientific name")
+ ("subspecies" "Canis lupus indica" . "scientific name")
+ ("species" "Canis lupus lycaon" . "synonym")
+ ("subspecies" "Canis lupus pallipes" . "scientific name")
+ ("species" "Canis lycaon" . "scientific name")
+ ("species" "Canis mesomelas" . "scientific name")
+ ("subspecies" "Canis mesomelas elongae" . "scientific name")
+ ("species" "Canis procyonoides" . "synonym")
+ ("species" "Canis rufus" . "scientific name")
+ ("species" "Canis simensis" . "scientific name")
+ ("species" "Canis sp." . "scientific name")
+ ("genus" "Canistrum" . "scientific name")
+ ("species" "Canistrum fosterianum" . "scientific name")
+ ("species" "Canistrum giganteum" . "scientific name"))
 </code>
-</div>
+<br/></div>
 </pre>
 </span>
 </span>
@@ -603,7 +816,7 @@ residue encoding.</p>
 </code>
 <code class="results">*ESR1-GENE-SEARCH*
 </code>
-</div>
+<br/></div>
 <p>The members of set can be accessed using the bio:members
   accessor and are instances of the bio:ncbi-gi class. To
   retrieve the id of the ncbi-gi objects, one can use the bio:id
@@ -614,7 +827,7 @@ residue encoding.</p>
 <code class="results">(2099 24890 13982 397435 443228 394461 259252 407238 396099 552888 751998
  281145 463079 791249 100136461 613025 403640 100136026 2100 133522)
 </code>
-</div>
+<br/></div>
 <p>To retrieve a gene from entrez, one can use the bio:fetch
   function, as in the following example:</p>
 <div class="lisp"><code><pre>(defparameter *esr1-gene*
@@ -626,7 +839,7 @@ residue encoding.</p>
 </code>
 <code class="results">*ESR1-GENE*
 </code>
-</div>
+<br/></div>
 <p>In this case, if the object identifier is found in the entrez
   database, an instance of the bio:gene class is returned.</p>
 </span>
