@@ -41,7 +41,7 @@
 ;;; utility function for copying remote documents
 (defun http-get-file (url file
                       &key
-                      (if-exists :overwrite)
+                      (if-exists :supersede)
                       (if-does-not-exist :create))
   (with-open-file (out file
                        :direction :output

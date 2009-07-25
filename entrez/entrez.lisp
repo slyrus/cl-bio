@@ -202,13 +202,15 @@
     (let* ((entrez-url (puri:merge-uris (make-query-uri query-params)
                                         *efetch-url-base*))
            (rendered-url (puri:render-uri entrez-url nil)))
-      (if copy-to-file
-          (apply #'http-get-file rendered-url copy-to-file
-                 (append
-                  (when if-exists `(:if-exists ,if-exists))
-                  (when if-does-not-exist `(:if-does-not-exist ,if-does-not-exist)))))
       (let ((drakma:*body-format-function* (constantly :latin1)))
-        (drakma:http-request rendered-url :want-stream t)))))
+        (if copy-to-file
+            (progn
+              (apply #'http-get-file rendered-url copy-to-file
+                     (append
+                      (when if-exists `(:if-exists ,if-exists))
+                      (when if-does-not-exist `(:if-does-not-exist ,if-does-not-exist))))
+              (open copy-to-file :direction :input :element-type :default))
+            (drakma:http-request rendered-url :want-stream t))))))
 
 (defun parse-entrez-xml-stream (stream
                                 &key
