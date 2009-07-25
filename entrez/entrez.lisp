@@ -35,7 +35,36 @@
 (defparameter *esearch-url-base* "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi")
 
 (defparameter *entrez-dtd-list*
-  '((:public-id "-//NCBI//NCBI GBSeq/EN"
+  '(
+    ;; Pubmed
+    (:public-id "-//NLM//DTD PubMedArticle, 1st January 2009//EN"
+     :system-url "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/pubmed_090101.dtd"
+     :local-file "dtd/DTD_PubmedArticle.dtd")
+    
+    (:public-id ("-//NLM//DTD Medline, 01 Jan 2009//EN"
+                 "-//NLM//DTD Medline//EN"
+                 "-//NLM//DTD NLM Medline//EN")
+     :system-url "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmmedline_090101.dtd"
+     :local-file "dtd/DTD_Medline.dtd")
+    
+    (:public-id ("-//NLM//DTD MedlineCitation, 1st January 2009//EN"
+                  "-//NLM//DTD MedlineCitation//EN")
+     :system-url "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmmedlinecitation_090101.dtd"
+     :local-file "dtd/DTD_MedlineCitation.dtd")
+
+    (:public-id ("-//NLM//DTD SharedCatCit, 1st January 2009//EN"
+                 "-//NLM//DTD SharedCatCit//EN")
+     :system-url "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmsharedcatcit_090101.dtd"
+     :local-file "dtd/DTD_SharedCatCit.dtd")
+
+    (:public-id ("-//NLM//DTD Common, 1st January 2009//EN"
+                 "-//NLM//DTD Common//EN")
+     :system-url "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmcommon_090101.dtd"
+     :local-file "dtd/DTD_Common.dtd")
+    
+
+    ;; GBSeq
+    (:public-id "-//NCBI//NCBI GBSeq/EN"
      :system-url "http://www.ncbi.nlm.nih.gov/dtd/NCBI_GBSeq.dtd"
      :local-file "dtd/NCBI_GBSeq.dtd")
     (:public-id "-//NCBI//NCBI Entity Module//EN"
@@ -129,17 +158,26 @@
 
 (defvar *local-dtd-hash-table* (make-hash-table :test 'equal))
 
-(mapcar (lambda (x)
-          (setf (gethash (getf x :public-id) *local-dtd-hash-table*)
-                (getf x :local-file)))
-        *entrez-dtd-list*)
+(map nil (lambda (x)
+           (let ((public-id-atom-or-list (getf x :public-id))
+                 (local-file (getf x :local-file)))
+             (map nil (lambda (id)
+                        (setf (gethash id *local-dtd-hash-table*)
+                              local-file))
+                  (if (listp public-id-atom-or-list)
+                      public-id-atom-or-list
+                      (list public-id-atom-or-list)))))
+     *entrez-dtd-list*)
 
 ;;; call this to cache the DTDs
 (defun http-get-entrez-dtds ()
-  (mapcar (lambda (x)
-            (http-get-file (getf x :system-url)
-                           (getf x :local-file)))
-          *entrez-dtd-list*))
+  (let ((cl-entrez-dir (ch-asdf:asdf-lookup-path "asdf:/cl-bio-entrez/entrez")))
+    (mapcar (lambda (x)
+              (http-get-file (getf x :system-url)
+                             (merge-pathnames 
+                              (getf x :local-file)
+                              cl-entrez-dir)))
+            *entrez-dtd-list*)))
 
 (defun dtd-resolver (pubid sysid)
   (let* ((cl-entrez-dir (ch-asdf:asdf-lookup-path "asdf:/cl-bio-entrez/entrez"))
