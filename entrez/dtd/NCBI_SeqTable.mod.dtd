@@ -388,7 +388,3 @@ $Revision: 115572 $
 <!-- data in columns -->
 <!ELEMENT Seq-table_columns (SeqTable-column*)>
 
-!-- number of rows -->
-
-<!ELEMENT Seq-table_columns (SeqTable-column*)> <!-- data in columns -->
-
