@@ -20,6 +20,7 @@
              (:cl-source-file "entrez-gene"
                               :depends-on ("defpackage" "classes" "utilities" "entrez"))
              (:cl-source-file "gbseq" :depends-on ("defpackage" "classes" "utilities" "entrez"))
+             (:cl-source-file "pubmed" :depends-on ("defpackage" "classes" "utilities" "entrez"))
              (:cl-source-file "entrez-dictionary"
                               :depends-on ("defpackage" "classes" "utilities" "entrez" "search"))
              (:static-file "README")))
