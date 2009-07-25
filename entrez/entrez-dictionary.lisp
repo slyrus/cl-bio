@@ -114,5 +114,8 @@
              (parse-gbset xml))
             ((equal root "GBSeq")
              (parse-gbseq xml))
+            ((equal root "PubmedArticleSet")
+             (parse-pubmed-article-set xml))
             (t (warn "returning raw xml")
+               (print root)
                xml)))))

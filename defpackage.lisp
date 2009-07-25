@@ -183,6 +183,31 @@
                #:beta-range
                #:filter-alignments
 
+               ;; artciles
+               #:author
+               #:author-last-name
+               #:author-fore-name
+               #:author-initials
+               
+               #:article
+               #:article-pmid
+               #:article-title
+               #:article-authors
+               #:article-journal
+               #:article-date
+               #:article-volume
+               #:article-issue
+               #:article-pages
+               #:article-abstract
+               #:article-mesh-headings
+
+               #:article-set
+               #:article-set-articles
+               #:article-set-query
+               #:article-set-total
+               #:article-set-count
+               #:article-set-start
+               
                ;; utilities
                #:split-string-into-lines-list
                #:split-string-into-lines
