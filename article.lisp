@@ -48,12 +48,15 @@
    (title :type string :accessor article-title :initarg :title)
    (authors :type list :accessor article-authors :initarg :authors :initform nil)
    (journal :type string :accessor article-journal :initarg :journal)
-   (date :type string :accessor article-date :initarg :date)
+   (short-journal :type string :accessor article-short-journal :initarg :short-journal)
+   (date :type list :accessor article-date :initarg :date)
    (volume :type (or string null) :accessor article-volume :initarg :volume)
    (issue :type (or string null) :accessor article-issue :initarg :issue)
    (pages :type (or string null) :accessor article-pages :initarg :pages)
    (abstract :type (or string null) :accessor article-abstract :initarg :abstract)
-   (mesh-headings :type list :accessor article-mesh-headings :initarg :mesh-headings :initform nil)))))
+   (mesh-headings :type list :accessor article-mesh-headings :initarg :mesh-headings :initform nil)
+   (doi :type (or string null) :accessor article-doi :initarg :doi)
+   (affiliation :type (or string null) :accessor article-affiliation :initarg :affiliation)))
 
 ;;; article-set protocol class
 (defclass article-set (bio-set)
