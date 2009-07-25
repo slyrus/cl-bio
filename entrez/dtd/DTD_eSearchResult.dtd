@@ -1,6 +1,6 @@
 <!--    
                 This is the Current DTD for Entrez eSearch
-$Id: DTD_eSearchResult.dtd,v 1.1 2007/11/23 07:27:05 sly Exp $
+$Id: eSearch_020511.dtd 85163 2006-06-28 17:35:21Z olegh $
 -->
 <!-- ================================================================= -->
 
@@ -61,4 +61,6 @@ $Id: DTD_eSearchResult.dtd,v 1.1 2007/11/23 07:27:05 sly Exp $
 				ErrorList?,
 				WarningList?
 				)>
+
+)>
 

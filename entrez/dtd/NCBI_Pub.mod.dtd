@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "pub.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 6.0 $
 ********************************************************************
 
   Publication common set
@@ -56,13 +56,16 @@ $Revision: 1.1 $
         Pub_equiv | 
         Pub_pmid)>
 
-<!ELEMENT Pub_gen (Cit-gen)> <!-- general or generic unparsed -->
+<!-- general or generic unparsed -->
+<!ELEMENT Pub_gen (Cit-gen)>
 
-<!ELEMENT Pub_sub (Cit-sub)> <!-- submission -->
+<!-- submission -->
+<!ELEMENT Pub_sub (Cit-sub)>
 
 <!ELEMENT Pub_medline (Medline-entry)>
 
-<!ELEMENT Pub_muid (%INTEGER;)> <!-- medline uid -->
+<!-- medline uid -->
+<!ELEMENT Pub_muid (%INTEGER;)>
 
 <!ELEMENT Pub_article (Cit-art)>
 
@@ -70,17 +73,22 @@ $Revision: 1.1 $
 
 <!ELEMENT Pub_book (Cit-book)>
 
-<!ELEMENT Pub_proc (Cit-proc)> <!-- proceedings of a meeting -->
+<!-- proceedings of a meeting -->
+<!ELEMENT Pub_proc (Cit-proc)>
 
 <!ELEMENT Pub_patent (Cit-pat)>
 
-<!ELEMENT Pub_pat-id (Id-pat)> <!-- identify a patent -->
+<!-- identify a patent -->
+<!ELEMENT Pub_pat-id (Id-pat)>
 
-<!ELEMENT Pub_man (Cit-let)> <!-- manuscript, thesis, or letter -->
+<!-- manuscript, thesis, or letter -->
+<!ELEMENT Pub_man (Cit-let)>
 
-<!ELEMENT Pub_equiv (Pub-equiv)> <!-- to cite a variety of ways -->
+<!-- to cite a variety of ways -->
+<!ELEMENT Pub_equiv (Pub-equiv)>
 
-<!ELEMENT Pub_pmid (PubMedId)> <!-- PubMedId -->
+<!-- PubMedId -->
+<!ELEMENT Pub_pmid (PubMedId)>
 
 <!-- equivalent identifiers for same citation -->
 <!ELEMENT Pub-equiv (Pub*)>
@@ -105,7 +113,8 @@ $Revision: 1.1 $
 
 <!ELEMENT Pub-set_book (Cit-book*)>
 
-<!ELEMENT Pub-set_proc (Cit-proc*)> <!-- proceedings of a meeting -->
+<!-- proceedings of a meeting -->
+<!ELEMENT Pub-set_proc (Cit-proc*)>
 
 <!ELEMENT Pub-set_patent (Cit-pat*)>
 

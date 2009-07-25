@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "biblio.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 6.2 $
 ****************************************************************
 
   NCBI Bibliographic data elements
@@ -59,7 +59,8 @@ $Revision: 1.1 $
         ArticleId_pmpid | 
         ArticleId_other)>
 
-<!ELEMENT ArticleId_pubmed (PubMedId)> <!-- see types below -->
+<!-- see types below -->
+<!ELEMENT ArticleId_pubmed (PubMedId)>
 <!-- Id from MEDLINE -->
 <!ELEMENT ArticleId_medline (MedlineUID)>
 <!-- Document Object Identifier -->
@@ -73,7 +74,8 @@ $Revision: 1.1 $
 <!-- Publisher Id supplied to PubMed -->
 <!ELEMENT ArticleId_pmpid (PmPid)>
 
-<!ELEMENT ArticleId_other (Dbtag)> <!-- generic catch all -->
+<!-- generic catch all -->
+<!ELEMENT ArticleId_other (Dbtag)>
 
 <!-- Id from the PubMed database at NCBI -->
 <!ELEMENT PubMedId (%INTEGER;)>
@@ -146,7 +148,8 @@ $Revision: 1.1 $
 -->
 <!ELEMENT PubStatusDate_pubstatus (PubStatus)>
 
-<!ELEMENT PubStatusDate_date (Date)> <!-- time may be added later -->
+<!-- time may be added later -->
+<!ELEMENT PubStatusDate_date (Date)>
 
 
 <!ELEMENT PubStatusDateSet (PubStatusDate*)>
@@ -161,9 +164,11 @@ $Revision: 1.1 $
         Cit-art_from, 
         Cit-art_ids?)>
 
-<!ELEMENT Cit-art_title (Title)> <!-- title of paper (ANSI requires) -->
+<!-- title of paper (ANSI requires) -->
+<!ELEMENT Cit-art_title (Title)>
 
-<!ELEMENT Cit-art_authors (Auth-list)> <!-- authors (ANSI requires) -->
+<!-- authors (ANSI requires) -->
+<!ELEMENT Cit-art_authors (Auth-list)>
 <!-- journal or book -->
 <!ELEMENT Cit-art_from (
         Cit-art_from_journal | 
@@ -176,14 +181,16 @@ $Revision: 1.1 $
 <!-- Meeting proceedings -->
 <!ELEMENT Cit-art_from_proc (Cit-proc)>
 
-<!ELEMENT Cit-art_ids (ArticleIdSet)> <!-- lots of ids -->
+<!-- lots of ids -->
+<!ELEMENT Cit-art_ids (ArticleIdSet)>
 
 <!-- Journal citation -->
 <!ELEMENT Cit-jour (
         Cit-jour_title, 
         Cit-jour_imp)>
 
-<!ELEMENT Cit-jour_title (Title)> <!-- title of journal -->
+<!-- title of journal -->
+<!ELEMENT Cit-jour_title (Title)>
 <!-- Imprint group -->
 <!ELEMENT Cit-jour_imp (Imprint)>
 
@@ -194,11 +201,14 @@ $Revision: 1.1 $
         Cit-book_authors, 
         Cit-book_imp)>
 
-<!ELEMENT Cit-book_title (Title)> <!-- Title of book -->
+<!-- Title of book -->
+<!ELEMENT Cit-book_title (Title)>
 
-<!ELEMENT Cit-book_coll (Title)> <!-- part of a collection -->
+<!-- part of a collection -->
+<!ELEMENT Cit-book_coll (Title)>
 
-<!ELEMENT Cit-book_authors (Auth-list)> <!-- authors -->
+<!-- authors -->
+<!ELEMENT Cit-book_authors (Auth-list)>
 <!-- Imprint group -->
 <!ELEMENT Cit-book_imp (Imprint)>
 
@@ -207,9 +217,11 @@ $Revision: 1.1 $
         Cit-proc_book, 
         Cit-proc_meet)>
 
-<!ELEMENT Cit-proc_book (Cit-book)> <!-- citation to meeting -->
+<!-- citation to meeting -->
+<!ELEMENT Cit-proc_book (Cit-book)>
 
-<!ELEMENT Cit-proc_meet (Meeting)> <!-- time and location of meeting -->
+<!-- time and location of meeting -->
+<!ELEMENT Cit-proc_meet (Meeting)>
 
 <!--
  Patent number and date-issue were made optional in 1997 to
@@ -235,32 +247,44 @@ $Revision: 1.1 $
 
 <!ELEMENT Cit-pat_title (#PCDATA)>
 
-<!ELEMENT Cit-pat_authors (Auth-list)> <!-- author/inventor -->
+<!-- author/inventor -->
+<!ELEMENT Cit-pat_authors (Auth-list)>
 
-<!ELEMENT Cit-pat_country (#PCDATA)> <!-- Patent Document Country -->
+<!-- Patent Document Country -->
+<!ELEMENT Cit-pat_country (#PCDATA)>
 
-<!ELEMENT Cit-pat_doc-type (#PCDATA)> <!-- Patent Document Type -->
+<!-- Patent Document Type -->
+<!ELEMENT Cit-pat_doc-type (#PCDATA)>
 
-<!ELEMENT Cit-pat_number (#PCDATA)> <!-- Patent Document Number -->
+<!-- Patent Document Number -->
+<!ELEMENT Cit-pat_number (#PCDATA)>
 
-<!ELEMENT Cit-pat_date-issue (Date)> <!-- Patent Issue/Pub Date -->
+<!-- Patent Issue/Pub Date -->
+<!ELEMENT Cit-pat_date-issue (Date)>
 
-<!ELEMENT Cit-pat_class (Cit-pat_class_E*)> <!-- Patent Doc Class Code  -->
+<!-- Patent Doc Class Code  -->
+<!ELEMENT Cit-pat_class (Cit-pat_class_E*)>
 
 
 <!ELEMENT Cit-pat_class_E (#PCDATA)>
 
-<!ELEMENT Cit-pat_app-number (#PCDATA)> <!-- Patent Doc Appl Number -->
+<!-- Patent Doc Appl Number -->
+<!ELEMENT Cit-pat_app-number (#PCDATA)>
 
-<!ELEMENT Cit-pat_app-date (Date)> <!-- Patent Appl File Date -->
+<!-- Patent Appl File Date -->
+<!ELEMENT Cit-pat_app-date (Date)>
 
-<!ELEMENT Cit-pat_applicants (Auth-list)> <!-- Applicants -->
+<!-- Applicants -->
+<!ELEMENT Cit-pat_applicants (Auth-list)>
 
-<!ELEMENT Cit-pat_assignees (Auth-list)> <!-- Assignees -->
+<!-- Assignees -->
+<!ELEMENT Cit-pat_assignees (Auth-list)>
 
-<!ELEMENT Cit-pat_priority (Patent-priority*)> <!-- Priorities -->
+<!-- Priorities -->
+<!ELEMENT Cit-pat_priority (Patent-priority*)>
 
-<!ELEMENT Cit-pat_abstract (#PCDATA)> <!-- abstract of patent -->
+<!-- abstract of patent -->
+<!ELEMENT Cit-pat_abstract (#PCDATA)>
 
 
 <!ELEMENT Patent-priority (
@@ -268,11 +292,14 @@ $Revision: 1.1 $
         Patent-priority_number, 
         Patent-priority_date)>
 
-<!ELEMENT Patent-priority_country (#PCDATA)> <!-- Patent country code -->
+<!-- Patent country code -->
+<!ELEMENT Patent-priority_country (#PCDATA)>
 
-<!ELEMENT Patent-priority_number (#PCDATA)> <!-- number assigned in that country -->
+<!-- number assigned in that country -->
+<!ELEMENT Patent-priority_number (#PCDATA)>
 
-<!ELEMENT Patent-priority_date (Date)> <!-- date of application -->
+<!-- date of application -->
+<!ELEMENT Patent-priority_date (Date)>
 
 <!-- just to identify a patent -->
 <!ELEMENT Id-pat (
@@ -280,17 +307,21 @@ $Revision: 1.1 $
         Id-pat_id, 
         Id-pat_doc-type?)>
 
-<!ELEMENT Id-pat_country (#PCDATA)> <!-- Patent Document Country -->
+<!-- Patent Document Country -->
+<!ELEMENT Id-pat_country (#PCDATA)>
 
 <!ELEMENT Id-pat_id (
         Id-pat_id_number | 
         Id-pat_id_app-number)>
 
-<!ELEMENT Id-pat_id_number (#PCDATA)> <!-- Patent Document Number -->
+<!-- Patent Document Number -->
+<!ELEMENT Id-pat_id_number (#PCDATA)>
 
-<!ELEMENT Id-pat_id_app-number (#PCDATA)> <!-- Patent Doc Appl Number -->
+<!-- Patent Doc Appl Number -->
+<!ELEMENT Id-pat_id_app-number (#PCDATA)>
 
-<!ELEMENT Id-pat_doc-type (#PCDATA)> <!-- Patent Doc Type -->
+<!-- Patent Doc Type -->
+<!ELEMENT Id-pat_doc-type (#PCDATA)>
 
 <!-- letter, thesis, or manuscript -->
 <!ELEMENT Cit-let (
@@ -298,9 +329,11 @@ $Revision: 1.1 $
         Cit-let_man-id?, 
         Cit-let_type?)>
 
-<!ELEMENT Cit-let_cit (Cit-book)> <!-- same fields as a book -->
+<!-- same fields as a book -->
+<!ELEMENT Cit-let_cit (Cit-book)>
 
-<!ELEMENT Cit-let_man-id (#PCDATA)> <!-- Manuscript identifier -->
+<!-- Manuscript identifier -->
+<!ELEMENT Cit-let_man-id (#PCDATA)>
 
 <!ELEMENT Cit-let_type %ENUM;>
 <!ATTLIST Cit-let_type value (
@@ -323,9 +356,11 @@ $Revision: 1.1 $
         Cit-sub_date?, 
         Cit-sub_descr?)>
 
-<!ELEMENT Cit-sub_authors (Auth-list)> <!-- not necessarily authors of the paper -->
+<!-- not necessarily authors of the paper -->
+<!ELEMENT Cit-sub_authors (Auth-list)>
 
-<!ELEMENT Cit-sub_imp (Imprint)> <!-- this only used to get date.. will go -->
+<!-- this only used to get date.. will go -->
+<!ELEMENT Cit-sub_imp (Imprint)>
 <!-- medium of submission -->
 <!ELEMENT Cit-sub_medium %ENUM;>
 <!ATTLIST Cit-sub_medium value (
@@ -337,9 +372,11 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT Cit-sub_date (Date)> <!-- replaces imp, will become required -->
+<!-- replaces imp, will become required -->
+<!ELEMENT Cit-sub_date (Date)>
 
-<!ELEMENT Cit-sub_descr (#PCDATA)> <!-- description of changes for public view -->
+<!-- description of changes for public view -->
+<!ELEMENT Cit-sub_descr (#PCDATA)>
 
 <!-- NOT from ANSI, this is a catchall -->
 <!ELEMENT Cit-gen (
@@ -355,11 +392,13 @@ $Revision: 1.1 $
         Cit-gen_title?, 
         Cit-gen_pmid?)>
 
-<!ELEMENT Cit-gen_cit (#PCDATA)> <!-- anything, not parsable -->
+<!-- anything, not parsable -->
+<!ELEMENT Cit-gen_cit (#PCDATA)>
 <!-- Authorship Group -->
 <!ELEMENT Cit-gen_authors (Auth-list)>
 
-<!ELEMENT Cit-gen_muid (%INTEGER;)> <!-- medline uid -->
+<!-- medline uid -->
+<!ELEMENT Cit-gen_muid (%INTEGER;)>
 <!--
  Title Group
  Valid for = A = Analytic (Cit-art)
@@ -377,11 +416,14 @@ $Revision: 1.1 $
 
 <!ELEMENT Cit-gen_date (Date)>
 
-<!ELEMENT Cit-gen_serial-number (%INTEGER;)> <!-- for GenBank style references -->
+<!-- for GenBank style references -->
+<!ELEMENT Cit-gen_serial-number (%INTEGER;)>
 
-<!ELEMENT Cit-gen_title (#PCDATA)> <!-- eg. cit="unpublished",title="title" -->
+<!-- eg. cit="unpublished",title="title" -->
+<!ELEMENT Cit-gen_title (#PCDATA)>
 
-<!ELEMENT Cit-gen_pmid (PubMedId)> <!-- PubMed Id -->
+<!-- PubMed Id -->
+<!ELEMENT Cit-gen_pmid (PubMedId)>
 
 <!-- Authorship Group -->
 <!ELEMENT Auth-list (
@@ -393,19 +435,23 @@ $Revision: 1.1 $
         Auth-list_names_ml | 
         Auth-list_names_str)>
 
-<!ELEMENT Auth-list_names_std (Author*)> <!-- full citations -->
+<!-- full citations -->
+<!ELEMENT Auth-list_names_std (Author*)>
 
-<!ELEMENT Auth-list_names_ml (Auth-list_names_ml_E*)> <!-- MEDLINE, semi-structured -->
+<!-- MEDLINE, semi-structured -->
+<!ELEMENT Auth-list_names_ml (Auth-list_names_ml_E*)>
 
 
 <!ELEMENT Auth-list_names_ml_E (#PCDATA)>
 
-<!ELEMENT Auth-list_names_str (Auth-list_names_str_E*)> <!-- free for all -->
+<!-- free for all -->
+<!ELEMENT Auth-list_names_str (Auth-list_names_str_E*)>
 
 
 <!ELEMENT Auth-list_names_str_E (#PCDATA)>
 
-<!ELEMENT Auth-list_affil (Affil)> <!-- author affiliation -->
+<!-- author affiliation -->
+<!ELEMENT Auth-list_affil (Affil)>
 
 
 <!ELEMENT Author (
@@ -415,7 +461,8 @@ $Revision: 1.1 $
         Author_affil?, 
         Author_is-corr?)>
 
-<!ELEMENT Author_name (Person-id)> <!-- Author, Primary or Secondary -->
+<!-- Author, Primary or Secondary -->
+<!ELEMENT Author_name (Person-id)>
 
 <!ELEMENT Author_level %ENUM;>
 <!ATTLIST Author_level value (
@@ -435,7 +482,8 @@ $Revision: 1.1 $
 
 <!ELEMENT Author_affil (Affil)>
 
-<!ELEMENT Author_is-corr EMPTY> <!-- TRUE if corresponding author -->
+<!-- TRUE if corresponding author -->
+<!ELEMENT Author_is-corr EMPTY>
 <!ATTLIST Author_is-corr value ( true | false ) #REQUIRED >
 
 
@@ -444,7 +492,8 @@ $Revision: 1.1 $
         Affil_str | 
         Affil_std)>
 
-<!ELEMENT Affil_str (#PCDATA)> <!-- unparsed string -->
+<!-- unparsed string -->
+<!ELEMENT Affil_str (#PCDATA)>
 <!-- std representation -->
 <!ELEMENT Affil_std (
         Affil_std_affil?, 
@@ -458,17 +507,23 @@ $Revision: 1.1 $
         Affil_std_phone?, 
         Affil_std_postal-code?)>
 
-<!ELEMENT Affil_std_affil (#PCDATA)> <!-- Author Affiliation, Name -->
+<!-- Author Affiliation, Name -->
+<!ELEMENT Affil_std_affil (#PCDATA)>
 
-<!ELEMENT Affil_std_div (#PCDATA)> <!-- Author Affiliation, Division -->
+<!-- Author Affiliation, Division -->
+<!ELEMENT Affil_std_div (#PCDATA)>
 
-<!ELEMENT Affil_std_city (#PCDATA)> <!-- Author Affiliation, City -->
+<!-- Author Affiliation, City -->
+<!ELEMENT Affil_std_city (#PCDATA)>
 
-<!ELEMENT Affil_std_sub (#PCDATA)> <!-- Author Affiliation, County Sub -->
+<!-- Author Affiliation, County Sub -->
+<!ELEMENT Affil_std_sub (#PCDATA)>
 
-<!ELEMENT Affil_std_country (#PCDATA)> <!-- Author Affiliation, Country -->
+<!-- Author Affiliation, Country -->
+<!ELEMENT Affil_std_country (#PCDATA)>
 
-<!ELEMENT Affil_std_street (#PCDATA)> <!-- street address, not ANSI -->
+<!-- street address, not ANSI -->
+<!ELEMENT Affil_std_street (#PCDATA)>
 
 <!ELEMENT Affil_std_email (#PCDATA)>
 
@@ -501,25 +556,35 @@ $Revision: 1.1 $
         Title_E_abr | 
         Title_E_isbn)>
 
-<!ELEMENT Title_E_name (#PCDATA)> <!-- Title, Anal,Coll,Mono    AJB -->
+<!-- Title, Anal,Coll,Mono    AJB -->
+<!ELEMENT Title_E_name (#PCDATA)>
 
-<!ELEMENT Title_E_tsub (#PCDATA)> <!-- Title, Subordinate       A B -->
+<!-- Title, Subordinate       A B -->
+<!ELEMENT Title_E_tsub (#PCDATA)>
 
-<!ELEMENT Title_E_trans (#PCDATA)> <!-- Title, Translated        AJB -->
+<!-- Title, Translated        AJB -->
+<!ELEMENT Title_E_trans (#PCDATA)>
 
-<!ELEMENT Title_E_jta (#PCDATA)> <!-- Title, Abbreviated        J -->
+<!-- Title, Abbreviated        J -->
+<!ELEMENT Title_E_jta (#PCDATA)>
 
-<!ELEMENT Title_E_iso-jta (#PCDATA)> <!-- specifically ISO jta      J -->
+<!-- specifically ISO jta      J -->
+<!ELEMENT Title_E_iso-jta (#PCDATA)>
 
-<!ELEMENT Title_E_ml-jta (#PCDATA)> <!-- specifically MEDLINE jta  J -->
+<!-- specifically MEDLINE jta  J -->
+<!ELEMENT Title_E_ml-jta (#PCDATA)>
 
-<!ELEMENT Title_E_coden (#PCDATA)> <!-- a coden                   J -->
+<!-- a coden                   J -->
+<!ELEMENT Title_E_coden (#PCDATA)>
 
-<!ELEMENT Title_E_issn (#PCDATA)> <!-- ISSN                      J -->
+<!-- ISSN                      J -->
+<!ELEMENT Title_E_issn (#PCDATA)>
 
-<!ELEMENT Title_E_abr (#PCDATA)> <!-- Title, Abbreviated         B -->
+<!-- Title, Abbreviated         B -->
+<!ELEMENT Title_E_abr (#PCDATA)>
 
-<!ELEMENT Title_E_isbn (#PCDATA)> <!-- ISBN                       B -->
+<!-- ISBN                       B -->
+<!ELEMENT Title_E_isbn (#PCDATA)>
 
 <!-- Imprint group -->
 <!ELEMENT Imprint (
@@ -538,7 +603,8 @@ $Revision: 1.1 $
         Imprint_pubstatus?, 
         Imprint_history?)>
 
-<!ELEMENT Imprint_date (Date)> <!-- date of publication -->
+<!-- date of publication -->
+<!ELEMENT Imprint_date (Date)>
 
 <!ELEMENT Imprint_volume (#PCDATA)>
 
@@ -548,13 +614,17 @@ $Revision: 1.1 $
 
 <!ELEMENT Imprint_section (#PCDATA)>
 
-<!ELEMENT Imprint_pub (Affil)> <!-- publisher, required for book -->
+<!-- publisher, required for book -->
+<!ELEMENT Imprint_pub (Affil)>
 
-<!ELEMENT Imprint_cprt (Date)> <!-- copyright date, "    "   " -->
+<!-- copyright date, "    "   " -->
+<!ELEMENT Imprint_cprt (Date)>
 
-<!ELEMENT Imprint_part-sup (#PCDATA)> <!-- part/sup of volume -->
+<!-- part/sup of volume -->
+<!ELEMENT Imprint_part-sup (#PCDATA)>
 
-<!ELEMENT Imprint_language (#PCDATA)> <!-- put here for simplicity -->
+<!-- put here for simplicity -->
+<!ELEMENT Imprint_language (#PCDATA)>
 <!-- for prepublication citations -->
 <!ELEMENT Imprint_prepub %ENUM;>
 
@@ -569,13 +639,17 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT Imprint_part-supi (#PCDATA)> <!-- part/sup on issue -->
+<!-- part/sup on issue -->
+<!ELEMENT Imprint_part-supi (#PCDATA)>
 
-<!ELEMENT Imprint_retract (CitRetract)> <!-- retraction info -->
+<!-- retraction info -->
+<!ELEMENT Imprint_retract (CitRetract)>
 
-<!ELEMENT Imprint_pubstatus (PubStatus)> <!-- current status of this publication -->
+<!-- current status of this publication -->
+<!ELEMENT Imprint_pubstatus (PubStatus)>
 
-<!ELEMENT Imprint_history (PubStatusDateSet)> <!-- dates for this record -->
+<!-- dates for this record -->
+<!ELEMENT Imprint_history (PubStatusDateSet)>
 
 
 <!ELEMENT CitRetract (
@@ -598,7 +672,8 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT CitRetract_exp (#PCDATA)> <!-- citation and/or explanation -->
+<!-- citation and/or explanation -->
+<!ELEMENT CitRetract_exp (#PCDATA)>
 
 
 <!ELEMENT Meeting (

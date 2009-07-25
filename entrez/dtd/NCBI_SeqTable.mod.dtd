@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqtable.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.7
-     ::DATATOOL:: on 11/05/2007 23:07:16
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 115572 $
   
 
 
@@ -110,20 +110,21 @@ $Revision: 1.1 $
 
 
 <!ELEMENT SeqTable-column-info (
-        SeqTable-column-info_name?, 
-        SeqTable-column-info_field)>
+        SeqTable-column-info_title?, 
+        SeqTable-column-info_field-id?, 
+        SeqTable-column-info_field-name?)>
 
-<!ELEMENT SeqTable-column-info_name (#PCDATA)> <!-- user friendly column name, can be skipped -->
-<!-- identification of the column data in the objects described by the table -->
-<!ELEMENT SeqTable-column-info_field (
-        SeqTable-column-info_field_int | 
-        SeqTable-column-info_field_str)>
-<!-- known column data types -->
-<!ELEMENT SeqTable-column-info_field_int (%INTEGER;)>
+<!-- user friendly column name, can be skipped -->
+<!ELEMENT SeqTable-column-info_title (#PCDATA)>
+<!--
+ identification of the column data in the objects described by the table
+ known column data types
+ position types
+-->
+<!ELEMENT SeqTable-column-info_field-id (%INTEGER;)>
 
 <!--
-    location	-  position types
-         location as Seq-loc
+    location	-  location as Seq-loc
     location-id	-  location Seq-id
     location-gi	-  gi
     location-from	-  interval from
@@ -138,16 +139,13 @@ $Revision: 1.1 $
     id-local	-  main feature fields
          id.local.id
     xref-id-local	-  xref.id.local.id
+    ext	-  field-name must be "E.xxx", see below
+    qual	-  field-name must be "Q.xxx", see below
+    dbxref	-  field-name must be "D.xxx", see below
     data-imp-key	-  various data fields
     ext-type	-  extra fields, see also special values for str below
-    gene-name	-  more specialized field ???
-         match by gene name
-    protein-product	-  match by protein product
-    transcript-product	-  match by transcript
-    snp-rsid	-  match by this SNP rsid
-    color	-  provide these colors
 -->
-<!ATTLIST SeqTable-column-info_field_int value (
+<!ATTLIST SeqTable-column-info_field-id value (
         location |
         location-id |
         location-gi |
@@ -169,6 +167,9 @@ $Revision: 1.1 $
         partial |
         comment |
         title |
+        ext |
+        qual |
+        dbxref |
         data-imp-key |
         data-region |
         data-cdregion-frame |
@@ -176,18 +177,12 @@ $Revision: 1.1 $
         qual-qual |
         qual-val |
         dbxref-db |
-        dbxref-tag |
-        gene-name |
-        protein-product |
-        transcript-product |
-        snp-rsid |
-        color |
-        bgcolor
+        dbxref-tag
         ) #IMPLIED >
 
 
 <!--
- any other column must be identified by ASN.1 text locator string
+ any column can be identified by ASN.1 text locator string
  with omitted object type.
  examples:
    "data.gene.locus" for Seq-feat.data.gene.locus
@@ -207,19 +202,21 @@ $Revision: 1.1 $
    "D.xxx" - dbxref.id = xxx, dbxref.tag = data
     - Seq-feat.dbxref is SET so several columns are allowed
 -->
-<!ELEMENT SeqTable-column-info_field_str (#PCDATA)>
+<!ELEMENT SeqTable-column-info_field-name (#PCDATA)>
 
 
 <!ELEMENT CommonString-table (
         CommonString-table_strings, 
         CommonString-table_indexes)>
 
-<!ELEMENT CommonString-table_strings (CommonString-table_strings_E*)> <!-- set of possible values -->
+<!-- set of possible values -->
+<!ELEMENT CommonString-table_strings (CommonString-table_strings_E*)>
 
 
 <!ELEMENT CommonString-table_strings_E (#PCDATA)>
 
-<!ELEMENT CommonString-table_indexes (CommonString-table_indexes_E*)> <!-- indexes of values -->
+<!-- indexes of values -->
+<!ELEMENT CommonString-table_indexes (CommonString-table_indexes_E*)>
 
 
 <!ELEMENT CommonString-table_indexes_E (%INTEGER;)>
@@ -229,12 +226,14 @@ $Revision: 1.1 $
         CommonBytes-table_bytes, 
         CommonBytes-table_indexes)>
 
-<!ELEMENT CommonBytes-table_bytes (CommonBytes-table_bytes_E*)> <!-- set of possible values -->
+<!-- set of possible values -->
+<!ELEMENT CommonBytes-table_bytes (CommonBytes-table_bytes_E*)>
 
 
 <!ELEMENT CommonBytes-table_bytes_E (%OCTETS;)>
 
-<!ELEMENT CommonBytes-table_indexes (CommonBytes-table_indexes_E*)> <!-- indexes of values -->
+<!-- indexes of values -->
+<!ELEMENT CommonBytes-table_indexes (CommonBytes-table_indexes_E*)>
 
 
 <!ELEMENT CommonBytes-table_indexes_E (%INTEGER;)>
@@ -252,29 +251,35 @@ $Revision: 1.1 $
         SeqTable-multi-data_id | 
         SeqTable-multi-data_interval)>
 
-<!ELEMENT SeqTable-multi-data_int (SeqTable-multi-data_int_E*)> <!-- a set of integers, one per row -->
+<!-- a set of integers, one per row -->
+<!ELEMENT SeqTable-multi-data_int (SeqTable-multi-data_int_E*)>
 
 
 <!ELEMENT SeqTable-multi-data_int_E (%INTEGER;)>
 
-<!ELEMENT SeqTable-multi-data_real (SeqTable-multi-data_real_E*)> <!-- a set of reals, one per row -->
+<!-- a set of reals, one per row -->
+<!ELEMENT SeqTable-multi-data_real (SeqTable-multi-data_real_E*)>
 
 
 <!ELEMENT SeqTable-multi-data_real_E (%REAL;)>
 
-<!ELEMENT SeqTable-multi-data_string (SeqTable-multi-data_string_E*)> <!-- a set of strings, one per row -->
+<!-- a set of strings, one per row -->
+<!ELEMENT SeqTable-multi-data_string (SeqTable-multi-data_string_E*)>
 
 
 <!ELEMENT SeqTable-multi-data_string_E (#PCDATA)>
 
-<!ELEMENT SeqTable-multi-data_bytes (SeqTable-multi-data_bytes_E*)> <!-- a set of byte arrays, one per row -->
+<!-- a set of byte arrays, one per row -->
+<!ELEMENT SeqTable-multi-data_bytes (SeqTable-multi-data_bytes_E*)>
 
 
 <!ELEMENT SeqTable-multi-data_bytes_E (%OCTETS;)>
 
-<!ELEMENT SeqTable-multi-data_common-string (CommonString-table)> <!-- a set of string with small set of possible values -->
+<!-- a set of string with small set of possible values -->
+<!ELEMENT SeqTable-multi-data_common-string (CommonString-table)>
 
-<!ELEMENT SeqTable-multi-data_common-bytes (CommonBytes-table)> <!-- a set of byte arrays with small set of possible values -->
+<!-- a set of byte arrays with small set of possible values -->
+<!ELEMENT SeqTable-multi-data_common-bytes (CommonBytes-table)>
 
 <!--
  a set of bits, one per row
@@ -282,7 +287,8 @@ $Revision: 1.1 $
 -->
 <!ELEMENT SeqTable-multi-data_bit (%OCTETS;)>
 
-<!ELEMENT SeqTable-multi-data_loc (Seq-loc*)> <!-- a set of locations, one per row -->
+<!-- a set of locations, one per row -->
+<!ELEMENT SeqTable-multi-data_loc (Seq-loc*)>
 
 <!ELEMENT SeqTable-multi-data_id (Seq-id*)>
 
@@ -299,19 +305,25 @@ $Revision: 1.1 $
         SeqTable-single-data_id | 
         SeqTable-single-data_interval)>
 
-<!ELEMENT SeqTable-single-data_int (%INTEGER;)> <!-- integer -->
+<!-- integer -->
+<!ELEMENT SeqTable-single-data_int (%INTEGER;)>
 
-<!ELEMENT SeqTable-single-data_real (%REAL;)> <!-- real -->
+<!-- real -->
+<!ELEMENT SeqTable-single-data_real (%REAL;)>
 
-<!ELEMENT SeqTable-single-data_string (#PCDATA)> <!-- string -->
+<!-- string -->
+<!ELEMENT SeqTable-single-data_string (#PCDATA)>
 
-<!ELEMENT SeqTable-single-data_bytes (%OCTETS;)> <!-- byte array -->
+<!-- byte array -->
+<!ELEMENT SeqTable-single-data_bytes (%OCTETS;)>
 
-<!ELEMENT SeqTable-single-data_bit EMPTY> <!-- bit -->
+<!-- bit -->
+<!ELEMENT SeqTable-single-data_bit EMPTY>
 <!ATTLIST SeqTable-single-data_bit value ( true | false ) #REQUIRED >
 
 
-<!ELEMENT SeqTable-single-data_loc (Seq-loc)> <!-- location -->
+<!-- location -->
+<!ELEMENT SeqTable-single-data_loc (Seq-loc)>
 
 <!ELEMENT SeqTable-single-data_id (Seq-id)>
 
@@ -322,19 +334,22 @@ $Revision: 1.1 $
         SeqTable-sparse-index_indexes | 
         SeqTable-sparse-index_bit-set)>
 
-<!ELEMENT SeqTable-sparse-index_indexes (SeqTable-sparse-index_indexes_E*)> <!-- indexed of rows with values -->
+<!-- indexed of rows with values -->
+<!ELEMENT SeqTable-sparse-index_indexes (SeqTable-sparse-index_indexes_E*)>
 
 
 <!ELEMENT SeqTable-sparse-index_indexes_E (%INTEGER;)>
 
-<!ELEMENT SeqTable-sparse-index_bit-set (%OCTETS;)> <!-- bitset of rows with values -->
+<!-- bitset of rows with values -->
+<!ELEMENT SeqTable-sparse-index_bit-set (%OCTETS;)>
 
 
 <!ELEMENT SeqTable-column (
         SeqTable-column_header, 
         SeqTable-column_data?, 
         SeqTable-column_sparse?, 
-        SeqTable-column_default?)>
+        SeqTable-column_default?, 
+        SeqTable-column_sparse-other?)>
 
 <!--
  column description or reference to previously defined info
@@ -342,11 +357,17 @@ $Revision: 1.1 $
 -->
 <!ELEMENT SeqTable-column_header (SeqTable-column-info)>
 
-<!ELEMENT SeqTable-column_data (SeqTable-multi-data)> <!-- row data -->
+<!-- row data -->
+<!ELEMENT SeqTable-column_data (SeqTable-multi-data)>
 
-<!ELEMENT SeqTable-column_sparse (SeqTable-sparse-index)> <!-- in case not all rows contain data this field will contain sparse info -->
+<!-- in case not all rows contain data this field will contain sparse info -->
+<!ELEMENT SeqTable-column_sparse (SeqTable-sparse-index)>
 
-<!ELEMENT SeqTable-column_default (SeqTable-single-data)> <!-- default value for sparse table, or if row data is too short -->
+<!-- default value for sparse table, or if row data is too short -->
+<!ELEMENT SeqTable-column_default (SeqTable-single-data)>
+
+<!-- single value for indexes not listed in sparse table -->
+<!ELEMENT SeqTable-column_sparse-other (SeqTable-single-data)>
 
 
 <!ELEMENT Seq-table (
@@ -355,11 +376,19 @@ $Revision: 1.1 $
         Seq-table_num-rows, 
         Seq-table_columns)>
 
-<!ELEMENT Seq-table_feat-type (%INTEGER;)> <!-- type of features in this table, equal to Seq-feat.data variant index -->
+<!-- type of features in this table, equal to Seq-feat.data variant index -->
+<!ELEMENT Seq-table_feat-type (%INTEGER;)>
 
-<!ELEMENT Seq-table_feat-subtype (%INTEGER;)> <!-- subtype of features in this table, defined in header SeqFeatData.hpp -->
+<!-- subtype of features in this table, defined in header SeqFeatData.hpp -->
+<!ELEMENT Seq-table_feat-subtype (%INTEGER;)>
 
-<!ELEMENT Seq-table_num-rows (%INTEGER;)> <!-- number of rows -->
+<!-- number of rows -->
+<!ELEMENT Seq-table_num-rows (%INTEGER;)>
+
+<!-- data in columns -->
+<!ELEMENT Seq-table_columns (SeqTable-column*)>
+
+!-- number of rows -->
 
 <!ELEMENT Seq-table_columns (SeqTable-column*)> <!-- data in columns -->
 

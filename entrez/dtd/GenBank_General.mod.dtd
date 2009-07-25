@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqblock.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -41,7 +41,8 @@
 
 <!ELEMENT GB-block_extra-accessions_E (#PCDATA)>
 
-<!ELEMENT GB-block_source (#PCDATA)> <!-- source line -->
+<!-- source line -->
+<!ELEMENT GB-block_source (#PCDATA)>
 
 <!ELEMENT GB-block_keywords (GB-block_keywords_E*)>
 
@@ -50,11 +51,15 @@
 
 <!ELEMENT GB-block_origin (#PCDATA)>
 
-<!ELEMENT GB-block_date (#PCDATA)> <!-- OBSOLETE old form Entry Date -->
+<!-- OBSOLETE old form Entry Date -->
+<!ELEMENT GB-block_date (#PCDATA)>
 
-<!ELEMENT GB-block_entry-date (Date)> <!-- replaces date -->
+<!-- replaces date -->
+<!ELEMENT GB-block_entry-date (Date)>
 
-<!ELEMENT GB-block_div (#PCDATA)> <!-- GenBank division -->
+<!-- GenBank division -->
+<!ELEMENT GB-block_div (#PCDATA)>
 
-<!ELEMENT GB-block_taxonomy (#PCDATA)> <!-- continuation line of organism -->
+<!-- continuation line of organism -->
+<!ELEMENT GB-block_taxonomy (#PCDATA)>
 

@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -39,24 +39,29 @@
         Prot-ref_db?, 
         Prot-ref_processed?)>
 
-<!ELEMENT Prot-ref_name (Prot-ref_name_E*)> <!-- protein name -->
+<!-- protein name -->
+<!ELEMENT Prot-ref_name (Prot-ref_name_E*)>
 
 
 <!ELEMENT Prot-ref_name_E (#PCDATA)>
 
-<!ELEMENT Prot-ref_desc (#PCDATA)> <!-- description (instead of name) -->
+<!-- description (instead of name) -->
+<!ELEMENT Prot-ref_desc (#PCDATA)>
 
-<!ELEMENT Prot-ref_ec (Prot-ref_ec_E*)> <!-- E.C. number(s) -->
+<!-- E.C. number(s) -->
+<!ELEMENT Prot-ref_ec (Prot-ref_ec_E*)>
 
 
 <!ELEMENT Prot-ref_ec_E (#PCDATA)>
 
-<!ELEMENT Prot-ref_activity (Prot-ref_activity_E*)> <!-- activities -->
+<!-- activities -->
+<!ELEMENT Prot-ref_activity (Prot-ref_activity_E*)>
 
 
 <!ELEMENT Prot-ref_activity_E (#PCDATA)>
 
-<!ELEMENT Prot-ref_db (Dbtag*)> <!-- ids in other dbases -->
+<!-- ids in other dbases -->
+<!ELEMENT Prot-ref_db (Dbtag*)>
 <!-- processing status -->
 <!ELEMENT Prot-ref_processed %ENUM;>
 <!ATTLIST Prot-ref_processed value (

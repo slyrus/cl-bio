@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqblock.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -54,32 +54,41 @@
         ) #REQUIRED >
 
 
-<!ELEMENT SP-block_extra-acc (SP-block_extra-acc_E*)> <!-- old SWISSPROT ids -->
+<!-- old SWISSPROT ids -->
+<!ELEMENT SP-block_extra-acc (SP-block_extra-acc_E*)>
 
 
 <!ELEMENT SP-block_extra-acc_E (#PCDATA)>
 
-<!ELEMENT SP-block_imeth EMPTY> <!-- seq known to start with Met -->
+<!-- seq known to start with Met -->
+<!ELEMENT SP-block_imeth EMPTY>
 <!ATTLIST SP-block_imeth value ( true | false ) "false" >
 
 
-<!ELEMENT SP-block_plasnm (SP-block_plasnm_E*)> <!-- plasmid names carrying gene -->
+<!-- plasmid names carrying gene -->
+<!ELEMENT SP-block_plasnm (SP-block_plasnm_E*)>
 
 
 <!ELEMENT SP-block_plasnm_E (#PCDATA)>
 
-<!ELEMENT SP-block_seqref (Seq-id*)> <!-- xref to other sequences -->
+<!-- xref to other sequences -->
+<!ELEMENT SP-block_seqref (Seq-id*)>
 
-<!ELEMENT SP-block_dbref (Dbtag*)> <!-- xref to non-sequence dbases -->
+<!-- xref to non-sequence dbases -->
+<!ELEMENT SP-block_dbref (Dbtag*)>
 
-<!ELEMENT SP-block_keywords (SP-block_keywords_E*)> <!-- keywords -->
+<!-- keywords -->
+<!ELEMENT SP-block_keywords (SP-block_keywords_E*)>
 
 
 <!ELEMENT SP-block_keywords_E (#PCDATA)>
 
-<!ELEMENT SP-block_created (Date)> <!-- creation date -->
+<!-- creation date -->
+<!ELEMENT SP-block_created (Date)>
 
-<!ELEMENT SP-block_sequpd (Date)> <!-- sequence update -->
+<!-- sequence update -->
+<!ELEMENT SP-block_sequpd (Date)>
 
-<!ELEMENT SP-block_annotupd (Date)> <!-- annotation update -->
+<!-- annotation update -->
+<!ELEMENT SP-block_annotupd (Date)>
 

@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -46,23 +46,29 @@
         Txinit_inittype?, 
         Txinit_evidence?)>
 
-<!ELEMENT Txinit_name (#PCDATA)> <!-- descriptive name of initiation site -->
+<!-- descriptive name of initiation site -->
+<!ELEMENT Txinit_name (#PCDATA)>
 
-<!ELEMENT Txinit_syn (Txinit_syn_E*)> <!-- synonyms -->
+<!-- synonyms -->
+<!ELEMENT Txinit_syn (Txinit_syn_E*)>
 
 
 <!ELEMENT Txinit_syn_E (#PCDATA)>
 
-<!ELEMENT Txinit_gene (Gene-ref*)> <!-- gene(s) transcribed -->
+<!-- gene(s) transcribed -->
+<!ELEMENT Txinit_gene (Gene-ref*)>
 
-<!ELEMENT Txinit_protein (Prot-ref*)> <!-- protein(s) produced -->
+<!-- protein(s) produced -->
+<!ELEMENT Txinit_protein (Prot-ref*)>
 
-<!ELEMENT Txinit_rna (Txinit_rna_E*)> <!-- rna(s) produced -->
+<!-- rna(s) produced -->
+<!ELEMENT Txinit_rna (Txinit_rna_E*)>
 
 
 <!ELEMENT Txinit_rna_E (#PCDATA)>
 
-<!ELEMENT Txinit_expression (#PCDATA)> <!-- tissue/time of expression -->
+<!-- tissue/time of expression -->
+<!ELEMENT Txinit_expression (#PCDATA)>
 <!-- transcription apparatus used at this site -->
 <!ELEMENT Txinit_txsystem %ENUM;>
 
@@ -85,15 +91,19 @@
         ) #REQUIRED >
 
 
-<!ELEMENT Txinit_txdescr (#PCDATA)> <!-- modifiers on txsystem -->
+<!-- modifiers on txsystem -->
+<!ELEMENT Txinit_txdescr (#PCDATA)>
 
-<!ELEMENT Txinit_txorg (Org-ref)> <!-- organism supplying transcription apparatus -->
+<!-- organism supplying transcription apparatus -->
+<!ELEMENT Txinit_txorg (Org-ref)>
 
-<!ELEMENT Txinit_mapping-precise EMPTY> <!-- mapping precise or approx -->
+<!-- mapping precise or approx -->
+<!ELEMENT Txinit_mapping-precise EMPTY>
 <!ATTLIST Txinit_mapping-precise value ( true | false ) "false" >
 
 
-<!ELEMENT Txinit_location-accurate EMPTY> <!-- does Seq-loc reflect mapping -->
+<!-- does Seq-loc reflect mapping -->
+<!ELEMENT Txinit_location-accurate EMPTY>
 <!ATTLIST Txinit_location-accurate value ( true | false ) "false" >
 
 
@@ -161,7 +171,8 @@
 <!ATTLIST Tx-evidence_low-prec-data value ( true | false ) "false" >
 
 
-<!ELEMENT Tx-evidence_from-homolog EMPTY> <!-- experiment actually done on -->
+<!-- experiment actually done on -->
+<!ELEMENT Tx-evidence_from-homolog EMPTY>
 <!ATTLIST Tx-evidence_from-homolog value ( true | false ) "false" >
 <!--
   close homolog

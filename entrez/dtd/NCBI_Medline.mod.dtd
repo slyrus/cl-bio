@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "medline.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 6.0 $
 **********************************************************************
 
   MEDLINE data definitions
@@ -50,11 +50,14 @@ $Revision: 1.1 $
         Medline-entry_mlfield?, 
         Medline-entry_status?)>
 
-<!ELEMENT Medline-entry_uid (%INTEGER;)> <!-- MEDLINE UID, sometimes not yet available if from PubMed -->
+<!-- MEDLINE UID, sometimes not yet available if from PubMed -->
+<!ELEMENT Medline-entry_uid (%INTEGER;)>
 
-<!ELEMENT Medline-entry_em (Date)> <!-- Entry Month -->
+<!-- Entry Month -->
+<!ELEMENT Medline-entry_em (Date)>
 
-<!ELEMENT Medline-entry_cit (Cit-art)> <!-- article citation -->
+<!-- article citation -->
+<!ELEMENT Medline-entry_cit (Cit-art)>
 
 <!ELEMENT Medline-entry_abstract (#PCDATA)>
 
@@ -64,7 +67,8 @@ $Revision: 1.1 $
 
 <!ELEMENT Medline-entry_xref (Medline-si*)>
 
-<!ELEMENT Medline-entry_idnum (Medline-entry_idnum_E*)> <!-- ID Number (grants, contracts) -->
+<!-- ID Number (grants, contracts) -->
+<!ELEMENT Medline-entry_idnum (Medline-entry_idnum_E*)>
 
 
 <!ELEMENT Medline-entry_idnum_E (#PCDATA)>
@@ -74,14 +78,17 @@ $Revision: 1.1 $
 
 <!ELEMENT Medline-entry_gene_E (#PCDATA)>
 
-<!ELEMENT Medline-entry_pmid (PubMedId)> <!-- MEDLINE records may include the PubMedId -->
+<!-- MEDLINE records may include the PubMedId -->
+<!ELEMENT Medline-entry_pmid (PubMedId)>
 
-<!ELEMENT Medline-entry_pub-type (Medline-entry_pub-type_E*)> <!-- may show publication types (review, etc) -->
+<!-- may show publication types (review, etc) -->
+<!ELEMENT Medline-entry_pub-type (Medline-entry_pub-type_E*)>
 
 
 <!ELEMENT Medline-entry_pub-type_E (#PCDATA)>
 
-<!ELEMENT Medline-entry_mlfield (Medline-field*)> <!-- additional Medline field types -->
+<!-- additional Medline field types -->
+<!ELEMENT Medline-entry_mlfield (Medline-field*)>
 
 <!ELEMENT Medline-entry_status (%INTEGER;)>
 
@@ -102,24 +109,29 @@ $Revision: 1.1 $
         Medline-mesh_term, 
         Medline-mesh_qual?)>
 
-<!ELEMENT Medline-mesh_mp EMPTY> <!-- TRUE if main point (*) -->
+<!-- TRUE if main point (*) -->
+<!ELEMENT Medline-mesh_mp EMPTY>
 <!ATTLIST Medline-mesh_mp value ( true | false ) "false" >
 
 
-<!ELEMENT Medline-mesh_term (#PCDATA)> <!-- the MeSH term -->
+<!-- the MeSH term -->
+<!ELEMENT Medline-mesh_term (#PCDATA)>
 
-<!ELEMENT Medline-mesh_qual (Medline-qual*)> <!-- qualifiers -->
+<!-- qualifiers -->
+<!ELEMENT Medline-mesh_qual (Medline-qual*)>
 
 
 <!ELEMENT Medline-qual (
         Medline-qual_mp?, 
         Medline-qual_subh)>
 
-<!ELEMENT Medline-qual_mp EMPTY> <!-- TRUE if main point -->
+<!-- TRUE if main point -->
+<!ELEMENT Medline-qual_mp EMPTY>
 <!ATTLIST Medline-qual_mp value ( true | false ) "false" >
 
 
-<!ELEMENT Medline-qual_subh (#PCDATA)> <!-- the subheading -->
+<!-- the subheading -->
+<!ELEMENT Medline-qual_subh (#PCDATA)>
 
 <!-- medline substance records -->
 <!ELEMENT Medline-rn (
@@ -140,9 +152,11 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT Medline-rn_cit (#PCDATA)> <!-- CAS or EC number if present -->
+<!-- CAS or EC number if present -->
+<!ELEMENT Medline-rn_cit (#PCDATA)>
 
-<!ELEMENT Medline-rn_name (#PCDATA)> <!-- name (always present) -->
+<!-- name (always present) -->
+<!ELEMENT Medline-rn_name (#PCDATA)>
 
 <!-- medline cross reference records -->
 <!ELEMENT Medline-si (
@@ -185,7 +199,8 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT Medline-si_cit (#PCDATA)> <!-- the citation/accession number -->
+<!-- the citation/accession number -->
+<!ELEMENT Medline-si_cit (#PCDATA)>
 
 
 <!ELEMENT Medline-field (
@@ -207,9 +222,11 @@ $Revision: 1.1 $
         ) #IMPLIED >
 
 
-<!ELEMENT Medline-field_str (#PCDATA)> <!-- the text -->
+<!-- the text -->
+<!ELEMENT Medline-field_str (#PCDATA)>
 
-<!ELEMENT Medline-field_ids (DocRef*)> <!-- pointers relevant to this text -->
+<!-- pointers relevant to this text -->
+<!ELEMENT Medline-field_ids (DocRef*)>
 
 <!-- reference to a document -->
 <!ELEMENT DocRef (

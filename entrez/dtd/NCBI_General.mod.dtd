@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "general.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 02/23/2007 23:08:17
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 99135 $
 **********************************************************************
 
   NCBI General Data elements
@@ -71,9 +71,11 @@ $Revision: 1.1 $
         Date_str | 
         Date_std)>
 
-<!ELEMENT Date_str (#PCDATA)> <!-- for those unparsed dates -->
+<!-- for those unparsed dates -->
+<!ELEMENT Date_str (#PCDATA)>
 
-<!ELEMENT Date_std (Date-std)> <!-- use this if you can -->
+<!-- use this if you can -->
+<!ELEMENT Date_std (Date-std)>
 
 <!-- NOTE: this is NOT a unix tm struct -->
 <!ELEMENT Date-std (
@@ -85,19 +87,26 @@ $Revision: 1.1 $
         Date-std_minute?, 
         Date-std_second?)>
 
-<!ELEMENT Date-std_year (%INTEGER;)> <!-- full year (including 1900) -->
+<!-- full year (including 1900) -->
+<!ELEMENT Date-std_year (%INTEGER;)>
 
-<!ELEMENT Date-std_month (%INTEGER;)> <!-- month (1-12) -->
+<!-- month (1-12) -->
+<!ELEMENT Date-std_month (%INTEGER;)>
 
-<!ELEMENT Date-std_day (%INTEGER;)> <!-- day of month (1-31) -->
+<!-- day of month (1-31) -->
+<!ELEMENT Date-std_day (%INTEGER;)>
 
-<!ELEMENT Date-std_season (#PCDATA)> <!-- for "spring", "may-june", etc -->
+<!-- for "spring", "may-june", etc -->
+<!ELEMENT Date-std_season (#PCDATA)>
 
-<!ELEMENT Date-std_hour (%INTEGER;)> <!-- hour of day (0-23) -->
+<!-- hour of day (0-23) -->
+<!ELEMENT Date-std_hour (%INTEGER;)>
 
-<!ELEMENT Date-std_minute (%INTEGER;)> <!-- minute of hour (0-59) -->
+<!-- minute of hour (0-59) -->
+<!ELEMENT Date-std_minute (%INTEGER;)>
 
-<!ELEMENT Date-std_second (%INTEGER;)> <!-- second of minute (0-59) -->
+<!-- second of minute (0-59) -->
+<!ELEMENT Date-std_second (%INTEGER;)>
 
 <!--
  Dbtag is generalized for tagging
@@ -108,9 +117,11 @@ $Revision: 1.1 $
         Dbtag_db, 
         Dbtag_tag)>
 
-<!ELEMENT Dbtag_db (#PCDATA)> <!-- name of database or system -->
+<!-- name of database or system -->
+<!ELEMENT Dbtag_db (#PCDATA)>
 
-<!ELEMENT Dbtag_tag (Object-id)> <!-- appropriate tag -->
+<!-- appropriate tag -->
+<!ELEMENT Dbtag_tag (Object-id)>
 
 <!--
  Object-id can tag or name anything
@@ -135,9 +146,11 @@ $Revision: 1.1 $
         Person-id_str | 
         Person-id_consortium)>
 
-<!ELEMENT Person-id_dbtag (Dbtag)> <!-- any defined database tag -->
+<!-- any defined database tag -->
+<!ELEMENT Person-id_dbtag (Dbtag)>
 
-<!ELEMENT Person-id_name (Name-std)> <!-- structured name -->
+<!-- structured name -->
+<!ELEMENT Person-id_name (Name-std)>
 
 <!--
  MEDLINE name (semi-structured)
@@ -145,9 +158,11 @@ $Revision: 1.1 $
 -->
 <!ELEMENT Person-id_ml (#PCDATA)>
 
-<!ELEMENT Person-id_str (#PCDATA)> <!-- unstructured name -->
+<!-- unstructured name -->
+<!ELEMENT Person-id_str (#PCDATA)>
 
-<!ELEMENT Person-id_consortium (#PCDATA)> <!-- consortium name -->
+<!-- consortium name -->
+<!ELEMENT Person-id_consortium (#PCDATA)>
 
 <!-- Structured names -->
 <!ELEMENT Name-std (
@@ -165,13 +180,17 @@ $Revision: 1.1 $
 
 <!ELEMENT Name-std_middle (#PCDATA)>
 
-<!ELEMENT Name-std_full (#PCDATA)> <!-- full name eg. "J. John Smith, Esq" -->
+<!-- full name eg. "J. John Smith, Esq" -->
+<!ELEMENT Name-std_full (#PCDATA)>
 
-<!ELEMENT Name-std_initials (#PCDATA)> <!-- first + middle initials -->
+<!-- first + middle initials -->
+<!ELEMENT Name-std_initials (#PCDATA)>
 
-<!ELEMENT Name-std_suffix (#PCDATA)> <!-- Jr, Sr, III -->
+<!-- Jr, Sr, III -->
+<!ELEMENT Name-std_suffix (#PCDATA)>
 
-<!ELEMENT Name-std_title (#PCDATA)> <!-- Dr., Sister, etc -->
+<!-- Dr., Sister, etc -->
+<!ELEMENT Name-std_title (#PCDATA)>
 
 <!--
 **** Int-fuzz **********************************************
@@ -185,7 +204,8 @@ $Revision: 1.1 $
         Int-fuzz_lim | 
         Int-fuzz_alt)>
 
-<!ELEMENT Int-fuzz_p-m (%INTEGER;)> <!-- plus or minus fixed amount -->
+<!-- plus or minus fixed amount -->
+<!ELEMENT Int-fuzz_p-m (%INTEGER;)>
 <!-- max to min -->
 <!ELEMENT Int-fuzz_range (
         Int-fuzz_range_max, 
@@ -195,7 +215,8 @@ $Revision: 1.1 $
 
 <!ELEMENT Int-fuzz_range_min (%INTEGER;)>
 
-<!ELEMENT Int-fuzz_pct (%INTEGER;)> <!-- % plus or minus (x10) 0-1000 -->
+<!-- % plus or minus (x10) 0-1000 -->
+<!ELEMENT Int-fuzz_pct (%INTEGER;)>
 <!-- some limit value -->
 <!ELEMENT Int-fuzz_lim %ENUM;>
 
@@ -219,7 +240,8 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT Int-fuzz_alt (Int-fuzz_alt_E*)> <!-- set of alternatives for the integer -->
+<!-- set of alternatives for the integer -->
+<!ELEMENT Int-fuzz_alt (Int-fuzz_alt_E*)>
 
 
 <!ELEMENT Int-fuzz_alt_E (%INTEGER;)>
@@ -235,11 +257,14 @@ $Revision: 1.1 $
         User-object_type, 
         User-object_data)>
 
-<!ELEMENT User-object_class (#PCDATA)> <!-- endeavor which designed this object -->
+<!-- endeavor which designed this object -->
+<!ELEMENT User-object_class (#PCDATA)>
 
-<!ELEMENT User-object_type (Object-id)> <!-- type of object within class -->
+<!-- type of object within class -->
+<!ELEMENT User-object_type (Object-id)>
 
-<!ELEMENT User-object_data (User-field*)> <!-- the object itself -->
+<!-- the object itself -->
+<!ELEMENT User-object_data (User-field*)>
 
 
 <!ELEMENT User-field (
@@ -247,9 +272,11 @@ $Revision: 1.1 $
         User-field_num?, 
         User-field_data)>
 
-<!ELEMENT User-field_label (Object-id)> <!-- field label -->
+<!-- field label -->
+<!ELEMENT User-field_label (Object-id)>
 
-<!ELEMENT User-field_num (%INTEGER;)> <!-- required for strs, ints, reals, oss -->
+<!-- required for strs, ints, reals, oss -->
+<!ELEMENT User-field_num (%INTEGER;)>
 <!-- field contents -->
 <!ELEMENT User-field_data (
         User-field_data_str | 
@@ -277,7 +304,8 @@ $Revision: 1.1 $
 
 <!ELEMENT User-field_data_os (%OCTETS;)>
 
-<!ELEMENT User-field_data_object (User-object)> <!-- for using other definitions -->
+<!-- for using other definitions -->
+<!ELEMENT User-field_data_object (User-object)>
 
 <!ELEMENT User-field_data_strs (User-field_data_strs_E*)>
 

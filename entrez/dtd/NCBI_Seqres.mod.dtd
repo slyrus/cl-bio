@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqres.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 6.0 $
 **********************************************************************
 
   NCBI Sequence Analysis Results (other than alignments)
@@ -47,19 +47,25 @@ $Revision: 1.1 $
 
 <!ELEMENT Seq-graph_comment (#PCDATA)>
 
-<!ELEMENT Seq-graph_loc (Seq-loc)> <!-- region this applies to -->
+<!-- region this applies to -->
+<!ELEMENT Seq-graph_loc (Seq-loc)>
 
-<!ELEMENT Seq-graph_title-x (#PCDATA)> <!-- title for x-axis -->
+<!-- title for x-axis -->
+<!ELEMENT Seq-graph_title-x (#PCDATA)>
 
 <!ELEMENT Seq-graph_title-y (#PCDATA)>
 
-<!ELEMENT Seq-graph_comp (%INTEGER;)> <!-- compression (residues/value) -->
+<!-- compression (residues/value) -->
+<!ELEMENT Seq-graph_comp (%INTEGER;)>
 
-<!ELEMENT Seq-graph_a (%REAL;)> <!-- for scaling values -->
+<!-- for scaling values -->
+<!ELEMENT Seq-graph_a (%REAL;)>
 
-<!ELEMENT Seq-graph_b (%REAL;)> <!-- display = (a x value) + b -->
+<!-- display = (a x value) + b -->
+<!ELEMENT Seq-graph_b (%REAL;)>
 
-<!ELEMENT Seq-graph_numval (%INTEGER;)> <!-- number of values in graph -->
+<!-- number of values in graph -->
+<!ELEMENT Seq-graph_numval (%INTEGER;)>
 
 <!ELEMENT Seq-graph_graph (
         Seq-graph_graph_real | 
@@ -79,11 +85,14 @@ $Revision: 1.1 $
         Real-graph_axis, 
         Real-graph_values)>
 
-<!ELEMENT Real-graph_max (%REAL;)> <!-- top of graph -->
+<!-- top of graph -->
+<!ELEMENT Real-graph_max (%REAL;)>
 
-<!ELEMENT Real-graph_min (%REAL;)> <!-- bottom of graph -->
+<!-- bottom of graph -->
+<!ELEMENT Real-graph_min (%REAL;)>
 
-<!ELEMENT Real-graph_axis (%REAL;)> <!-- value to draw axis on -->
+<!-- value to draw axis on -->
+<!ELEMENT Real-graph_axis (%REAL;)>
 
 <!ELEMENT Real-graph_values (Real-graph_values_E*)>
 

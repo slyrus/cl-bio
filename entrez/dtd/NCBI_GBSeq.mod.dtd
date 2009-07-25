@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "gbseq.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 01/15/2009 23:07:54
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,12 +9,12 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 149842 $
 *********************************************************
 
  ASN.1 and XML for the components of a GenBank format sequence
  J.Ostell 2002
- Updated 14 December 2005
+ Updated 15 January 2009
 
 *********************************************************
 -->
@@ -94,6 +94,9 @@ $Revision: 1.1 $
 
 ********
 -->
+<!ELEMENT GBSet (GBSeq*)>
+
+
 <!ELEMENT GBSeq (
         GBSeq_locus, 
         GBSeq_length, 
@@ -119,6 +122,7 @@ $Revision: 1.1 $
         GBSeq_taxonomy?, 
         GBSeq_references?, 
         GBSeq_comment?, 
+        GBSeq_tagset?, 
         GBSeq_primary?, 
         GBSeq_source-db?, 
         GBSeq_database-reference?, 
@@ -174,6 +178,8 @@ $Revision: 1.1 $
 
 <!ELEMENT GBSeq_comment (#PCDATA)>
 
+<!ELEMENT GBSeq_tagset (GBTagset)>
+
 <!ELEMENT GBSeq_primary (#PCDATA)>
 
 <!ELEMENT GBSeq_source-db (#PCDATA)>
@@ -182,7 +188,8 @@ $Revision: 1.1 $
 
 <!ELEMENT GBSeq_feature-table (GBFeature*)>
 
-<!ELEMENT GBSeq_sequence (#PCDATA)> <!-- Optional for other dump forms -->
+<!-- Optional for other dump forms -->
+<!ELEMENT GBSeq_sequence (#PCDATA)>
 
 <!ELEMENT GBSeq_contig (#PCDATA)>
 
@@ -194,6 +201,9 @@ $Revision: 1.1 $
 
 
 <!ELEMENT GBKeyword (#PCDATA)>
+
+
+<!ELEMENT GBAuthor (#PCDATA)>
 
 
 <!ELEMENT GBReference (
@@ -226,9 +236,6 @@ $Revision: 1.1 $
 <!ELEMENT GBReference_remark (#PCDATA)>
 
 
-<!ELEMENT GBAuthor (#PCDATA)>
-
-
 <!ELEMENT GBXref (
         GBXref_dbname, 
         GBXref_id)>
@@ -236,6 +243,36 @@ $Revision: 1.1 $
 <!ELEMENT GBXref_dbname (#PCDATA)>
 
 <!ELEMENT GBXref_id (#PCDATA)>
+
+
+<!ELEMENT GBTagset (
+        GBTagset_authority?, 
+        GBTagset_version?, 
+        GBTagset_url?, 
+        GBTagset_tags?)>
+
+<!ELEMENT GBTagset_authority (#PCDATA)>
+
+<!ELEMENT GBTagset_version (#PCDATA)>
+
+<!ELEMENT GBTagset_url (#PCDATA)>
+
+<!ELEMENT GBTagset_tags (GBTags)>
+
+
+<!ELEMENT GBTags (GBTag*)>
+
+
+<!ELEMENT GBTag (
+        GBTag_name?, 
+        GBTag_value?, 
+        GBTag_unit?)>
+
+<!ELEMENT GBTag_name (#PCDATA)>
+
+<!ELEMENT GBTag_value (#PCDATA)>
+
+<!ELEMENT GBTag_unit (#PCDATA)>
 
 
 <!ELEMENT GBFeature (
@@ -300,5 +337,35 @@ $Revision: 1.1 $
 <!ELEMENT GBQualifier_value (#PCDATA)>
 
 
-<!ELEMENT GBSet (GBSeq*)>
+<!ELEMENT GBTagsetRules (
+        GBTagsetRules_authority?, 
+        GBTagsetRules_version?, 
+        GBTagsetRules_mandatorytags?, 
+        GBTagsetRules_optionaltags?, 
+        GBTagsetRules_uniquetags?, 
+        GBTagsetRules_extensible?)>
+
+<!ELEMENT GBTagsetRules_authority (#PCDATA)>
+
+<!ELEMENT GBTagsetRules_version (#PCDATA)>
+
+<!ELEMENT GBTagsetRules_mandatorytags (GBTagNames)>
+
+<!ELEMENT GBTagsetRules_optionaltags (GBTagNames)>
+
+<!ELEMENT GBTagsetRules_uniquetags (GBTagNames)>
+
+<!ELEMENT GBTagsetRules_extensible EMPTY>
+<!ATTLIST GBTagsetRules_extensible value ( true | false ) #REQUIRED >
+
+
+
+<!ELEMENT GBTagNames (GBTagNames_E*)>
+
+
+
+<!ELEMENT GBTagNames_E (#PCDATA)>
+
+
+<!ELEMENT GBTagsetRuleSet (GBTagsetRules*)>
 

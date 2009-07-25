@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "entrezgene.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.2
+     ::DATATOOL:: on 04/27/2009 23:05:20
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $ 
+$Revision: 158545 $ 
 ********************************************************************** 
  
   NCBI Entrezgene 
@@ -25,7 +25,9 @@ $Revision: 1.1 $
 
 <!-- Elements used by other modules:
           Entrezgene,
-          Entrezgene-Set -->
+          Entrezgene-Set,
+          Gene-track,
+          Gene-commentary -->
 
 <!-- Elements referenced from other modules:
           Gene-ref FROM NCBI-Gene,
@@ -66,7 +68,8 @@ $Revision: 1.1 $
         Entrezgene_xtra-iq?, 
         Entrezgene_non-unique-keys?)>
 
-<!ELEMENT Entrezgene_track-info (Gene-track)> <!-- not in submission, but in retrieval  -->
+<!-- not in submission, but in retrieval  -->
+<!ELEMENT Entrezgene_track-info (Gene-track)>
 <!-- type of Gene -->
 <!ELEMENT Entrezgene_type (%INTEGER;)>
 <!ATTLIST Entrezgene_type value (
@@ -80,23 +83,27 @@ $Revision: 1.1 $
         pseudo |
         transposon |
         miscRNA |
+        ncRNA |
         other
         ) #IMPLIED >
 
 
 <!ELEMENT Entrezgene_source (BioSource)>
 
-<!ELEMENT Entrezgene_gene (Gene-ref)> <!-- for locus-tag see note 3 -->
+<!-- for locus-tag see note 3 -->
+<!ELEMENT Entrezgene_gene (Gene-ref)>
 
 <!ELEMENT Entrezgene_prot (Prot-ref)>
 
 <!ELEMENT Entrezgene_rna (RNA-ref)>
 
-<!ELEMENT Entrezgene_summary (#PCDATA)> <!-- short summary  -->
+<!-- short summary  -->
+<!ELEMENT Entrezgene_summary (#PCDATA)>
 
 <!ELEMENT Entrezgene_location (Maps*)>
 
-<!ELEMENT Entrezgene_gene-source (Gene-source)> <!-- NCBI source to Entrez  -->
+<!-- NCBI source to Entrez  -->
+<!ELEMENT Entrezgene_gene-source (Gene-source)>
 
 <!--
  location of gene on chromosome (if known)
@@ -107,22 +114,27 @@ $Revision: 1.1 $
 
 <!ELEMENT Entrezgene_properties (Gene-commentary*)>
 
-<!ELEMENT Entrezgene_refgene (Gene-commentary*)> <!-- NG for this?  -->
+<!-- NG for this?  -->
+<!ELEMENT Entrezgene_refgene (Gene-commentary*)>
 
 <!ELEMENT Entrezgene_homology (Gene-commentary*)>
 
 <!ELEMENT Entrezgene_comments (Gene-commentary*)>
 
-<!ELEMENT Entrezgene_unique-keys (Dbtag*)> <!-- see note 3 -->
+<!-- see note 3 -->
+<!ELEMENT Entrezgene_unique-keys (Dbtag*)>
 
-<!ELEMENT Entrezgene_xtra-index-terms (Entrezgene_xtra-index-terms_E*)> <!-- see note 2 -->
+<!-- see note 2 -->
+<!ELEMENT Entrezgene_xtra-index-terms (Entrezgene_xtra-index-terms_E*)>
 
 
 <!ELEMENT Entrezgene_xtra-index-terms_E (#PCDATA)>
 
-<!ELEMENT Entrezgene_xtra-properties (Xtra-Terms*)> <!-- see note 2 -->
+<!-- see note 2 -->
+<!ELEMENT Entrezgene_xtra-properties (Xtra-Terms*)>
 
-<!ELEMENT Entrezgene_xtra-iq (Xtra-Terms*)> <!-- see note 2 -->
+<!-- see note 2 -->
+<!ELEMENT Entrezgene_xtra-iq (Xtra-Terms*)>
 
 <!ELEMENT Entrezgene_non-unique-keys (Dbtag*)>
 
@@ -138,7 +150,8 @@ $Revision: 1.1 $
         Gene-track_update-date, 
         Gene-track_discontinue-date?)>
 
-<!ELEMENT Gene-track_geneid (%INTEGER;)> <!-- required unique document id  -->
+<!-- required unique document id  -->
+<!ELEMENT Gene-track_geneid (%INTEGER;)>
 
 <!ELEMENT Gene-track_status (%INTEGER;)>
 
@@ -155,13 +168,17 @@ $Revision: 1.1 $
         ) #IMPLIED >
 
 
-<!ELEMENT Gene-track_current-id (Dbtag*)> <!-- see note 1 below -->
+<!-- see note 1 below -->
+<!ELEMENT Gene-track_current-id (Dbtag*)>
 
-<!ELEMENT Gene-track_create-date (Date)> <!-- date created in Entrez  -->
+<!-- date created in Entrez  -->
+<!ELEMENT Gene-track_create-date (Date)>
 
-<!ELEMENT Gene-track_update-date (Date)> <!-- last date updated in Entrez  -->
+<!-- last date updated in Entrez  -->
+<!ELEMENT Gene-track_update-date (Date)>
 
-<!ELEMENT Gene-track_discontinue-date (Date)> <!-- -->
+<!-- -->
+<!ELEMENT Gene-track_discontinue-date (Date)>
 
 
 <!ELEMENT Gene-source (
@@ -173,23 +190,30 @@ $Revision: 1.1 $
         Gene-source_locus-display?, 
         Gene-source_extra-terms?)>
 
-<!ELEMENT Gene-source_src (#PCDATA)> <!-- key to the source within NCBI locuslink, Ecoli, etc  -->
+<!-- key to the source within NCBI locuslink, Ecoli, etc  -->
+<!ELEMENT Gene-source_src (#PCDATA)>
 
-<!ELEMENT Gene-source_src-int (%INTEGER;)> <!-- eg. locuslink id  -->
+<!-- eg. locuslink id  -->
+<!ELEMENT Gene-source_src-int (%INTEGER;)>
 
-<!ELEMENT Gene-source_src-str1 (#PCDATA)> <!-- eg. chromosome1  -->
+<!-- eg. chromosome1  -->
+<!ELEMENT Gene-source_src-str1 (#PCDATA)>
 
-<!ELEMENT Gene-source_src-str2 (#PCDATA)> <!-- see note 3 -->
+<!-- see note 3 -->
+<!ELEMENT Gene-source_src-str2 (#PCDATA)>
 
-<!ELEMENT Gene-source_gene-display EMPTY> <!-- do we have a URL for gene display?  -->
+<!-- do we have a URL for gene display?  -->
+<!ELEMENT Gene-source_gene-display EMPTY>
 <!ATTLIST Gene-source_gene-display value ( true | false ) "false" >
 
 
-<!ELEMENT Gene-source_locus-display EMPTY> <!-- do we have a URL for map/locus display?  -->
+<!-- do we have a URL for map/locus display?  -->
+<!ELEMENT Gene-source_locus-display EMPTY>
 <!ATTLIST Gene-source_locus-display value ( true | false ) "false" >
 
 
-<!ELEMENT Gene-source_extra-terms EMPTY> <!-- do we have a URL for extra indexing terms?  -->
+<!-- do we have a URL for extra indexing terms?  -->
+<!ELEMENT Gene-source_extra-terms EMPTY>
 <!ATTLIST Gene-source_extra-terms value ( true | false ) "false" >
 
 
@@ -224,6 +248,7 @@ $Revision: 1.1 $
     complex	-  used (but not limited) to identify resulting 
          interaction complexes
     compound	-  pubchem entities
+    gene-group	-  for relationship sets (such as pseudogene / parent gene)
 -->
 <!ATTLIST Gene-commentary_type value (
         genomic |
@@ -247,12 +272,15 @@ $Revision: 1.1 $
         phenotype |
         complex |
         compound |
+        ncRNA |
+        gene-group |
         comment |
         other
         ) #IMPLIED >
 
 
-<!ELEMENT Gene-commentary_heading (#PCDATA)> <!-- appears above text  -->
+<!-- appears above text  -->
+<!ELEMENT Gene-commentary_heading (#PCDATA)>
 
 <!--
  occurs to left of text
@@ -267,19 +295,26 @@ $Revision: 1.1 $
 -->
 <!ELEMENT Gene-commentary_text (#PCDATA)>
 
-<!ELEMENT Gene-commentary_accession (#PCDATA)> <!-- accession for the gi in the seqloc, see note 3 -->
+<!-- accession for the gi in the seqloc, see note 3 -->
+<!ELEMENT Gene-commentary_accession (#PCDATA)>
 
-<!ELEMENT Gene-commentary_version (%INTEGER;)> <!-- version for the accession above -->
+<!-- version for the accession above -->
+<!ELEMENT Gene-commentary_version (%INTEGER;)>
 
-<!ELEMENT Gene-commentary_xtra-properties (Xtra-Terms*)> <!-- see note 2 -->
+<!-- see note 2 -->
+<!ELEMENT Gene-commentary_xtra-properties (Xtra-Terms*)>
 
-<!ELEMENT Gene-commentary_refs (Pub*)> <!-- refs for this  -->
+<!-- refs for this  -->
+<!ELEMENT Gene-commentary_refs (Pub*)>
 
-<!ELEMENT Gene-commentary_source (Other-source*)> <!-- links and refs  -->
+<!-- links and refs  -->
+<!ELEMENT Gene-commentary_source (Other-source*)>
 
-<!ELEMENT Gene-commentary_genomic-coords (Seq-loc*)> <!-- referenced sequences in genomic coords -->
+<!-- referenced sequences in genomic coords -->
+<!ELEMENT Gene-commentary_genomic-coords (Seq-loc*)>
 
-<!ELEMENT Gene-commentary_seqs (Seq-loc*)> <!-- referenced sequences in non-genomic coords -->
+<!-- referenced sequences in non-genomic coords -->
+<!ELEMENT Gene-commentary_seqs (Seq-loc*)>
 
 <!ELEMENT Gene-commentary_products (Gene-commentary*)>
 
@@ -299,15 +334,20 @@ $Revision: 1.1 $
         Other-source_url?, 
         Other-source_post-text?)>
 
-<!ELEMENT Other-source_src (Dbtag)> <!-- key to non-ncbi source  -->
+<!-- key to non-ncbi source  -->
+<!ELEMENT Other-source_src (Dbtag)>
 
-<!ELEMENT Other-source_pre-text (#PCDATA)> <!-- text before anchor  -->
+<!-- text before anchor  -->
+<!ELEMENT Other-source_pre-text (#PCDATA)>
 
-<!ELEMENT Other-source_anchor (#PCDATA)> <!-- text to show as highlight  -->
+<!-- text to show as highlight  -->
+<!ELEMENT Other-source_anchor (#PCDATA)>
 
-<!ELEMENT Other-source_url (#PCDATA)> <!-- if present, use this URL not Dbtag and datbase  -->
+<!-- if present, use this URL not Dbtag and datbase  -->
+<!ELEMENT Other-source_url (#PCDATA)>
 
-<!ELEMENT Other-source_post-text (#PCDATA)> <!-- text after anchor  -->
+<!-- text after anchor  -->
+<!ELEMENT Other-source_post-text (#PCDATA)>
 
 
 <!ELEMENT Maps (
@@ -320,7 +360,8 @@ $Revision: 1.1 $
         Maps_method_proxy | 
         Maps_method_map-type)>
 
-<!ELEMENT Maps_method_proxy (#PCDATA)> <!--url to non mapviewer mapviewing resource -->
+<!--url to non mapviewer mapviewing resource -->
+<!ELEMENT Maps_method_proxy (#PCDATA)>
 <!-- units used in display-str to query mapviewer  -->
 <!ELEMENT Maps_method_map-type %ENUM;>
 <!ATTLIST Maps_method_map-type value (

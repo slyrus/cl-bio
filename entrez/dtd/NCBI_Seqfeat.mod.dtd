@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.2
-     ::DATATOOL:: on 09/06/2007 23:07:21
+     ::DATATOOL:: by application DATATOOL version 1.9.2
+     ::DATATOOL:: on 04/27/2009 23:05:20
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 158548 $
 **********************************************************************
 
   NCBI Sequence Feature elements
@@ -53,13 +53,17 @@ $Revision: 1.1 $
         Feat-id_local | 
         Feat-id_general)>
 
-<!ELEMENT Feat-id_gibb (%INTEGER;)> <!-- geninfo backbone -->
+<!-- geninfo backbone -->
+<!ELEMENT Feat-id_gibb (%INTEGER;)>
 
-<!ELEMENT Feat-id_giim (Giimport-id)> <!-- geninfo import -->
+<!-- geninfo import -->
+<!ELEMENT Feat-id_giim (Giimport-id)>
 
-<!ELEMENT Feat-id_local (Object-id)> <!-- for local software use -->
+<!-- for local software use -->
+<!ELEMENT Feat-id_local (Object-id)>
 
-<!ELEMENT Feat-id_general (Dbtag)> <!-- for use by various databases -->
+<!-- for use by various databases -->
+<!ELEMENT Feat-id_general (Dbtag)>
 
 <!--
 *** Seq-feat *******************************************
@@ -90,29 +94,38 @@ $Revision: 1.1 $
 -->
 <!ELEMENT Seq-feat_id (Feat-id)>
 
-<!ELEMENT Seq-feat_data (SeqFeatData)> <!-- the specific data -->
+<!-- the specific data -->
+<!ELEMENT Seq-feat_data (SeqFeatData)>
 
-<!ELEMENT Seq-feat_partial EMPTY> <!-- incomplete in some way? -->
+<!-- incomplete in some way? -->
+<!ELEMENT Seq-feat_partial EMPTY>
 <!ATTLIST Seq-feat_partial value ( true | false ) #REQUIRED >
 
 
-<!ELEMENT Seq-feat_except EMPTY> <!-- something funny about this? -->
+<!-- something funny about this? -->
+<!ELEMENT Seq-feat_except EMPTY>
 <!ATTLIST Seq-feat_except value ( true | false ) #REQUIRED >
 
 
 <!ELEMENT Seq-feat_comment (#PCDATA)>
 
-<!ELEMENT Seq-feat_product (Seq-loc)> <!-- product of process -->
+<!-- product of process -->
+<!ELEMENT Seq-feat_product (Seq-loc)>
 
-<!ELEMENT Seq-feat_location (Seq-loc)> <!-- feature made from -->
+<!-- feature made from -->
+<!ELEMENT Seq-feat_location (Seq-loc)>
 
-<!ELEMENT Seq-feat_qual (Gb-qual*)> <!-- qualifiers -->
+<!-- qualifiers -->
+<!ELEMENT Seq-feat_qual (Gb-qual*)>
 
-<!ELEMENT Seq-feat_title (#PCDATA)> <!-- for user defined label -->
+<!-- for user defined label -->
+<!ELEMENT Seq-feat_title (#PCDATA)>
 
-<!ELEMENT Seq-feat_ext (User-object)> <!-- user defined structure extension -->
+<!-- user defined structure extension -->
+<!ELEMENT Seq-feat_ext (User-object)>
 
-<!ELEMENT Seq-feat_cit (Pub-set)> <!-- citations for this feature -->
+<!-- citations for this feature -->
+<!ELEMENT Seq-feat_cit (Pub-set)>
 <!-- evidence for existence of feature -->
 <!ELEMENT Seq-feat_exp-ev %ENUM;>
 
@@ -126,19 +139,25 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT Seq-feat_xref (SeqFeatXref*)> <!-- cite other relevant features -->
+<!-- cite other relevant features -->
+<!ELEMENT Seq-feat_xref (SeqFeatXref*)>
 
-<!ELEMENT Seq-feat_dbxref (Dbtag*)> <!-- support for xref to other databases -->
+<!-- support for xref to other databases -->
+<!ELEMENT Seq-feat_dbxref (Dbtag*)>
 
-<!ELEMENT Seq-feat_pseudo EMPTY> <!-- annotated on pseudogene? -->
+<!-- annotated on pseudogene? -->
+<!ELEMENT Seq-feat_pseudo EMPTY>
 <!ATTLIST Seq-feat_pseudo value ( true | false ) #REQUIRED >
 
 
-<!ELEMENT Seq-feat_except-text (#PCDATA)> <!-- explain if except=TRUE -->
+<!-- explain if except=TRUE -->
+<!ELEMENT Seq-feat_except-text (#PCDATA)>
 
-<!ELEMENT Seq-feat_ids (Feat-id*)> <!-- set of Ids; will replace 'id' field -->
+<!-- set of Ids; will replace 'id' field -->
+<!ELEMENT Seq-feat_ids (Feat-id*)>
 
-<!ELEMENT Seq-feat_exts (User-object*)> <!-- set of extensions; will replace 'ext' field -->
+<!-- set of extensions; will replace 'ext' field -->
+<!ELEMENT Seq-feat_exts (User-object*)>
 
 
 <!ELEMENT SeqFeatData (
@@ -161,7 +180,8 @@ $Revision: 1.1 $
         SeqFeatData_psec-str | 
         SeqFeatData_non-std-residue | 
         SeqFeatData_het | 
-        SeqFeatData_biosrc)>
+        SeqFeatData_biosrc | 
+        SeqFeatData_clone)>
 
 <!ELEMENT SeqFeatData_gene (Gene-ref)>
 
@@ -179,9 +199,11 @@ $Revision: 1.1 $
 
 <!ELEMENT SeqFeatData_rna (RNA-ref)>
 
-<!ELEMENT SeqFeatData_pub (Pubdesc)> <!-- publication applies to this seq  -->
+<!-- publication applies to this seq  -->
+<!ELEMENT SeqFeatData_pub (Pubdesc)>
 
-<!ELEMENT SeqFeatData_seq (Seq-loc)> <!-- to annotate origin from another seq -->
+<!-- to annotate origin from another seq -->
+<!ELEMENT SeqFeatData_seq (Seq-loc)>
 <!--
 *** Import ***********************************************
 *
@@ -190,9 +212,11 @@ $Revision: 1.1 $
 -->
 <!ELEMENT SeqFeatData_imp (Imp-feat)>
 
-<!ELEMENT SeqFeatData_region (#PCDATA)> <!-- named region (globin locus) -->
+<!-- named region (globin locus) -->
+<!ELEMENT SeqFeatData_region (#PCDATA)>
 
-<!ELEMENT SeqFeatData_comment EMPTY> <!-- just a comment -->
+<!-- just a comment -->
+<!ELEMENT SeqFeatData_comment EMPTY>
 
 <!ELEMENT SeqFeatData_bond %ENUM;>
 <!ATTLIST SeqFeatData_bond value (
@@ -236,13 +260,17 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT SeqFeatData_rsite (Rsite-ref)> <!-- restriction site  (for maps really) -->
+<!-- restriction site  (for maps really) -->
+<!ELEMENT SeqFeatData_rsite (Rsite-ref)>
 
-<!ELEMENT SeqFeatData_user (User-object)> <!-- user defined structure -->
+<!-- user defined structure -->
+<!ELEMENT SeqFeatData_user (User-object)>
 
-<!ELEMENT SeqFeatData_txinit (Txinit)> <!-- transcription initiation -->
+<!-- transcription initiation -->
+<!ELEMENT SeqFeatData_txinit (Txinit)>
 
-<!ELEMENT SeqFeatData_num (Numbering)> <!-- a numbering system -->
+<!-- a numbering system -->
+<!ELEMENT SeqFeatData_num (Numbering)>
 <!-- protein secondary structure -->
 <!ELEMENT SeqFeatData_psec-str %ENUM;>
 
@@ -258,20 +286,31 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT SeqFeatData_non-std-residue (#PCDATA)> <!-- non-standard residue here in seq -->
+<!-- non-standard residue here in seq -->
+<!ELEMENT SeqFeatData_non-std-residue (#PCDATA)>
 
-<!ELEMENT SeqFeatData_het (Heterogen)> <!-- cofactor, prosthetic grp, etc, bound to seq -->
+<!-- cofactor, prosthetic grp, etc, bound to seq -->
+<!ELEMENT SeqFeatData_het (Heterogen)>
 
 <!ELEMENT SeqFeatData_biosrc (BioSource)>
+<!--
+*** Clone-ref ***********************************************
+*
+*  Specification of clone features
+*
+-->
+<!ELEMENT SeqFeatData_clone (Clone-ref)>
 
 <!-- both optional because can have one or both -->
 <!ELEMENT SeqFeatXref (
         SeqFeatXref_id?, 
         SeqFeatXref_data?)>
 
-<!ELEMENT SeqFeatXref_id (Feat-id)> <!-- the feature copied -->
+<!-- the feature copied -->
+<!ELEMENT SeqFeatXref_id (Feat-id)>
 
-<!ELEMENT SeqFeatXref_data (SeqFeatData)> <!-- the specific data -->
+<!-- the specific data -->
+<!ELEMENT SeqFeatXref_data (SeqFeatData)>
 
 <!--
 *** CdRegion ***********************************************
@@ -290,7 +329,8 @@ $Revision: 1.1 $
         Cdregion_code-break?, 
         Cdregion_stops?)>
 
-<!ELEMENT Cdregion_orf EMPTY> <!-- just an ORF ? -->
+<!-- just an ORF ? -->
+<!ELEMENT Cdregion_orf EMPTY>
 <!ATTLIST Cdregion_orf value ( true | false ) #REQUIRED >
 
 
@@ -308,19 +348,25 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT Cdregion_conflict EMPTY> <!-- conflict -->
+<!-- conflict -->
+<!ELEMENT Cdregion_conflict EMPTY>
 <!ATTLIST Cdregion_conflict value ( true | false ) #REQUIRED >
 
 
-<!ELEMENT Cdregion_gaps (%INTEGER;)> <!-- number of gaps on conflict/except -->
+<!-- number of gaps on conflict/except -->
+<!ELEMENT Cdregion_gaps (%INTEGER;)>
 
-<!ELEMENT Cdregion_mismatch (%INTEGER;)> <!-- number of mismatches on above -->
+<!-- number of mismatches on above -->
+<!ELEMENT Cdregion_mismatch (%INTEGER;)>
 
-<!ELEMENT Cdregion_code (Genetic-code)> <!-- genetic code used -->
+<!-- genetic code used -->
+<!ELEMENT Cdregion_code (Genetic-code)>
 
-<!ELEMENT Cdregion_code-break (Code-break*)> <!-- individual exceptions -->
+<!-- individual exceptions -->
+<!ELEMENT Cdregion_code-break (Code-break*)>
 
-<!ELEMENT Cdregion_stops (%INTEGER;)> <!-- number of stop codons on above -->
+<!-- number of stop codons on above -->
+<!ELEMENT Cdregion_stops (%INTEGER;)>
 
 <!--
  each code is 64 cells long, in the order where
@@ -348,21 +394,29 @@ $Revision: 1.1 $
         Genetic-code_E_sncbi8aa | 
         Genetic-code_E_sncbistdaa)>
 
-<!ELEMENT Genetic-code_E_name (#PCDATA)> <!-- name of a code -->
+<!-- name of a code -->
+<!ELEMENT Genetic-code_E_name (#PCDATA)>
 
-<!ELEMENT Genetic-code_E_id (%INTEGER;)> <!-- id in dbase -->
+<!-- id in dbase -->
+<!ELEMENT Genetic-code_E_id (%INTEGER;)>
 
-<!ELEMENT Genetic-code_E_ncbieaa (#PCDATA)> <!-- indexed to IUPAC extended -->
+<!-- indexed to IUPAC extended -->
+<!ELEMENT Genetic-code_E_ncbieaa (#PCDATA)>
 
-<!ELEMENT Genetic-code_E_ncbi8aa (%OCTETS;)> <!-- indexed to NCBI8aa -->
+<!-- indexed to NCBI8aa -->
+<!ELEMENT Genetic-code_E_ncbi8aa (%OCTETS;)>
 
-<!ELEMENT Genetic-code_E_ncbistdaa (%OCTETS;)> <!-- indexed to NCBIstdaa -->
+<!-- indexed to NCBIstdaa -->
+<!ELEMENT Genetic-code_E_ncbistdaa (%OCTETS;)>
 
-<!ELEMENT Genetic-code_E_sncbieaa (#PCDATA)> <!-- start, indexed to IUPAC extended -->
+<!-- start, indexed to IUPAC extended -->
+<!ELEMENT Genetic-code_E_sncbieaa (#PCDATA)>
 
-<!ELEMENT Genetic-code_E_sncbi8aa (%OCTETS;)> <!-- start, indexed to NCBI8aa -->
+<!-- start, indexed to NCBI8aa -->
+<!ELEMENT Genetic-code_E_sncbi8aa (%OCTETS;)>
 
-<!ELEMENT Genetic-code_E_sncbistdaa (%OCTETS;)> <!-- start, indexed to NCBIstdaa -->
+<!-- start, indexed to NCBIstdaa -->
+<!ELEMENT Genetic-code_E_sncbistdaa (%OCTETS;)>
 
 <!--
  specific codon exceptions
@@ -372,16 +426,19 @@ $Revision: 1.1 $
         Code-break_loc, 
         Code-break_aa)>
 
-<!ELEMENT Code-break_loc (Seq-loc)> <!-- location of exception -->
+<!-- location of exception -->
+<!ELEMENT Code-break_loc (Seq-loc)>
 <!-- the amino acid -->
 <!ELEMENT Code-break_aa (
         Code-break_aa_ncbieaa | 
         Code-break_aa_ncbi8aa | 
         Code-break_aa_ncbistdaa)>
 
-<!ELEMENT Code-break_aa_ncbieaa (%INTEGER;)> <!-- ASCII value of NCBIeaa code -->
+<!-- ASCII value of NCBIeaa code -->
+<!ELEMENT Code-break_aa_ncbieaa (%INTEGER;)>
 
-<!ELEMENT Code-break_aa_ncbi8aa (%INTEGER;)> <!-- NCBI8aa code -->
+<!-- NCBI8aa code -->
+<!ELEMENT Code-break_aa_ncbi8aa (%INTEGER;)>
 
 <!ELEMENT Code-break_aa_ncbistdaa (%INTEGER;)>
 
@@ -401,9 +458,11 @@ $Revision: 1.1 $
 
 <!ELEMENT Imp-feat_key (#PCDATA)>
 
-<!ELEMENT Imp-feat_loc (#PCDATA)> <!-- original location string -->
+<!-- original location string -->
+<!ELEMENT Imp-feat_loc (#PCDATA)>
 
-<!ELEMENT Imp-feat_descr (#PCDATA)> <!-- text description -->
+<!-- text description -->
+<!ELEMENT Imp-feat_descr (#PCDATA)>
 
 
 <!ELEMENT Gb-qual (
@@ -413,4 +472,102 @@ $Revision: 1.1 $
 <!ELEMENT Gb-qual_qual (#PCDATA)>
 
 <!ELEMENT Gb-qual_val (#PCDATA)>
+
+<!--
+*** Clone-ref ***********************************************
+*
+*  Specification of clone features
+*
+-->
+<!ELEMENT Clone-ref (
+        Clone-ref_name, 
+        Clone-ref_library?, 
+        Clone-ref_concordant?, 
+        Clone-ref_unique?, 
+        Clone-ref_placement-method?, 
+        Clone-ref_clone-seq?)>
+
+<!-- Official clone symbol -->
+<!ELEMENT Clone-ref_name (#PCDATA)>
+
+<!-- Library name -->
+<!ELEMENT Clone-ref_library (#PCDATA)>
+
+<!-- OPTIONAL? -->
+<!ELEMENT Clone-ref_concordant EMPTY>
+<!ATTLIST Clone-ref_concordant value ( true | false ) "false" >
+
+
+<!-- OPTIONAL? -->
+<!ELEMENT Clone-ref_unique EMPTY>
+<!ATTLIST Clone-ref_unique value ( true | false ) "false" >
+
+
+<!ELEMENT Clone-ref_placement-method (%INTEGER;)>
+
+<!--
+    end-seq	-  Clone placed by end sequence
+    insert-alignment	-  Clone placed by insert alignment
+    sts	-  Clone placed by STS
+-->
+<!ATTLIST Clone-ref_placement-method value (
+        end-seq |
+        insert-alignment |
+        sts |
+        fish |
+        fingerprint |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Clone-ref_clone-seq (Clone-seq-set)>
+
+
+<!ELEMENT Clone-seq-set (Clone-seq*)>
+
+
+<!ELEMENT Clone-seq (
+        Clone-seq_type, 
+        Clone-seq_confidence?, 
+        Clone-seq_location, 
+        Clone-seq_seq?, 
+        Clone-seq_align-id?)>
+
+<!ELEMENT Clone-seq_type (%INTEGER;)>
+<!ATTLIST Clone-seq_type value (
+        insert |
+        end |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Clone-seq_confidence (%INTEGER;)>
+
+<!--
+    multiple	-  Multiple hits
+    na	-  Unspecified
+    nohit-rep	-  No hits, repetitive
+    nohitnorep	-  No hits, not repetitive
+    other-chrm	-  Hit on different chromosome
+    virtual	-  Virtual (hasn't been sequenced)
+-->
+<!ATTLIST Clone-seq_confidence value (
+        multiple |
+        na |
+        nohit-rep |
+        nohitnorep |
+        other-chrm |
+        unique |
+        virtual |
+        other
+        ) #IMPLIED >
+
+
+<!-- location on sequence -->
+<!ELEMENT Clone-seq_location (Seq-loc)>
+
+<!-- clone sequence location -->
+<!ELEMENT Clone-seq_seq (Seq-loc)>
+
+<!ELEMENT Clone-seq_align-id (Dbtag)>
 

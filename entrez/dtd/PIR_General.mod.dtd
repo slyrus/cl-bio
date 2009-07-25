@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqblock.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -41,13 +41,15 @@
         PIR-block_seq-raw?, 
         PIR-block_seqref?)>
 
-<!ELEMENT PIR-block_had-punct EMPTY> <!-- had punctuation in sequence ? -->
+<!-- had punctuation in sequence ? -->
+<!ELEMENT PIR-block_had-punct EMPTY>
 <!ATTLIST PIR-block_had-punct value ( true | false ) #REQUIRED >
 
 
 <!ELEMENT PIR-block_host (#PCDATA)>
 
-<!ELEMENT PIR-block_source (#PCDATA)> <!-- source line -->
+<!-- source line -->
+<!ELEMENT PIR-block_source (#PCDATA)>
 
 <!ELEMENT PIR-block_summary (#PCDATA)>
 
@@ -68,7 +70,9 @@
 
 <!ELEMENT PIR-block_date (#PCDATA)>
 
-<!ELEMENT PIR-block_seq-raw (#PCDATA)> <!-- seq with punctuation -->
+<!-- seq with punctuation -->
+<!ELEMENT PIR-block_seq-raw (#PCDATA)>
 
-<!ELEMENT PIR-block_seqref (Seq-id*)> <!-- xref to other sequences -->
+<!-- xref to other sequences -->
+<!ELEMENT PIR-block_seqref (Seq-id*)>
 

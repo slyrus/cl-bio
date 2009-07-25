@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.2
-     ::DATATOOL:: on 07/19/2007 23:09:23
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -41,18 +41,23 @@
         Org-ref_syn?, 
         Org-ref_orgname?)>
 
-<!ELEMENT Org-ref_taxname (#PCDATA)> <!-- preferred formal name -->
+<!-- preferred formal name -->
+<!ELEMENT Org-ref_taxname (#PCDATA)>
 
-<!ELEMENT Org-ref_common (#PCDATA)> <!-- common name -->
+<!-- common name -->
+<!ELEMENT Org-ref_common (#PCDATA)>
 
-<!ELEMENT Org-ref_mod (Org-ref_mod_E*)> <!-- unstructured modifiers -->
+<!-- unstructured modifiers -->
+<!ELEMENT Org-ref_mod (Org-ref_mod_E*)>
 
 
 <!ELEMENT Org-ref_mod_E (#PCDATA)>
 
-<!ELEMENT Org-ref_db (Dbtag*)> <!-- ids in taxonomic or culture dbases -->
+<!-- ids in taxonomic or culture dbases -->
+<!ELEMENT Org-ref_db (Dbtag*)>
 
-<!ELEMENT Org-ref_syn (Org-ref_syn_E*)> <!-- synonyms for taxname or common -->
+<!-- synonyms for taxname or common -->
+<!ELEMENT Org-ref_syn (Org-ref_syn_E*)>
 
 
 <!ELEMENT Org-ref_syn_E (#PCDATA)>
@@ -76,27 +81,37 @@
         OrgName_name_namedhybrid | 
         OrgName_name_partial)>
 
-<!ELEMENT OrgName_name_binomial (BinomialOrgName)> <!-- genus/species type name -->
+<!-- genus/species type name -->
+<!ELEMENT OrgName_name_binomial (BinomialOrgName)>
 
-<!ELEMENT OrgName_name_virus (#PCDATA)> <!-- virus names are different -->
+<!-- virus names are different -->
+<!ELEMENT OrgName_name_virus (#PCDATA)>
 
-<!ELEMENT OrgName_name_hybrid (MultiOrgName)> <!-- hybrid between organisms -->
+<!-- hybrid between organisms -->
+<!ELEMENT OrgName_name_hybrid (MultiOrgName)>
 
-<!ELEMENT OrgName_name_namedhybrid (BinomialOrgName)> <!-- some hybrids have genus x species name -->
+<!-- some hybrids have genus x species name -->
+<!ELEMENT OrgName_name_namedhybrid (BinomialOrgName)>
 
-<!ELEMENT OrgName_name_partial (PartialOrgName)> <!-- when genus not known -->
+<!-- when genus not known -->
+<!ELEMENT OrgName_name_partial (PartialOrgName)>
 
-<!ELEMENT OrgName_attrib (#PCDATA)> <!-- attribution of name -->
+<!-- attribution of name -->
+<!ELEMENT OrgName_attrib (#PCDATA)>
 
 <!ELEMENT OrgName_mod (OrgMod*)>
 
-<!ELEMENT OrgName_lineage (#PCDATA)> <!-- lineage with semicolon separators -->
+<!-- lineage with semicolon separators -->
+<!ELEMENT OrgName_lineage (#PCDATA)>
 
-<!ELEMENT OrgName_gcode (%INTEGER;)> <!-- genetic code (see CdRegion) -->
+<!-- genetic code (see CdRegion) -->
+<!ELEMENT OrgName_gcode (%INTEGER;)>
 
-<!ELEMENT OrgName_mgcode (%INTEGER;)> <!-- mitochondrial genetic code -->
+<!-- mitochondrial genetic code -->
+<!ELEMENT OrgName_mgcode (%INTEGER;)>
 
-<!ELEMENT OrgName_div (#PCDATA)> <!-- GenBank division code -->
+<!-- GenBank division code -->
+<!ELEMENT OrgName_div (#PCDATA)>
 
 
 <!ELEMENT OrgMod (
@@ -159,7 +174,8 @@
 
 <!ELEMENT OrgMod_subname (#PCDATA)>
 
-<!ELEMENT OrgMod_attrib (#PCDATA)> <!-- attribution/source of name -->
+<!-- attribution/source of name -->
+<!ELEMENT OrgMod_attrib (#PCDATA)>
 
 
 <!ELEMENT BinomialOrgName (
@@ -167,9 +183,11 @@
         BinomialOrgName_species?, 
         BinomialOrgName_subspecies?)>
 
-<!ELEMENT BinomialOrgName_genus (#PCDATA)> <!-- required -->
+<!-- required -->
+<!ELEMENT BinomialOrgName_genus (#PCDATA)>
 
-<!ELEMENT BinomialOrgName_species (#PCDATA)> <!-- species required if subspecies used -->
+<!-- species required if subspecies used -->
+<!ELEMENT BinomialOrgName_species (#PCDATA)>
 
 <!ELEMENT BinomialOrgName_subspecies (#PCDATA)>
 

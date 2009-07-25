@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.1
-     ::DATATOOL:: on 01/18/2007 23:07:18
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
      ============================================ -->
 
 <!-- ============================================ -->
@@ -30,7 +30,9 @@
         Rsite-ref_str | 
         Rsite-ref_db)>
 
-<!ELEMENT Rsite-ref_str (#PCDATA)> <!-- may be unparsable -->
+<!-- may be unparsable -->
+<!ELEMENT Rsite-ref_str (#PCDATA)>
 
-<!ELEMENT Rsite-ref_db (Dbtag)> <!-- pointer to a restriction site database -->
+<!-- pointer to a restriction site database -->
+<!ELEMENT Rsite-ref_db (Dbtag)>
 

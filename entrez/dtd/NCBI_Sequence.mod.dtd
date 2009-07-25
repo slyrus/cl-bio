@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seq.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.7
-     ::DATATOOL:: on 10/24/2007 23:07:33
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 08/26/2008 23:06:32
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 138450 $
 **********************************************************************
 
   NCBI Sequence elements
@@ -72,11 +72,14 @@ $Revision: 1.1 $
         Bioseq_inst, 
         Bioseq_annot?)>
 
-<!ELEMENT Bioseq_id (Seq-id*)> <!-- equivalent identifiers -->
+<!-- equivalent identifiers -->
+<!ELEMENT Bioseq_id (Seq-id*)>
 
-<!ELEMENT Bioseq_descr (Seq-descr)> <!-- descriptors -->
+<!-- descriptors -->
+<!ELEMENT Bioseq_descr (Seq-descr)>
 
-<!ELEMENT Bioseq_inst (Seq-inst)> <!-- the sequence data -->
+<!-- the sequence data -->
+<!ELEMENT Bioseq_inst (Seq-inst)>
 
 <!ELEMENT Bioseq_annot (Seq-annot*)>
 
@@ -113,53 +116,77 @@ $Revision: 1.1 $
         Seqdesc_source | 
         Seqdesc_molinfo)>
 
-<!ELEMENT Seqdesc_mol-type (GIBB-mol)> <!-- type of molecule -->
+<!-- type of molecule -->
+<!ELEMENT Seqdesc_mol-type (GIBB-mol)>
 
-<!ELEMENT Seqdesc_modif (GIBB-mod*)> <!-- modifiers -->
+<!-- modifiers -->
+<!ELEMENT Seqdesc_modif (GIBB-mod*)>
 
-<!ELEMENT Seqdesc_method (GIBB-method)> <!-- sequencing method -->
+<!-- sequencing method -->
+<!ELEMENT Seqdesc_method (GIBB-method)>
 
-<!ELEMENT Seqdesc_name (#PCDATA)> <!-- a name for this sequence -->
+<!-- a name for this sequence -->
+<!ELEMENT Seqdesc_name (#PCDATA)>
 
-<!ELEMENT Seqdesc_title (#PCDATA)> <!-- a title for this sequence -->
+<!-- a title for this sequence -->
+<!ELEMENT Seqdesc_title (#PCDATA)>
 
-<!ELEMENT Seqdesc_org (Org-ref)> <!-- if all from one organism -->
+<!-- if all from one organism -->
+<!ELEMENT Seqdesc_org (Org-ref)>
 
-<!ELEMENT Seqdesc_comment (#PCDATA)> <!-- a more extensive comment -->
+<!-- a more extensive comment -->
+<!ELEMENT Seqdesc_comment (#PCDATA)>
 
-<!ELEMENT Seqdesc_num (Numbering)> <!-- a numbering system -->
+<!-- a numbering system -->
+<!ELEMENT Seqdesc_num (Numbering)>
 
-<!ELEMENT Seqdesc_maploc (Dbtag)> <!-- map location of this sequence -->
+<!-- map location of this sequence -->
+<!ELEMENT Seqdesc_maploc (Dbtag)>
 
-<!ELEMENT Seqdesc_pir (PIR-block)> <!-- PIR specific info -->
+<!-- PIR specific info -->
+<!ELEMENT Seqdesc_pir (PIR-block)>
 
-<!ELEMENT Seqdesc_genbank (GB-block)> <!-- GenBank specific info -->
+<!-- GenBank specific info -->
+<!ELEMENT Seqdesc_genbank (GB-block)>
 
-<!ELEMENT Seqdesc_pub (Pubdesc)> <!-- a reference to the publication -->
+<!-- a reference to the publication -->
+<!ELEMENT Seqdesc_pub (Pubdesc)>
 
-<!ELEMENT Seqdesc_region (#PCDATA)> <!-- overall region (globin locus) -->
+<!-- overall region (globin locus) -->
+<!ELEMENT Seqdesc_region (#PCDATA)>
 
-<!ELEMENT Seqdesc_user (User-object)> <!-- user defined object -->
+<!-- user defined object -->
+<!ELEMENT Seqdesc_user (User-object)>
 
-<!ELEMENT Seqdesc_sp (SP-block)> <!-- SWISSPROT specific info -->
+<!-- SWISSPROT specific info -->
+<!ELEMENT Seqdesc_sp (SP-block)>
 
-<!ELEMENT Seqdesc_dbxref (Dbtag)> <!-- xref to other databases -->
+<!-- xref to other databases -->
+<!ELEMENT Seqdesc_dbxref (Dbtag)>
 
-<!ELEMENT Seqdesc_embl (EMBL-block)> <!-- EMBL specific information -->
+<!-- EMBL specific information -->
+<!ELEMENT Seqdesc_embl (EMBL-block)>
 
-<!ELEMENT Seqdesc_create-date (Date)> <!-- date entry first created/released -->
+<!-- date entry first created/released -->
+<!ELEMENT Seqdesc_create-date (Date)>
 
-<!ELEMENT Seqdesc_update-date (Date)> <!-- date of last update -->
+<!-- date of last update -->
+<!ELEMENT Seqdesc_update-date (Date)>
 
-<!ELEMENT Seqdesc_prf (PRF-block)> <!-- PRF specific information -->
+<!-- PRF specific information -->
+<!ELEMENT Seqdesc_prf (PRF-block)>
 
-<!ELEMENT Seqdesc_pdb (PDB-block)> <!-- PDB specific information -->
+<!-- PDB specific information -->
+<!ELEMENT Seqdesc_pdb (PDB-block)>
 
-<!ELEMENT Seqdesc_het (Heterogen)> <!-- cofactor, etc associated but not bound -->
+<!-- cofactor, etc associated but not bound -->
+<!ELEMENT Seqdesc_het (Heterogen)>
 
-<!ELEMENT Seqdesc_source (BioSource)> <!-- source of materials, includes Org-ref -->
+<!-- source of materials, includes Org-ref -->
+<!ELEMENT Seqdesc_source (BioSource)>
 
-<!ELEMENT Seqdesc_molinfo (MolInfo)> <!-- info on the molecule and techniques -->
+<!-- info on the molecule and techniques -->
+<!ELEMENT Seqdesc_molinfo (MolInfo)>
 
 <!--
 ******* NOTE:
@@ -182,7 +209,8 @@ $Revision: 1.1 $
         MolInfo_biomol?, 
         MolInfo_tech?, 
         MolInfo_techexp?, 
-        MolInfo_completeness?)>
+        MolInfo_completeness?, 
+        MolInfo_gbmoltype?)>
 
 <!ELEMENT MolInfo_biomol (%INTEGER;)>
 
@@ -209,6 +237,8 @@ $Revision: 1.1 $
         cRNA |
         snoRNA |
         transcribed-RNA |
+        ncRNA |
+        tmRNA |
         other
         ) #IMPLIED >
 
@@ -238,6 +268,7 @@ $Revision: 1.1 $
     wgs	-  whole genome shotgun sequencing
     barcode	-  barcode of life project
     composite-wgs-htgs	-  composite of WGS and HTGS
+    tsa	-  transcriptome shotgun assembly
     other	-  use Source.techexp
 -->
 <!ATTLIST MolInfo_tech value (
@@ -264,6 +295,7 @@ $Revision: 1.1 $
         wgs |
         barcode |
         composite-wgs-htgs |
+        tsa |
         other
         ) #IMPLIED >
 
@@ -302,6 +334,9 @@ $Revision: 1.1 $
         other
         ) #IMPLIED >
 
+
+<!-- identifies particular ncRNA -->
+<!ELEMENT MolInfo_gbmoltype (#PCDATA)>
 
 <!-- type of molecule represented -->
 <!ELEMENT GIBB-mol %ENUM;>
@@ -403,13 +438,17 @@ $Revision: 1.1 $
         Numbering_ref | 
         Numbering_real)>
 
-<!ELEMENT Numbering_cont (Num-cont)> <!-- continuous numbering -->
+<!-- continuous numbering -->
+<!ELEMENT Numbering_cont (Num-cont)>
 
-<!ELEMENT Numbering_enum (Num-enum)> <!-- enumerated names for residues -->
+<!-- enumerated names for residues -->
+<!ELEMENT Numbering_enum (Num-enum)>
 
-<!ELEMENT Numbering_ref (Num-ref)> <!-- by reference to another sequence -->
+<!-- by reference to another sequence -->
+<!ELEMENT Numbering_ref (Num-ref)>
 
-<!ELEMENT Numbering_real (Num-real)> <!-- supports mapping to a float system -->
+<!-- supports mapping to a float system -->
+<!ELEMENT Numbering_real (Num-real)>
 
 <!-- continuous display numbering system -->
 <!ELEMENT Num-cont (
@@ -417,13 +456,16 @@ $Revision: 1.1 $
         Num-cont_has-zero?, 
         Num-cont_ascending?)>
 
-<!ELEMENT Num-cont_refnum (%INTEGER;)> <!-- number assigned to first residue -->
+<!-- number assigned to first residue -->
+<!ELEMENT Num-cont_refnum (%INTEGER;)>
 
-<!ELEMENT Num-cont_has-zero EMPTY> <!-- 0 used? -->
+<!-- 0 used? -->
+<!ELEMENT Num-cont_has-zero EMPTY>
 <!ATTLIST Num-cont_has-zero value ( true | false ) "false" >
 
 
-<!ELEMENT Num-cont_ascending EMPTY> <!-- ascending numbers? -->
+<!-- ascending numbers? -->
+<!ELEMENT Num-cont_ascending EMPTY>
 <!ATTLIST Num-cont_ascending value ( true | false ) "true" >
 
 
@@ -432,9 +474,11 @@ $Revision: 1.1 $
         Num-enum_num, 
         Num-enum_names)>
 
-<!ELEMENT Num-enum_num (%INTEGER;)> <!-- number of tags to follow -->
+<!-- number of tags to follow -->
+<!ELEMENT Num-enum_num (%INTEGER;)>
 
-<!ELEMENT Num-enum_names (Num-enum_names_E*)> <!-- the tags -->
+<!-- the tags -->
+<!ELEMENT Num-enum_names (Num-enum_names_E*)>
 
 
 <!ELEMENT Num-enum_names_E (#PCDATA)>
@@ -465,9 +509,11 @@ $Revision: 1.1 $
         Num-real_b, 
         Num-real_units?)>
 
-<!ELEMENT Num-real_a (%REAL;)> <!-- from an integer system used by Bioseq -->
+<!-- from an integer system used by Bioseq -->
+<!ELEMENT Num-real_a (%REAL;)>
 
-<!ELEMENT Num-real_b (%REAL;)> <!-- position = (a * int_position) + b -->
+<!-- position = (a * int_position) + b -->
+<!ELEMENT Num-real_b (%REAL;)>
 
 <!ELEMENT Num-real_units (#PCDATA)>
 
@@ -485,29 +531,39 @@ $Revision: 1.1 $
         Pubdesc_comment?, 
         Pubdesc_reftype?)>
 
-<!ELEMENT Pubdesc_pub (Pub-equiv)> <!-- the citation(s) -->
+<!-- the citation(s) -->
+<!ELEMENT Pubdesc_pub (Pub-equiv)>
 
-<!ELEMENT Pubdesc_name (#PCDATA)> <!-- name used in paper -->
+<!-- name used in paper -->
+<!ELEMENT Pubdesc_name (#PCDATA)>
 
-<!ELEMENT Pubdesc_fig (#PCDATA)> <!-- figure in paper -->
+<!-- figure in paper -->
+<!ELEMENT Pubdesc_fig (#PCDATA)>
 
-<!ELEMENT Pubdesc_num (Numbering)> <!-- numbering from paper -->
+<!-- numbering from paper -->
+<!ELEMENT Pubdesc_num (Numbering)>
 
-<!ELEMENT Pubdesc_numexc EMPTY> <!-- numbering problem with paper -->
+<!-- numbering problem with paper -->
+<!ELEMENT Pubdesc_numexc EMPTY>
 <!ATTLIST Pubdesc_numexc value ( true | false ) #REQUIRED >
 
 
-<!ELEMENT Pubdesc_poly-a EMPTY> <!-- poly A tail indicated in figure? -->
+<!-- poly A tail indicated in figure? -->
+<!ELEMENT Pubdesc_poly-a EMPTY>
 <!ATTLIST Pubdesc_poly-a value ( true | false ) #REQUIRED >
 
 
-<!ELEMENT Pubdesc_maploc (#PCDATA)> <!-- map location reported in paper -->
+<!-- map location reported in paper -->
+<!ELEMENT Pubdesc_maploc (#PCDATA)>
 
-<!ELEMENT Pubdesc_seq-raw (#PCDATA)> <!-- original sequence from paper -->
+<!-- original sequence from paper -->
+<!ELEMENT Pubdesc_seq-raw (#PCDATA)>
 
-<!ELEMENT Pubdesc_align-group (%INTEGER;)> <!-- this seq aligned with others in paper -->
+<!-- this seq aligned with others in paper -->
+<!ELEMENT Pubdesc_align-group (%INTEGER;)>
 
-<!ELEMENT Pubdesc_comment (#PCDATA)> <!-- any comment on this pub in context -->
+<!-- any comment on this pub in context -->
+<!ELEMENT Pubdesc_comment (#PCDATA)>
 <!-- type of reference in a GenBank record -->
 <!ELEMENT Pubdesc_reftype (%INTEGER;)>
 
@@ -587,9 +643,11 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT Seq-inst_length (%INTEGER;)> <!-- length of sequence in residues -->
+<!-- length of sequence in residues -->
+<!ELEMENT Seq-inst_length (%INTEGER;)>
 
-<!ELEMENT Seq-inst_fuzz (Int-fuzz)> <!-- length uncertainty -->
+<!-- length uncertainty -->
+<!ELEMENT Seq-inst_fuzz (Int-fuzz)>
 <!-- topology of molecule -->
 <!ELEMENT Seq-inst_topology %ENUM;>
 
@@ -621,11 +679,14 @@ $Revision: 1.1 $
         ) #REQUIRED >
 
 
-<!ELEMENT Seq-inst_seq-data (Seq-data)> <!-- the sequence -->
+<!-- the sequence -->
+<!ELEMENT Seq-inst_seq-data (Seq-data)>
 
-<!ELEMENT Seq-inst_ext (Seq-ext)> <!-- extensions for special types -->
+<!-- extensions for special types -->
+<!ELEMENT Seq-inst_ext (Seq-ext)>
 
-<!ELEMENT Seq-inst_hist (Seq-hist)> <!-- sequence history -->
+<!-- sequence history -->
+<!ELEMENT Seq-inst_hist (Seq-hist)>
 
 <!--
 *** Sequence Extensions **********************************
@@ -638,11 +699,14 @@ $Revision: 1.1 $
         Seq-ext_map | 
         Seq-ext_delta)>
 
-<!ELEMENT Seq-ext_seg (Seg-ext)> <!-- segmented sequences -->
+<!-- segmented sequences -->
+<!ELEMENT Seq-ext_seg (Seg-ext)>
 
-<!ELEMENT Seq-ext_ref (Ref-ext)> <!-- hot link to another sequence (a view) -->
+<!-- hot link to another sequence (a view) -->
+<!ELEMENT Seq-ext_ref (Ref-ext)>
 
-<!ELEMENT Seq-ext_map (Map-ext)> <!-- ordered map of markers -->
+<!-- ordered map of markers -->
+<!ELEMENT Seq-ext_map (Map-ext)>
 
 <!ELEMENT Seq-ext_delta (Delta-ext)>
 
@@ -663,9 +727,11 @@ $Revision: 1.1 $
         Delta-seq_loc | 
         Delta-seq_literal)>
 
-<!ELEMENT Delta-seq_loc (Seq-loc)> <!-- point to a sequence -->
+<!-- point to a sequence -->
+<!ELEMENT Delta-seq_loc (Seq-loc)>
 
-<!ELEMENT Delta-seq_literal (Seq-literal)> <!-- a piece of sequence -->
+<!-- a piece of sequence -->
+<!ELEMENT Delta-seq_literal (Seq-literal)>
 
 
 <!ELEMENT Seq-literal (
@@ -673,11 +739,14 @@ $Revision: 1.1 $
         Seq-literal_fuzz?, 
         Seq-literal_seq-data?)>
 
-<!ELEMENT Seq-literal_length (%INTEGER;)> <!-- must give a length in residues -->
+<!-- must give a length in residues -->
+<!ELEMENT Seq-literal_length (%INTEGER;)>
 
-<!ELEMENT Seq-literal_fuzz (Int-fuzz)> <!-- could be unsure -->
+<!-- could be unsure -->
+<!ELEMENT Seq-literal_fuzz (Int-fuzz)>
 
-<!ELEMENT Seq-literal_seq-data (Seq-data)> <!-- may have the data -->
+<!-- may have the data -->
+<!ELEMENT Seq-literal_seq-data (Seq-data)>
 
 <!--
 *** Sequence History Record ***********************************
@@ -691,11 +760,14 @@ $Revision: 1.1 $
         Seq-hist_replaced-by?, 
         Seq-hist_deleted?)>
 
-<!ELEMENT Seq-hist_assembly (Seq-align*)> <!-- how was this assembled? -->
+<!-- how was this assembled? -->
+<!ELEMENT Seq-hist_assembly (Seq-align*)>
 
-<!ELEMENT Seq-hist_replaces (Seq-hist-rec)> <!-- seq makes these seqs obsolete -->
+<!-- seq makes these seqs obsolete -->
+<!ELEMENT Seq-hist_replaces (Seq-hist-rec)>
 
-<!ELEMENT Seq-hist_replaced-by (Seq-hist-rec)> <!-- these seqs make this one obsolete -->
+<!-- these seqs make this one obsolete -->
+<!ELEMENT Seq-hist_replaced-by (Seq-hist-rec)>
 
 <!ELEMENT Seq-hist_deleted (
         Seq-hist_deleted_bool | 
@@ -734,27 +806,38 @@ $Revision: 1.1 $
         Seq-data_ncbistdaa | 
         Seq-data_gap)>
 
-<!ELEMENT Seq-data_iupacna (IUPACna)> <!-- IUPAC 1 letter nuc acid code -->
+<!-- IUPAC 1 letter nuc acid code -->
+<!ELEMENT Seq-data_iupacna (IUPACna)>
 
-<!ELEMENT Seq-data_iupacaa (IUPACaa)> <!-- IUPAC 1 letter amino acid code -->
+<!-- IUPAC 1 letter amino acid code -->
+<!ELEMENT Seq-data_iupacaa (IUPACaa)>
 
-<!ELEMENT Seq-data_ncbi2na (NCBI2na)> <!-- 2 bit nucleic acid code -->
+<!-- 2 bit nucleic acid code -->
+<!ELEMENT Seq-data_ncbi2na (NCBI2na)>
 
-<!ELEMENT Seq-data_ncbi4na (NCBI4na)> <!-- 4 bit nucleic acid code -->
+<!-- 4 bit nucleic acid code -->
+<!ELEMENT Seq-data_ncbi4na (NCBI4na)>
 
-<!ELEMENT Seq-data_ncbi8na (NCBI8na)> <!-- 8 bit extended nucleic acid code -->
+<!-- 8 bit extended nucleic acid code -->
+<!ELEMENT Seq-data_ncbi8na (NCBI8na)>
 
-<!ELEMENT Seq-data_ncbipna (NCBIpna)> <!-- nucleic acid probabilities -->
+<!-- nucleic acid probabilities -->
+<!ELEMENT Seq-data_ncbipna (NCBIpna)>
 
-<!ELEMENT Seq-data_ncbi8aa (NCBI8aa)> <!-- 8 bit extended amino acid codes -->
+<!-- 8 bit extended amino acid codes -->
+<!ELEMENT Seq-data_ncbi8aa (NCBI8aa)>
 
-<!ELEMENT Seq-data_ncbieaa (NCBIeaa)> <!-- extended ASCII 1 letter aa codes -->
+<!-- extended ASCII 1 letter aa codes -->
+<!ELEMENT Seq-data_ncbieaa (NCBIeaa)>
 
-<!ELEMENT Seq-data_ncbipaa (NCBIpaa)> <!-- amino acid probabilities -->
+<!-- amino acid probabilities -->
+<!ELEMENT Seq-data_ncbipaa (NCBIpaa)>
 
-<!ELEMENT Seq-data_ncbistdaa (NCBIstdaa)> <!-- consecutive codes for std aas -->
+<!-- consecutive codes for std aas -->
+<!ELEMENT Seq-data_ncbistdaa (NCBIstdaa)>
 
-<!ELEMENT Seq-data_gap (Seq-gap)> <!-- gap types -->
+<!-- gap types -->
+<!ELEMENT Seq-data_gap (Seq-gap)>
 
 
 <!ELEMENT Seq-gap (
@@ -831,17 +914,46 @@ $Revision: 1.1 $
 <!--
 *** Sequence Annotation *************************************
 *
+ This is a replica of Textseq-id
+ This is specific for annotations, and exists to maintain a semantic
+ difference between IDs assigned to annotations and IDs assigned to
+ sequences
 -->
+<!ELEMENT Textannot-id (
+        Textannot-id_name?, 
+        Textannot-id_accession?, 
+        Textannot-id_release?, 
+        Textannot-id_version?)>
+
+<!ELEMENT Textannot-id_name (#PCDATA)>
+
+<!ELEMENT Textannot-id_accession (#PCDATA)>
+
+<!ELEMENT Textannot-id_release (#PCDATA)>
+
+<!ELEMENT Textannot-id_version (%INTEGER;)>
+
+
 <!ELEMENT Annot-id (
         Annot-id_local | 
         Annot-id_ncbi | 
-        Annot-id_general)>
+        Annot-id_general | 
+        Annot-id_other)>
 
 <!ELEMENT Annot-id_local (Object-id)>
 
 <!ELEMENT Annot-id_ncbi (%INTEGER;)>
 
 <!ELEMENT Annot-id_general (Dbtag)>
+<!--
+*** Sequence Annotation *************************************
+*
+ This is a replica of Textseq-id
+ This is specific for annotations, and exists to maintain a semantic
+ difference between IDs assigned to annotations and IDs assigned to
+ sequences
+-->
+<!ELEMENT Annot-id_other (Textannot-id)>
 
 
 <!ELEMENT Annot-descr (Annotdesc*)>
@@ -859,25 +971,35 @@ $Revision: 1.1 $
         Annotdesc_align | 
         Annotdesc_region)>
 
-<!ELEMENT Annotdesc_name (#PCDATA)> <!-- a short name for this collection -->
+<!-- a short name for this collection -->
+<!ELEMENT Annotdesc_name (#PCDATA)>
 
-<!ELEMENT Annotdesc_title (#PCDATA)> <!-- a title for this collection -->
+<!-- a title for this collection -->
+<!ELEMENT Annotdesc_title (#PCDATA)>
 
-<!ELEMENT Annotdesc_comment (#PCDATA)> <!-- a more extensive comment -->
+<!-- a more extensive comment -->
+<!ELEMENT Annotdesc_comment (#PCDATA)>
 
-<!ELEMENT Annotdesc_pub (Pubdesc)> <!-- a reference to the publication -->
+<!-- a reference to the publication -->
+<!ELEMENT Annotdesc_pub (Pubdesc)>
 
-<!ELEMENT Annotdesc_user (User-object)> <!-- user defined object -->
+<!-- user defined object -->
+<!ELEMENT Annotdesc_user (User-object)>
 
-<!ELEMENT Annotdesc_create-date (Date)> <!-- date entry first created/released -->
+<!-- date entry first created/released -->
+<!ELEMENT Annotdesc_create-date (Date)>
 
-<!ELEMENT Annotdesc_update-date (Date)> <!-- date of last update -->
+<!-- date of last update -->
+<!ELEMENT Annotdesc_update-date (Date)>
 
-<!ELEMENT Annotdesc_src (Seq-id)> <!-- source sequence from which annot came -->
+<!-- source sequence from which annot came -->
+<!ELEMENT Annotdesc_src (Seq-id)>
 
-<!ELEMENT Annotdesc_align (Align-def)> <!-- definition of the SeqAligns -->
+<!-- definition of the SeqAligns -->
+<!ELEMENT Annotdesc_align (Align-def)>
 
-<!ELEMENT Annotdesc_region (Seq-loc)> <!-- all contents cover this region -->
+<!-- all contents cover this region -->
+<!ELEMENT Annotdesc_region (Seq-loc)>
 
 
 <!ELEMENT Align-def (
@@ -899,7 +1021,8 @@ $Revision: 1.1 $
         ) #IMPLIED >
 
 
-<!ELEMENT Align-def_ids (Seq-id*)> <!-- used for the one ref seqid for now -->
+<!-- used for the one ref seqid for now -->
+<!ELEMENT Align-def_ids (Seq-id*)>
 
 <!-- features in table form -->
 <!ELEMENT Seq-annot (
@@ -924,9 +1047,11 @@ $Revision: 1.1 $
         ) #IMPLIED >
 
 
-<!ELEMENT Seq-annot_name (#PCDATA)> <!-- source if "other" above -->
+<!-- source if "other" above -->
+<!ELEMENT Seq-annot_name (#PCDATA)>
 
-<!ELEMENT Seq-annot_desc (Annot-descr)> <!-- used only for stand alone Seq-annots -->
+<!-- used only for stand alone Seq-annots -->
+<!ELEMENT Seq-annot_desc (Annot-descr)>
 
 <!ELEMENT Seq-annot_data (
         Seq-annot_data_ftable | 
@@ -942,9 +1067,11 @@ $Revision: 1.1 $
 
 <!ELEMENT Seq-annot_data_graph (Seq-graph*)>
 
-<!ELEMENT Seq-annot_data_ids (Seq-id*)> <!-- used for communication between tools -->
+<!-- used for communication between tools -->
+<!ELEMENT Seq-annot_data_ids (Seq-id*)>
 
-<!ELEMENT Seq-annot_data_locs (Seq-loc*)> <!-- used for communication between tools -->
+<!-- used for communication between tools -->
+<!ELEMENT Seq-annot_data_locs (Seq-loc*)>
 
 <!ELEMENT Seq-annot_data_seq-table (Seq-table)>
 
