@@ -51,7 +51,6 @@
                       (use-cache-for-lookup t)
                       builder
                       refresh)
-  (declare (optimize (debug 3)))
   (let ((directory (merge-pathnames (make-pathname :directory (list :relative database))
                                     *entrez-data-cache-directory*)))
     (ensure-directories-exist directory)
@@ -110,7 +109,6 @@
                       retstart
                       retmax
                       )
-  (declare (optimize (debug 3)))
   (let ((xml (apply #'bio:fetch object *entrez-xml-dictionary*
                     args
                     #+nil (append
