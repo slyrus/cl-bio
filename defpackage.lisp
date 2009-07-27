@@ -186,7 +186,7 @@
                ;; artciles
                #:author
                #:author-last-name
-               #:author-fore-name
+               #:author-forenames
                #:author-initials
                
                #:article
@@ -194,12 +194,15 @@
                #:article-title
                #:article-authors
                #:article-journal
+               #:article-short-journal
                #:article-date
                #:article-volume
                #:article-issue
                #:article-pages
                #:article-abstract
                #:article-mesh-headings
+               #:article-doi
+               #:article-affiliation
 
                #:article-set
                #:article-set-articles
