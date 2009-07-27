@@ -59,6 +59,12 @@
    (authority :accessor authority :initarg :authority :initform
   "ncbi")))
 
+(defclass ncbi-pmid (identifier)
+  ((id :accessor id :initarg :id :initarg :gi)
+   (type :accessor identity-type :initarg :type :initform "pmid")
+   (authority :accessor authority :initarg :authority :initform
+  "ncbi")))
+
 (defmethod get-ncbi-gis ((described described-object))
   (get-descriptors described :type 'ncbi-gi))
 
