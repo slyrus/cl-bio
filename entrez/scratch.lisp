@@ -361,3 +361,12 @@
                 :copy-to-file "data/esr1-structure.xml"
                 :builder (cxml-stp:make-builder)))
 
+
+;;; pubmed
+
+(defparameter *eisen-drosophila-search*
+  (bio:lookup "Eisen drosophila" *entrez-dictionary* :database "pubmed"))
+
+(defparameter *eisen-drosophila-paper*
+  (let ((pmid (bio:id (car (bio:members entrez-user::*eisen-drosophila-search*)))))
+    (car (bio:members (bio:fetch pmid *entrez-dictionary* :database "pubmed")))))
