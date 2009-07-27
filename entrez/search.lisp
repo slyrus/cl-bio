@@ -79,14 +79,14 @@
     (apply #'parse-entrez-xml-stream stream
            (when builder `(:builder ,builder)))))
 
-(defun get-search-result-ids (search-result)
+(defun get-search-result-ids (search-result &key (id-class 'bio:ncbi-gi))
   (xpath:with-namespaces ()
     (let ((idset (make-instance 'bio::identifier-set)))
       (mapcar
        (lambda (node)
          (let ((id (xpath-protocol:node-text node)))
-           (push (make-instance 'bio:ncbi-gi :id (or (parse-integer id :junk-allowed t)
-                                                     id))
+           (push (make-instance id-class :id (or (parse-integer id :junk-allowed t)
+                                                 id))
                  (bio:members idset))))
        (xpath:all-nodes
         (xpath:evaluate
