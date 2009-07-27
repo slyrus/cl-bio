@@ -17,7 +17,8 @@
 (defmethod bio:lookup (object (dictionary entrez-xml-dictionary)
                        &key
                        (database "nucleotide")
-                       (cache t)
+                       (cache-results t)
+                       (use-cache-for-lookup t)
                        builder
                        refresh
                        retstart
@@ -29,14 +30,14 @@
                                    :name (format nil "~A-~A-~A" object retstart retmax)
                                    :type "xml") directory))
            (file-exists (probe-file file)))
-      (if (and file-exists (not refresh))
+      (if (and use-cache-for-lookup file-exists (not refresh))
           (with-open-file (stream file :element-type :default)
             (apply #'parse-entrez-xml-stream stream
                    (when builder `(:builder ,builder))))
           (let ((stream (apply #'get-entrez-search-stream
                                object
                                (append
-                                (when cache `(:copy-to-file ,file))
+                                (when cache-results `(:copy-to-file ,file))
                                 (when database `(:database ,database))
                                 (when retstart `(:retstart ,retstart))
                                 (when retmax `(:retmax ,retmax))))))
@@ -46,23 +47,27 @@
 (defmethod bio:fetch (object (dictionary entrez-xml-dictionary)
                       &key
                       (database "nucleotide")
-                      (cache t)
+                      (cache-results t)
+                      (use-cache-for-lookup t)
                       builder
                       refresh)
+  (declare (optimize (debug 3)))
   (let ((directory (merge-pathnames (make-pathname :directory (list :relative database))
                                     *entrez-data-cache-directory*)))
     (ensure-directories-exist directory)
-    (let* ((file (merge-pathnames (make-pathname :name (princ-to-string object) :type "xml") directory))
-           (file-exists (probe-file file)))
-      (if (and file-exists (not refresh))
+    (let* ((file (and (or cache-results use-cache-for-lookup)
+                      (merge-pathnames (make-pathname
+                                        :name (princ-to-string object) :type "xml")
+                                       directory)))
+           (file-exists (and file (probe-file file))))
+      (if (and use-cache-for-lookup file-exists (not refresh))
           (with-open-file (stream file :element-type :default)
             (apply #'parse-entrez-xml-stream stream
                    (when builder `(:builder ,builder))))
           (let ((stream (apply #'get-entrez-stream
                                object
-                               :copy-to-file file
                                (append
-                                (when cache `(:copy-to-file ,file))
+                                (when cache-results `(:copy-to-file ,file))
                                 (when database `(:database ,database))))))
             (apply #'parse-entrez-xml-stream stream
                    (when builder `(:builder ,builder))))))))
@@ -77,7 +82,8 @@
 (defmethod bio:lookup (object (dictionary entrez-dictionary)
                        &key
                        database
-                       cache
+                       use-cache-for-lookup
+                       cache-results
                        refresh
                        retstart
                        retmax)
@@ -85,22 +91,32 @@
    (apply #'bio:lookup object *entrez-xml-dictionary*
           (append
            (when database `(:database ,database))
-           (when cache `(:cache ,cache))
+           (when cache-results `(:cache-results ,cache-results))
+           (when use-cache-for-lookup `(:use-cache-for-lookup ,use-cache-for-lookup))
            (when refresh `(:refresh ,refresh))
            (when retstart `(:retstart ,retstart))
-           (when retmax `(:retmax ,retmax))))))
+           (when retmax `(:retmax ,retmax))))
+   :id-class (cond 
+               ((string-equal database"pubmed") 'bio::ncbi-pmid)
+               (t 'bio:ncbi-gi))))
 
 (defmethod bio:fetch (object (dictionary entrez-dictionary)
+                                            &rest args
                       &key
                       database
-                      cache
+                      (use-cache-for-lookup t use-cache-for-lookup-supplied-p)
+                      (cache-results t cache-results-supplied-p)
                       refresh
                       retstart
-                      retmax)
+                      retmax
+                      )
+  (declare (optimize (debug 3)))
   (let ((xml (apply #'bio:fetch object *entrez-xml-dictionary*
-                    (append
+                    args
+                    #+nil (append
                      (when database `(:database ,database))
-                     (when cache `(:cache ,cache))
+                     (when cache-results `(:cache-results ,cache-results))
+                     (when use-cache-for-lookup `(:use-cache-for-lookup ,use-cache-for-lookup))
                      (when refresh `(:refresh ,refresh))
                      (when retstart `(:retstart ,retstart))
                      (when retmax `(:retmax ,retmax))))))
