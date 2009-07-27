@@ -68,6 +68,14 @@
 (defun stp-document->list (document)
   (stp-node->list (stp:document-element document)))
 
+(defun string-if (string)
+  (unless (equal "" string) string))
+
 (defun string-value-if (node)
-  (let ((val (xpath:string-value node)))
-    (unless (equal "" val) val)))
+  (when node
+    (string-if (xpath:string-value node))))
+
+(defun number-value-if (node)
+  (when node
+    (xpath:number-value node)))
+
