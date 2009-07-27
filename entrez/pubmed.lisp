@@ -4,28 +4,37 @@
 (defun parse-author-node (node)
   (let ((last-name (xpath:string-value
                     (xpath:evaluate "LastName" node)))
-        (fore-name (xpath:string-value
-                    (xpath:evaluate "ForeName" node)))
-        (initials (xpath:string-value
+        (forenames (or (string-if
+                        (format nil "~A~@[ ~A~]"
+                                (xpath:string-value (xpath:evaluate "FirstName" node))
+                                (string-value-if (xpath:evaluate "MiddleName" node))))
+                       (string-value-if
+                        (xpath:evaluate "ForeName" node))))
+        (initials (string-value-if
                    (xpath:evaluate "Initials" node))))
     (apply #'make-instance 'bio:author
            :last-name last-name
            (append
-            (when fore-name `(:fore-name ,fore-name))
+            (when forenames `(:forenames ,forenames))
             (when initials `(:initials ,initials))))))
 
 (defun fix-pages (medline-pages)
-  (destructuring-bind (start partial-end)
-      (ppcre:split "-" medline-pages)
-    (let ((end (copy-seq start)))
-      (let ((pos (- (length start) (length partial-end))))
-        (format nil "~A-~A" start (replace end partial-end :start1 pos))))))
+  (let ((pages-split (ppcre:split "-" medline-pages)))
+    (if (and pages-split 
+             (> (length pages-split) 1)
+             (> (length (car pages-split))
+                (length (cadr pages-split))))
+        (destructuring-bind (start partial-end)
+            pages-split
+          (let ((end (copy-seq start)))
+            (let ((pos (- (length start) (length partial-end))))
+              (format nil "~A-~A" start (replace end partial-end :start1 pos)))))
+        medline-pages)))
 
 (defun parse-article (node)
-  (declare (optimize (debug 3)))
   (xpath:with-namespaces ()
     (let ((citation (xpath:first-node (xpath:evaluate "MedlineCitation" node)))
-          (doi (xpath:string-value
+          (doi (string-value-if
                 (xpath:first-node
                  (xpath:evaluate "PubmedData/ArticleIdList/ArticleId[attribute::IdType=\"doi\"]"
                                  node)))))
@@ -35,7 +44,7 @@
             (article (xpath:first-node (xpath:evaluate "Article" citation)))
             (mesh-headings
              (xpath:map-node-set->list
-              #'xpath:string-value
+              #'string-value-if
               (xpath:evaluate "MeshHeadingList/MeshHeading/DescriptorName" citation)))
             
             (short-journal-title
@@ -49,9 +58,9 @@
               (authors
                (mapcar #'parse-author-node
                        (xpath:all-nodes (xpath:evaluate "AuthorList/Author" article))))
-              (abstract (xpath:string-value
+              (abstract (string-value-if
                          (xpath:evaluate "Abstract/AbstractText" article)))
-              (affiliation (xpath:string-value
+              (affiliation (string-value-if
                             (xpath:evaluate "Affiliation" article)))
               (journal-node
                (xpath:first-node (xpath:evaluate "Journal" article))))
@@ -61,13 +70,13 @@
                 (journal-issue-node (xpath:first-node (xpath:evaluate "JournalIssue" journal-node))))
             (let ((pub-date-node (xpath:first-node
                                   (xpath:evaluate "PubDate" journal-issue-node)))
-                  (volume (xpath:string-value
+                  (volume (string-value-if
                            (xpath:evaluate "Volume" journal-issue-node)))
-                  (issue (xpath:string-value
+                  (issue (string-value-if
                           (xpath:evaluate "Issue" journal-issue-node))))
               (let ((year (xpath:number-value
                            (xpath:evaluate "Year" pub-date-node)))
-                    (month (xpath:string-value
+                    (month (string-value-if
                             (xpath:evaluate "Month" pub-date-node)))
                     (day (xpath:number-value
                           (xpath:evaluate "Day" pub-date-node))))
@@ -79,7 +88,7 @@
                                           :authors authors
                                           :abstract abstract
                                           :affiliation affiliation
-                                          :pages (when pages (fix-pages  pages))
+                                          :pages (when pages (fix-pages pages))
                                           :volume volume
                                           :issue issue
                                           :date (list year month day)
@@ -88,7 +97,6 @@
                   obj)))))))))
 
 (defun parse-pubmed-article-set (node)
-  (declare (optimize (debug 3)))
   (xpath:with-namespaces ()
     (let ((set (make-instance 'bio:article-set)))
       (let ((articles
