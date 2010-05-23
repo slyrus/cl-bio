@@ -155,7 +155,10 @@
      :local-file "dtd/PRF_General.mod.dtd")
     (:public-id "-//NCBI//SP General Module//EN"
      :system-url "http://www.ncbi.nlm.nih.gov/dtd/SP_General.mod.dtd"
-     :local-file "dtd/SP_General.mod.dtd")))
+     :local-file "dtd/SP_General.mod.dtd")
+    (:public-id "-//NCBI//NCBI Variation Module//EN"
+     :system-url "http://www.ncbi.nlm.nih.gov/data_specs/dtd/NCBI_Variation.mod.dtd"
+     :local-file "dtd/NCBI_Variation.mod.dtd")))
 
 (defvar *local-dtd-hash-table* (make-hash-table :test 'equal))
 
