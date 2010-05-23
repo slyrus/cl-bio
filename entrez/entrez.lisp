@@ -37,8 +37,9 @@
 (defparameter *entrez-dtd-list*
   '(
     ;; Pubmed
-    (:public-id "-//NLM//DTD PubMedArticle, 1st January 2009//EN"
-     :system-url "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/pubmed_090101.dtd"
+
+    (:public-id "-//NLM//DTD PubMedArticle, 1st January 2010//EN"
+     :system-url "http://www.ncbi.nlm.nih.gov/corehtml/query/DTD/pubmed_100101.dtd"
      :local-file "dtd/DTD_PubmedArticle.dtd")
     
     (:public-id ("-//NLM//DTD Medline, 01 Jan 2009//EN"
@@ -47,9 +48,9 @@
      :system-url "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmmedline_090101.dtd"
      :local-file "dtd/DTD_Medline.dtd")
     
-    (:public-id ("-//NLM//DTD MedlineCitation, 1st January 2009//EN"
+    (:public-id ("-//NLM//DTD Medline, 01 Jan 2010//EN"
                   "-//NLM//DTD MedlineCitation//EN")
-     :system-url "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmmedlinecitation_090101.dtd"
+     :system-url "http://www.ncbi.nlm.nih.gov/corehtml/query/DTD/nlmmedlinecitationset_100101.dtd" 
      :local-file "dtd/DTD_MedlineCitation.dtd")
 
     (:public-id ("-//NLM//DTD SharedCatCit, 1st January 2009//EN"
@@ -184,12 +185,14 @@
           *entrez-dtd-list*))
 
 (defun dtd-resolver (pubid sysid)
-  (let* ((local-dtd (merge-pathnames (gethash pubid *local-dtd-hash-table*)
-                                     (entrez-directory))))
-    (if (and pubid (probe-file local-dtd))
-        (open local-dtd :element-type :default)
-        (when (eq (puri:uri-scheme sysid) :http)
-          (drakma:http-request sysid :want-stream t)))))
+  (let ((local-dtd (gethash pubid *local-dtd-hash-table*)))
+    (let ((local-dtd-pathname (when local-dtd
+                                (merge-pathnames local-dtd
+                                                 (entrez-directory)))))
+      (if (and pubid local-dtd (probe-file local-dtd-pathname))
+          (open local-dtd-pathname :element-type :default)
+          (when (eq (puri:uri-scheme sysid) :http)
+            (drakma:http-request sysid :want-stream t))))))
 
 ;;; fetching xml sequences from NCBI
 (defun get-entrez-stream (id

@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqloc.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 09/15/2008 23:08:25
+     ::DATATOOL:: by application DATATOOL version 1.9.2
+     ::DATATOOL:: on 02/03/2010 23:05:21
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 140157 $
+$Revision: 182744 $
 **********************************************************************
 
   NCBI Sequence location and identifier elements
@@ -119,6 +119,9 @@ $Revision: 140157 $
 
 <!-- Internal named annotation tracking ID -->
 <!ELEMENT Seq-id_named-annot-track (Textseq-id)>
+
+
+<!ELEMENT Seq-id-set (Seq-id*)>
 
 
 <!ELEMENT Patent-seq-id (

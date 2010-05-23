@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seq.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 08/26/2008 23:06:32
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 04/26/2010 23:04:43
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 138450 $
+$Revision: 189794 $
 **********************************************************************
 
   NCBI Sequence elements
@@ -37,7 +37,8 @@ $Revision: 138450 $
           Seq-inst,
           Seq-literal,
           Seqdesc,
-          Delta-ext -->
+          Delta-ext,
+          Seq-gap -->
 
 <!-- Elements referenced from other modules:
           Date,

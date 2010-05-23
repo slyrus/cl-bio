@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.2
-     ::DATATOOL:: on 04/27/2009 23:05:20
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 04/26/2010 23:04:43
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 158548 $
+$Revision: 189795 $
 **********************************************************************
 
   NCBI Sequence Feature elements
@@ -28,6 +28,7 @@ $Revision: 158548 $
           Gene-ref FROM NCBI-Gene,
           Prot-ref FROM NCBI-Protein,
           Org-ref FROM NCBI-Organism,
+          Variation-ref FROM NCBI-Variation,
           BioSource FROM NCBI-BioSource,
           RNA-ref FROM NCBI-RNA,
           Seq-loc,
@@ -181,7 +182,8 @@ $Revision: 158548 $
         SeqFeatData_non-std-residue | 
         SeqFeatData_het | 
         SeqFeatData_biosrc | 
-        SeqFeatData_clone)>
+        SeqFeatData_clone | 
+        SeqFeatData_variation)>
 
 <!ELEMENT SeqFeatData_gene (Gene-ref)>
 
@@ -199,7 +201,7 @@ $Revision: 158548 $
 
 <!ELEMENT SeqFeatData_rna (RNA-ref)>
 
-<!-- publication applies to this seq  -->
+<!-- publication applies to this seq -->
 <!ELEMENT SeqFeatData_pub (Pubdesc)>
 
 <!-- to annotate origin from another seq -->
@@ -300,6 +302,8 @@ $Revision: 158548 $
 *
 -->
 <!ELEMENT SeqFeatData_clone (Clone-ref)>
+
+<!ELEMENT SeqFeatData_variation (Variation-ref)>
 
 <!-- both optional because can have one or both -->
 <!ELEMENT SeqFeatXref (
