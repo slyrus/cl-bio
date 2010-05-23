@@ -279,7 +279,7 @@
                                    "/Gene-commentary_label"
                                    #+nil "/Gene-commentary"
                                    #+nil "/Gene-commentary_accession")
-                      *dpp-node*))
+                      *dpp-gene-node*))
 
 (join-xpath-result (xpath:evaluate
                       (concatenate 'string "Entrezgene-Set"
@@ -289,7 +289,7 @@
                                    "/BioSource_org"
                                    "/Org-ref"
                                    "/Org-ref_db")
-                      *dpp-node*))
+                      *dpp-gene-node*))
 
 (join-xpath-result (xpath:evaluate
                       (concatenate 'string "Entrezgene-Set"
@@ -299,7 +299,7 @@
                                    "/Gene-commentary_products"
                                    "/Gene-commentary"
                                    "/Gene-commentary_type/attribute::value")
-                      *dpp-node*))
+                      *dpp-gene-node*))
 
 (join-xpath-result (xpath:evaluate
                       (concatenate 'string "Entrezgene-Set"
@@ -310,20 +310,20 @@
                                    "/Pub"
                                    "/Pub_pmid"
                                    "/PubMedId")
-                      *dpp-node*))
+                      *dpp-gene-node*))
 
 (join-xpath-result (xpath:evaluate
                       (concatenate 'string "Entrezgene-Set"
                                    "/Entrezgene"
                                    "/Entrezgene_comments"
                                    "/Gene-commentary[Gene-commentary_type/attribute::value=\"generif\"]")
-                      *dpp-node*))
+                      *dpp-gene-node*))
 
 (xpath:string-value
    (xpath:evaluate (concatenate 'string "Entrezgene-Set"
                                 "/Entrezgene"
                                 "/Entrezgene_type/attribute::value")
-                   *dpp-node*))
+                   *dpp-gene-node*))
 
 (xpath:map-node-set->list
  (lambda (node)
@@ -337,11 +337,11 @@
      (cons db (if (equal object-id-id "")
                   object-id-str
                   object-id-id))))
- (xpath:evaluate "//Dbtag" *dpp-node*))
+ (xpath:evaluate "//Dbtag" *dpp-gene-node*))
 
 (xpath:string-value
  (xpath:evaluate (concatenate 'string "Entrezgene-Set/Entrezgene/Entrezgene_source/BioSource/BioSource_org/Org-ref/Org-ref_taxname/text()")
-                 *dpp-node*))
+                 *dpp-gene-node*))
 
 (mapcar #'generif-text
         (bio:get-descriptors *dpp-gene* :type 'generif))
@@ -372,3 +372,10 @@
     (car (bio:members (bio:fetch pmid *entrez-dictionary* :database "pubmed")))))
 
 (describe (car (bio:members (bio:fetch "19247932" *entrez-dictionary* :database "pubmed"))))
+
+
+(let ((pmid (bio:id (car (bio:members
+                          (bio:lookup "endoxifen"
+                                      *entrez-dictionary*
+                                      :database "pubmed"))))))
+  (car (bio:members (bio:fetch pmid *entrez-dictionary* :database "pubmed"))))
