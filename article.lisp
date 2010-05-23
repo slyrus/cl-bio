@@ -35,6 +35,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; Article
+;;;
+;;; Note that the article and article-set-classes were originally
+;;; "borrowed" from Kevin Rosenberg's cl-pubmed package.
 
 ;;; author protocol class
 (defclass author (bio-object)
