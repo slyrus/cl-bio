@@ -83,24 +83,14 @@
   (make-instance 'entrez-dictionary))
 
 (defmethod bio:lookup (object (dictionary entrez-dictionary)
+                       &rest args
                        &key
-                       database
-                       use-cache-for-lookup
-                       cache-results
-                       refresh
-                       retstart
-                       retmax)
+                       database)
   (get-search-result-ids
    (apply #'bio:lookup object *entrez-xml-dictionary*
-          (append
-           (when database `(:database ,database))
-           (when cache-results `(:cache-results ,cache-results))
-           (when use-cache-for-lookup `(:use-cache-for-lookup ,use-cache-for-lookup))
-           (when refresh `(:refresh ,refresh))
-           (when retstart `(:retstart ,retstart))
-           (when retmax `(:retmax ,retmax))))
+          args)
    :id-class (cond 
-               ((string-equal database"pubmed") 'bio::ncbi-pmid)
+               ((string-equal database "pubmed") 'bio::ncbi-pmid)
                (t 'bio:ncbi-gi))))
 
 (defmethod bio:fetch (object (dictionary entrez-dictionary)
