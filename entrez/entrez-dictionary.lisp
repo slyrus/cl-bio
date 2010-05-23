@@ -2,11 +2,15 @@
 (in-package :entrez)
 
 (defparameter *entrez-data-cache-directory*
-  (ch-asdf:asdf-lookup-path "asdf:/cl-bio-entrez/cache/data"))
+  (asdf:component-pathname
+   (reduce #'asdf:find-component
+           (list nil "cl-bio-entrez" "cache" "data"))))
 (ensure-directories-exist *entrez-data-cache-directory*)
 
 (defparameter *entrez-search-cache-directory*
-  (ch-asdf:asdf-lookup-path "asdf:/cl-bio-entrez/cache/search"))
+  (asdf:component-pathname
+   (reduce #'asdf:find-component
+           (list nil "cl-bio-entrez" "cache" "search"))))
 (ensure-directories-exist *entrez-search-cache-directory*)
 
 (defclass entrez-xml-dictionary (bio::dictionary) ())

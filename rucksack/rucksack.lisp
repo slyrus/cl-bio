@@ -31,6 +31,9 @@
 
 (in-package :bio-rucksack)
 
-(defparameter *bio-rucksack* (ch-asdf:asdf-lookup-path "asdf:/cl-bio-rucksack/rucksack/rucksack-data"))
+(defparameter *bio-rucksack* 
+  (asdf:component-pathname
+   (reduce #'asdf:find-component
+           (list nil "cl-bio-rucksack" "rucksack" "rucksack-data"))))
 
 (ensure-directories-exist *bio-rucksack*)

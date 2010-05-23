@@ -98,8 +98,13 @@
     m))
 
 (defparameter *blosum-62*
-  (parse-matrix (read (open (ch-asdf:asdf-lookup-path
-                             "asdf:/cl-bio-align/align/matrix/blosum62")))))
+  (parse-matrix
+   (with-open-file
+       (matrix
+        (asdf:component-pathname
+         (reduce #'asdf:find-component
+                 (list nil "cl-bio-align" "align" "matrix" "blosum62"))))
+     (read matrix))))
 
 (defun get-score (m k l)  
   (gethash (list (gethash k (score-matrix-hash m)) (gethash l (score-matrix-hash m)))

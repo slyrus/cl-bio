@@ -2,11 +2,9 @@
 (asdf:defsystem #:cl-bio-align
   :name "cl-bio-align"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
-  :version #.(with-open-file
-                 (vers (merge-pathnames "version.lisp-expr" *load-truename*))
-               (read vers))
+  :version "0.2.6"
   :licence "BSD"
-  :depends-on (cl-bio ch-asdf)
+  :depends-on (cl-bio)
   :components
   ((:module :align
             :components

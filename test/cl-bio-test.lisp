@@ -70,7 +70,9 @@
 
 (defun test-load-dpp ()
   (let ((dpp (car (read-fasta-file
-                   (ch-asdf:asdf-lookup-path "asdf:/cl-bio-test/data/dpp-fasta")))))
+                   (asdf:component-pathname
+                    (reduce #'asdf:find-component
+                            (list nil "cl-bio-test" "data" "dpp-fasta")))))))
     dpp))
 
 (defun test-load-2l ()

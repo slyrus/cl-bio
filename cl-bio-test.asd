@@ -5,12 +5,10 @@
 (defsystem #:cl-bio-test
   :name "cl-bio-test"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
-  :version #.(with-open-file
-                 (vers (merge-pathnames "version.lisp-expr" *load-truename*))
-               (read vers))
+  :version "0.2.6"
   :licence "BSD"
   :description "Tests for cl-bio"
-  :depends-on (cl-bio ch-asdf)
+  :depends-on (cl-bio)
   :components
   ((:module :test
 	    :components

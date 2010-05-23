@@ -2,12 +2,10 @@
 (asdf:defsystem #:cl-bio-entrez
   :name "cl-bio-entrez"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
-  :version #.(with-open-file
-                 (vers (merge-pathnames "version.lisp-expr" *load-truename*))
-               (read vers))
   :licence "BSD"
+  :version "0.2.6"
   :description "A library for accessing the NCBI entrez web services"
-  :depends-on (puri drakma cxml cxml-stp xpath cl-bio ch-asdf)
+  :depends-on (cl-bio puri drakma cxml cxml-stp xpath)
   :components
   ((:module :entrez
             :components 
@@ -28,3 +26,4 @@
             :components
             ((:module "data")
              (:module "search")))))
+

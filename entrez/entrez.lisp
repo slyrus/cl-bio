@@ -169,20 +169,23 @@
                       (list public-id-atom-or-list)))))
      *entrez-dtd-list*)
 
+(defun entrez-directory ()
+  (asdf:component-pathname
+   (reduce #'asdf:find-component
+           (list nil "cl-bio-entrez" "entrez"))))
+
 ;;; call this to cache the DTDs
 (defun http-get-entrez-dtds ()
-  (let ((cl-entrez-dir (ch-asdf:asdf-lookup-path "asdf:/cl-bio-entrez/entrez")))
-    (mapcar (lambda (x)
-              (http-get-file (getf x :system-url)
-                             (merge-pathnames 
-                              (getf x :local-file)
-                              cl-entrez-dir)))
-            *entrez-dtd-list*)))
+  (mapcar (lambda (x)
+            (http-get-file (getf x :system-url)
+                           (merge-pathnames 
+                            (getf x :local-file)
+                            (entrez-directory))))
+          *entrez-dtd-list*))
 
 (defun dtd-resolver (pubid sysid)
-  (let* ((cl-entrez-dir (ch-asdf:asdf-lookup-path "asdf:/cl-bio-entrez/entrez"))
-         (local-dtd (merge-pathnames (gethash pubid *local-dtd-hash-table*)
-                                     cl-entrez-dir)))
+  (let* ((local-dtd (merge-pathnames (gethash pubid *local-dtd-hash-table*)
+                                     (entrez-directory))))
     (if (and pubid (probe-file local-dtd))
         (open local-dtd :element-type :default)
         (when (eq (puri:uri-scheme sysid) :http)

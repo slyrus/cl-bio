@@ -370,3 +370,5 @@
 (defparameter *eisen-drosophila-paper*
   (let ((pmid (bio:id (car (bio:members entrez-user::*eisen-drosophila-search*)))))
     (car (bio:members (bio:fetch pmid *entrez-dictionary* :database "pubmed")))))
+
+(describe (car (bio:members (bio:fetch "19247932" *entrez-dictionary* :database "pubmed"))))
