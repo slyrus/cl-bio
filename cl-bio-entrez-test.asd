@@ -2,9 +2,7 @@
 (asdf:defsystem #:cl-bio-entrez-test
   :name "cl-bio-entrez-test"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
-  :version #.(with-open-file
-                 (vers (merge-pathnames "version.lisp-expr" *load-truename*))
-               (read vers))
+  :version "0.2.6"
   :licence "BSD"
   :description "Tests for cl-bio-entrez"
   :depends-on (cl-bio-entrez)

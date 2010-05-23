@@ -10,9 +10,7 @@
 (defsystem :cl-bio-doc
   :name "cl-bio-doc"
   :author "Cyrus Harmon" 
-  :version #.(with-open-file
-                 (vers (merge-pathnames "version.lisp-expr" *load-truename*))
-               (read vers))
+  :version "0.2.6"
   :depends-on (ch-asdf ch-bib ch-util puri smarkup cl-graph cl-bio
                cl-bio-taxonomy cl-bio-entrez)
   :components

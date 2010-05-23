@@ -7,8 +7,7 @@
   :description "A library for representing various biological objects"
   :depends-on (cl-ppcre flexichain)
   :components
-  ((:static-file "version" :pathname #p"version.lisp-expr")
-   (:cl-source-file "defpackage")
+  ((:cl-source-file "defpackage")
    (:cl-source-file "cl-bio" :depends-on ("defpackage"))
    (:cl-source-file "bio-object" :depends-on ("defpackage"))
    (:cl-source-file "article" :depends-on ("defpackage" "bio-object"))
