@@ -1,3 +1,33 @@
+;;; pubmed.lisp
+;;; Routines for working with the pubmed section of NCBI's entrez database
+;;;
+;;; Copyright (c) 2009 Cyrus Harmon (ch-lisp@bobobeach.com)
+;;; All rights reserved.
+;;;
+;;; Redistribution and use in source and binary forms, with or without
+;;; modification, are permitted provided that the following conditions
+;;; are met:
+;;;
+;;;   * Redistributions of source code must retain the above copyright
+;;;     notice, this list of conditions and the following disclaimer.
+;;;
+;;;   * Redistributions in binary form must reproduce the above
+;;;     copyright notice, this list of conditions and the following
+;;;     disclaimer in the documentation and/or other materials
+;;;     provided with the distribution.
+;;;
+;;; THIS SOFTWARE IS PROVIDED BY THE AUTHOR 'AS IS' AND ANY EXPRESSED
+;;; OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+;;; WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+;;; ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+;;; DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+;;; DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+;;; GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+;;; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+;;; WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+;;; NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+;;;
 
 (in-package :entrez)
 
@@ -74,12 +104,20 @@
                            (xpath:evaluate "Volume" journal-issue-node)))
                   (issue (string-value-if
                           (xpath:evaluate "Issue" journal-issue-node))))
-              (let ((year (xpath:number-value
+              (let ((year (number-value-if
                            (xpath:evaluate "Year" pub-date-node)))
                     (month (string-value-if
                             (xpath:evaluate "Month" pub-date-node)))
-                    (day (xpath:number-value
+                    (day (number-value-if
                           (xpath:evaluate "Day" pub-date-node))))
+                (unless year
+                  (let ((medline-date (string-value-if
+                                       (xpath:evaluate "MedlineDate" pub-date-node))))
+                    (if medline-date
+                        (let ((maybe-year (parse-integer
+                                           (ppcre:scan-to-strings "(\\d+)" medline-date))))
+                          (when maybe-year
+                            (setf year maybe-year))))))
                 (let ((obj (make-instance 'bio:article
                                           :pmid pmid
                                           :title article-title
