@@ -2,7 +2,7 @@
 (asdf:defsystem #:cl-bio-align
   :name "cl-bio-align"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
-  :version "0.2.6"
+  :version "0.2.7"
   :licence "BSD"
   :depends-on (cl-bio)
   :components

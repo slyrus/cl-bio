@@ -10,7 +10,7 @@
 (defsystem :cl-bio-entrez-doc
   :name "cl-bio-entrez-doc"
   :author "Cyrus Harmon" 
-  :version "0.2.6"
+  :version "0.2.7"
   :depends-on (ch-asdf ch-bib ch-util puri smarkup cl-graph)
   :components
   ((:module "entrez"

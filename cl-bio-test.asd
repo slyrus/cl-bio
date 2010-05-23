@@ -1,11 +1,8 @@
 
-(defpackage #:cl-bio-test-system (:use #:asdf #:cl))
-(in-package #:cl-bio-test-system)
-
-(defsystem #:cl-bio-test
+(asdf:defsystem #:cl-bio-test
   :name "cl-bio-test"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
-  :version "0.2.6"
+  :version "0.2.7"
   :licence "BSD"
   :description "Tests for cl-bio"
   :depends-on (cl-bio)

@@ -2,7 +2,7 @@
 (asdf:defsystem #:cl-bio-taxonomy
   :name "cl-bio-taxonomy"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
-  :version "0.2.6"
+  :version "0.2.7"
   :licence "BSD"
   :depends-on (cl-bio cl-bio-rucksack)
   :components

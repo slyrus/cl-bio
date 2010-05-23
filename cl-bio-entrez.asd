@@ -3,7 +3,7 @@
   :name "cl-bio-entrez"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
   :licence "BSD"
-  :version "0.2.6"
+  :version "0.2.7"
   :description "A library for accessing the NCBI entrez web services"
   :depends-on (cl-bio puri drakma cxml cxml-stp xpath)
   :components

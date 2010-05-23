@@ -2,7 +2,7 @@
 (asdf:defsystem #:cl-bio
   :name "cl-bio"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
-  :version "0.2.6"
+  :version "0.2.7"
   :licence "BSD"
   :description "A library for representing various biological objects"
   :depends-on (cl-ppcre flexichain)
