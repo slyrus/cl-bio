@@ -100,15 +100,8 @@
                (t 'bio:ncbi-gi))))
 
 (defmethod bio:fetch (object (dictionary entrez-dictionary)
-                                            &rest args
-                      &key
-                      database
-                      (use-cache-for-lookup t use-cache-for-lookup-supplied-p)
-                      (cache-results t cache-results-supplied-p)
-                      refresh
-                      retstart
-                      retmax
-                      )
+                      &rest args
+                      &key)
   (let ((xml (apply #'bio:fetch object *entrez-xml-dictionary*
                     args
                     #+nil (append
