@@ -72,10 +72,12 @@
   (unless (equal "" string) string))
 
 (defun string-value-if (node)
-  (when node
+  (when (and node (or (not (xpath:node-set-p node))
+                      (not (xpath:node-set-empty-p node))))
     (string-if (xpath:string-value node))))
 
 (defun number-value-if (node)
-  (when node
+  (when (and node (or (not (xpath:node-set-p node))
+                      (not (xpath:node-set-empty-p node))))
     (xpath:number-value node)))
 
