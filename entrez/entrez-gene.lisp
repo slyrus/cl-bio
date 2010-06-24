@@ -35,6 +35,10 @@
              "Entrezgene_source/BioSource/BioSource_org/Org-ref/Org-ref_taxname/text()"
              node))))
       (when tax-name (setf (bio:gene-source obj) tax-name)))
+    (let ((summary (xpath:string-value
+                    (xpath:evaluate "Entrezgene_summary/text()" node))))
+      (when summary
+        (setf (bio:gene-summary obj) summary)))
     (let ((gene-ref-locus
            (xpath:string-value
             (xpath:evaluate "Entrezgene_gene/Gene-ref/Gene-ref_locus/text()"

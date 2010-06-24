@@ -40,6 +40,7 @@
 (defclass gene (bio-object)
   ((type :accessor gene-type :initarg :type)
    (source :accessor gene-source :initarg :source)
+   (summary :accessor gene-summary :initarg :summary)
    (products :accessor gene-products :initarg :products :initform nil)))
 
 (defclass gene-product (bio-object)

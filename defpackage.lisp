@@ -167,6 +167,7 @@
                #:gene-source
                #:gene-product
                #:gene-products
+               #:gene-summary
                
                #:annotation
                #:annotations
