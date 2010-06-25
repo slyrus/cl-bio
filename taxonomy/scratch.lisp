@@ -2,8 +2,14 @@
 (in-package :bio-taxonomy)
 
 ;;; to load the taxonomies:
+;;;
 ;;;  1. download the taxonomy data dump from NCBI
-;;;  2. update the location of *taxonomy-data-directory*
+;;;     at ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
+;;;  
+;;;  2. gunzip/untar that file
+;;;
+;;;  3. update the location of *taxonomy-data-directory*
+;;;
 (taxonomy::load-taxon-data)
 
 

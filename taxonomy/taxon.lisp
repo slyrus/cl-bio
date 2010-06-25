@@ -41,15 +41,15 @@
 ;;; rucksack storage and parsing parameters
 
 (defparameter *taxonomy-data-directory*
-  (merge-pathnames #p"data/taxonomy/"
+  (merge-pathnames #p"projects/cl-bio-data/taxonomy/"
                    (user-homedir-pathname)))
 
 (define-symbol-macro *tax-nodes-file*
-    (merge-pathnames #p"taxdump/nodes.dmp"
+    (merge-pathnames #p"nodes.dmp"
                      *taxonomy-data-directory*))
 
 (define-symbol-macro *tax-names-file*
-    (merge-pathnames #p"taxdump/names.dmp"
+    (merge-pathnames #p"names.dmp"
                      *taxonomy-data-directory*))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
