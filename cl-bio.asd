@@ -34,7 +34,6 @@
             ((:cl-source-file "utilities")
              (:cl-source-file "fasta" :depends-on ("utilities")))
             :depends-on ("defpackage" "encoding" "range" "bio-sequence" "identifier"))
-   (:static-file "bootstrap" :pathname #p"bootstrap.lisp")
    (:static-file "COPYRIGHT")
    (:static-file "README")
    (:static-file "make-dist" :pathname #.(make-pathname :name "make-dist" :type "sh"))))
