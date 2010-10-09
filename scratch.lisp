@@ -78,6 +78,6 @@
   (make-dna-sequence-from-string "CATGTAGATAG"))
 (add-descriptor *seq* (make-instance 'identifier :id "testseq"))
 (format t "seq is ~A bases long~&" (seq-length *seq*))
-(format t "revomp seq is ~A~&" (residues-string (reverse-complement *seq*)))
-(bio-io:write-fasta-file *seq* "testseq.fsa")
+(format t "revcomp seq is ~A~&" (residues-string (reverse-complement *seq*)))
+(write-fasta-file *seq* "testseq.fsa")
 
