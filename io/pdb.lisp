@@ -203,7 +203,6 @@
     record))
 
 (defun find-first-char (char string &key (start 0) (escape-char #\\))
-  (declare (optimize (debug 3)))
   (let ((pos (position char string :start start)))
     (when pos (if (and (plusp pos)
                        (char= (char string (1- pos)) escape-char))
@@ -211,7 +210,6 @@
                   pos))))
 
 (defun parse-specification (string &optional start)
-  (declare (optimize (debug 3)))
   (let ((colon-pos (find-first-char #\: string :start start)))
     (when colon-pos
       (let ((semicolon-pos (find-first-char #\; string
@@ -232,8 +230,10 @@
        (cons token value)))
 
 (defmethod finish-pdb-record ((record pdb-compound) &key (entry *current-entry*))
+  (declare (ignore entry))
   (call-next-method)
   (print (parse-specification-list (print (data record)))))
+
 (defgeneric write-pdb-record (record-type data stream))
 
 (defun write-pdb-header (entry stream)
@@ -276,7 +276,6 @@
     :sheet :sigatm :siguij :site :ssbond :tvect :formul :hetatm :hetnam))
 
 (defun read-pdb-record (stream)
-  (declare (optimize (debug 2)))
   (let ((record (start-pdb-record
                  (intern (read-pdb-record-name *current-line*) :keyword)
                  *current-line*)))
