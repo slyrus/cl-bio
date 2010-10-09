@@ -28,7 +28,7 @@
 ;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;
 
-(in-package :bio-io)
+(in-package :bio)
 
 (defun read-fasta-header-line (stream seq)
   ;; read until the first #\>
@@ -95,6 +95,6 @@
                                                        (identifier (id x))))
                                                    (get-descriptors sequence)))))
     (format stream "~&>~A~%" header)
-    (split-string-into-lines (residues-string sequence)
+    (split-string-into-lines (bio:residues-string sequence)
                              :stream stream)
     (terpri stream)))

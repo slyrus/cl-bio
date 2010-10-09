@@ -28,7 +28,7 @@
 ;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;
 
-(in-package :bio-io)
+(in-package :bio)
 
 (defun check-end-of-sequence (stream &key (end-char #\>))
   (let ((char (peek-char t stream nil :eof)))

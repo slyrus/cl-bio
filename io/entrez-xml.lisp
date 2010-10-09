@@ -28,8 +28,7 @@
 ;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;
 
-
-(in-package :bio-io)
+(in-package :bio)
 
 (defun convert-entrez-seq-to-bio-seq (eseq)
   (flet ((get-element-data (tag list)

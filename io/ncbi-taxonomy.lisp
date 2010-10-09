@@ -28,8 +28,7 @@
 ;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;
 
-
-(in-package :bio-io)
+(in-package :bio)
 
 (defun parse-taxonomy-dump (stream))
 

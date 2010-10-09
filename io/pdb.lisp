@@ -50,7 +50,7 @@
 ;;; * grouping records
 ;;; 
 
-(in-package :bio-io)
+(in-package :bio)
 
 ;;; since we need to look ahead to see if we are continuing lines or
 ;;; not, establish a special variable to hold the value of the current

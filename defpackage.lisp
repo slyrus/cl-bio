@@ -29,22 +29,7 @@
 
 (in-package #:cl-user)
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (unless (find-package 'bio)
-    (defpackage #:bio)))
-
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (defpackage #:bio-io (:use #:cl #:bio)
-              (:export
-               .
-               #1=(
-                   #:read-fast-sequences
-                   #:read-fasta-file
-                   
-                   #:write-fasta-file)))
-
-  (defpackage #:bio (:use #:cl #:bio-io)
-
+(defpackage #:bio (:use #:cl)
               (:export
 
                ;; objects
@@ -226,7 +211,8 @@
                #:3-letter-residues-string
                #:3-letter-residues-list
 
-               . #1#)))
+               #:read-fasta-sequences
+               #:read-fasta-file
+               #:write-fasta-file))
 
 (defpackage #:bio-user (:use #:cl #:bio))
-

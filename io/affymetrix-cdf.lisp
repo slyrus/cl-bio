@@ -29,7 +29,7 @@
 ;;;
 
 
-(in-package :bio-io)
+(in-package :bio)
 
 (defun read-cdf-line (stream)
   (let ((line-type (read-until-char stream #\=))

@@ -3,7 +3,7 @@
 
 (in-package :entrez-user)
 
-(http-get-entrez-dtds)
+;; (http-get-entrez-dtds)
 
 ;;; xpath stuff
 
@@ -98,12 +98,12 @@
     (bio:residues-string (bio:translate *esr2-nucleotide* :range range))))
 
 ;;; xpath tests and what not
-(defparameter *esr1-node*
+(defparameter *esr1-gene-node*
   (bio:fetch (bio:id (car (bio:members *esr1-gene-search*)))
              *entrez-xml-dictionary*
              :database "gene"))
 
-(entrez::stp-document->list *esr1-node*)
+(entrez::stp-document->list *esr1-gene-node*)
 
 (join-xpath-result
  (xpath:evaluate
@@ -114,7 +114,25 @@
                "/Gene-commentary_products"
                "/Gene-commentary[Gene-commentary_type/attribute::value=\"mRNA\"]"
                "/Gene-commentary_accession")
-  *esr1-node*))
+  *esr1-gene-node*))
+
+(join-xpath-result
+ (xpath:evaluate
+  (concatenate 'string "Entrezgene-Set"
+               "/Entrezgene"
+               "/Entrezgene_summary")
+  *esr1-gene-node*))
+
+(xpath:string-value
+ (xpath:evaluate "Entrezgene_summary/text()"
+                 (xpath:first-node
+                  (xpath:evaluate "Entrezgene-Set/Entrezgene"
+                                  *esr1-gene-node*))))
+
+(xpath:string-value
+ (xpath:evaluate "Entrezgene-Set/Entrezgene/Entrezgene_summary/text()"
+                 *esr1-gene-node*))
+
 
 (xpath:map-node-set->list
  (lambda (commentary-node)
@@ -134,7 +152,7 @@
                "/Gene-commentary"
                "/Gene-commentary_products"
                "/Gene-commentary")
-  *esr1-node*))
+  *esr1-gene-node*))
 
 (xpath:map-node-set->list
  (lambda (commentary-node)
@@ -163,7 +181,7 @@
                "/Gene-commentary"
                "/Gene-commentary_products"
                "/Gene-commentary")
-  *esr1-node*))
+  *esr1-gene-node*))
 
 (bio:split-string-into-lines (bio:residues-string *esr1-nucleotide*))
 

@@ -198,7 +198,7 @@
   (:span
    (:h2 "Loading a FASTA file")
    (:lisp
-    #q{(defparameter *dpp* (bio:read-fasta-file "data/dpp.fasta"))})
+    #q{(defparameter *dpp* (bioread-fasta-file "data/dpp.fasta"))})
    
    (:lisp
     #q{(append (subseq (bio:split-string-into-lines-list
