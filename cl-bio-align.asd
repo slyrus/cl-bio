@@ -4,7 +4,7 @@
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
   :version "0.2.7"
   :licence "BSD"
-  :depends-on (cl-bio)
+  :depends-on (cl-bio alexandria)
   :components
   ((:module :align
             :components
