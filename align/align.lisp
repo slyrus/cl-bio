@@ -141,8 +141,7 @@
     (t -4)))
 (declaim (ftype (function (base-char base-char)
                           (signed-byte 8))
-                na-score)
-         (inline na-score))
+                na-score))
 
 (defun gap-score (g i j)
   (if (= 0 (aref g i j))
@@ -259,9 +258,7 @@
         (n (make-array (list (+ (length a) 1) (+ (length b) 1))
                        :initial-element 0
                        :element-type '(signed-byte 31))))
-    (declare (type (simple-array (signed-byte 31)
-                                 (* *))
-                   m n))
+    (declare (type (simple-array (signed-byte 31) (* *)) m n))
     (dotimes (i (+ (length a) 1))
       (if (> i 0)
           (global-align-score m n i 0 (aref a (- i 1)) +gap-char+ score-fn)
@@ -511,8 +508,7 @@
                            score-fn))
 
 (defun local-align-score (m n i j k l score-fn)
-  (declare (optimize (speed 3) (safety 0))
-           (type fixnum i j)
+  (declare (type fixnum i j)
            (type base-char k l)
            (type (simple-array fixnum (* *)) n m))
   (cond
@@ -548,8 +544,7 @@
           (setf (aref m i j) z) (setf (aref n i j) +left+) z))))))
 
 (defun local-align (a b score-fn)
-  (declare (optimize (speed 3) (safety 0))
-           (type (simple-array character *) a b))
+  (declare (type (simple-array character *) a b))
   (let ((m (make-array (list (+ (length a) 1) (+ (length b) 1))
                        :initial-element 0 :element-type 'fixnum))
         (n (make-array (list (+ (length a) 1) (+ (length b) 1))
