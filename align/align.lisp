@@ -2,7 +2,7 @@
 ;;; Classes, generic functions, methods and functions for aligning
 ;;; biological sequences
 ;;;
-;;; Copyright (c) 2002-2008 Cyrus Harmon (ch-lisp@bobobeach.com)
+;;; Copyright (c) 2002-2011 Cyrus Harmon (ch-lisp@bobobeach.com)
 ;;; All rights reserved.
 ;;;
 ;;; Redistribution and use in source and binary forms, with or without
@@ -31,6 +31,12 @@
 ;;;
 
 (in-package :bio-align)
+
+(defgeneric global-align-aa (seq1 seq2))
+(defgeneric global-align-na (seq1 seq2 &key gap match mismatch transition initial-gap terminal-gap))
+(defgeneric global-align-aa-affine-gaps (seq1 seq2 &key gap gap-extend initial-gap terminal-gap))
+(defgeneric global-align-na-affine-gaps (seq1 seq2 &key gap gap-extend match mismatch
+                                              transition initial-gap terminal-gap))
 
 (defclass score-matrix ()
   ((list :accessor score-matrix-list :initarg :list)
@@ -127,21 +133,30 @@
 (declaim (type base-char +gap-char+))
 
 (defparameter *gap* -8)
-(defparameter *gap-extend* -2)
-(declaim (type (signed-byte 8) *gap* *gap-extend*))
+(defparameter *initial-gap* 0)
+(defparameter *terminal-gap* 0)
+(defparameter *gap-extgend* -2)
+(defparameter *match* 4)
+(defparameter *mismatch* -4)
+(defparameter *transition* nil)
+
+(declaim (type (signed-byte 8) *gap* *gap-extend* *match* *mismatch*))
+(declaim (type (or null (signed-byte 8)) *transition* *initial-gap* *terminal-gap*))
 
 (defun na-score (k l)
   (declare (type base-char k l)
            (optimize (speed 3) (safety 0)))
   (cond
-    ((eql k l) 4)
+    ((eql k l) *match*)
     ((eql k +gap-char+) *gap*)
     ((eql l +gap-char+) *gap*)
-    ((eql (transition k) l) -2)
-    (t -4)))
+    ((and *transition*
+          (eql (transition k) l)) *transition*)
+    (t *mismatch*)))
 (declaim (ftype (function (base-char base-char)
                           (signed-byte 8))
                 na-score))
+
 
 (defun gap-score (g i j)
   (if (= 0 (aref g i j))
@@ -166,33 +181,6 @@
     (t
      (emit m n (- i 1) (- j 1) a b
            (cons (aref a (- i 1)) s1) (cons (aref b (- j 1)) s2)))))
-
-#+nil
-(defun emit2 (m n i j a b &optional s1 s2)
-  (cond
-    ((and (= i 0) (= j 0))
-     (list s1 s2))
-    ((= i 0)
-     (emit2 m n i (- j 1) a b
-            (cons #\- s1) (cons (aref b (- j 1)) s2)))
-    ((= j 0)
-     (emit2 m n (- i 1) j a b
-            (cons (aref a (- i 1)) s1) (cons #\- s2)))
-    (t
-     (let ((k (aref a (- i 1))) (l (aref b (- j 1))))
-       (let ((x (+ (aref m (- i 1) (- j 1)) (score k l)))
-             (y (+ (aref m (- i 1) j) (score k +gap-char+)))
-             (z (+ (aref m i (- j 1)) (score +gap-char+ l))))
-         (cond
-           ((and (>= x y) (>= x z))
-            (emit2 m n (- i 1) (- j 1) a b
-                   (cons (aref a (- i 1)) s1) (cons (aref b (- j 1)) s2)))
-           ((>= y z)
-            (emit2 m n (- i 1) j a b
-                   (cons (aref a (- i 1)) s1) (cons #\- s2)))
-           (t
-            (emit2 m n i (- j 1) a b
-                   (cons #\- s1) (cons (aref b (- j 1)) s2)))))))))
 
 (defun global-align-score (m n i j k l score-fn)
   (cond
@@ -272,7 +260,7 @@
       (do ((j 1 (+ j 1)))
           ((> j (length b)))
           (global-align-score m n i j (aref a (- i 1)) (aref b (- j 1)) score-fn)))
-    (let ((z (emit m n (+ (length a) 0) (+ (length b) 0) a b)))
+    (let ((z (emit m n (length a) (length b) a b)))
       (make-alignment
        :score (aref m (length a) (length b))
        :seq1 (coerce (first z) 'string)
@@ -281,15 +269,18 @@
        :dp-traceback n))))
 
 (macrolet ((global-align-score-mac (m n i j k l score-fn)
-             (alexandria:once-only
-                 (m n i j k l)
+             (alexandria:once-only (m n i j k l)
                `(cond
                   ((and (> ,i 0) (= ,j 0))
-                   (let ((y (+ (aref ,m (1- ,i) ,j) (,score-fn ,k +gap-char+))))
+                   (let ((y (+ (aref ,m (1- ,i) ,j) 
+                               (let ((*gap* (or *initial-gap* *gap*)))
+                                 (,score-fn ,k +gap-char+)))))
                      (setf (aref ,m ,i ,j) y
                            (aref ,n ,i ,j) +up+)))
                   ((and (= ,i 0) (> ,j 0))       
-                   (let ((z (+ (aref ,m ,i (1- ,j)) (,score-fn +gap-char+ ,l))))
+                   (let ((z (+ (aref ,m ,i (1- ,j))
+                               (let ((*gap* (or *initial-gap* *gap*)))
+                                 (,score-fn +gap-char+ ,l)))))
                      (setf (aref ,m ,i ,j) z
                            (aref ,n ,i ,j) +left+)))
                   (t
@@ -314,25 +305,39 @@
                                      :initial-element 0
                                      :element-type '(unsigned-byte 2))))
                   (declare (type (simple-array (unsigned-byte 2) (* *)) n))
-                  (dotimes (i (+ (length a) 1))
-                    (declare (type fixnum i))
-                    (if (> i 0)
-                        (global-align-score-mac m n i 0 (aref a (- i 1)) +gap-char+ ,score-fn)
-                        (setf (aref m i 0) 0)))
-                  (dotimes (j (+ (length b) 1))
-                    (declare (type fixnum j))
-                    (if (> j 0)
-                        (global-align-score-mac m n 0 j +gap-char+ (aref b (- j 1)) ,score-fn)
-                        (setf (aref m 0 j) 0)))
-                  (let ((ilimit (length a))
-                        (jlimit (length b)))
-                    (do ((i 1 (+ i 1)))
-                        ((> i ilimit))
-                      (declare (type fixnum i))
-                      (do ((j 1 (+ j 1)))
-                          ((> j jlimit))
-                        (declare (type fixnum j))
-                        (global-align-score-mac m n i j (aref a (1- i)) (aref b (1- j)) ,score-fn))))
+                  (setf (aref m 0 0) 0)
+                  (let ((imax (length a))
+                        (jmax (length b)))
+                    (loop for i from 1 to imax
+                       do (global-align-score-mac m n i 0 (aref a (- i 1)) +gap-char+
+                                                  (lambda (p q)
+                                                    (or *initial-gap*
+                                                        (,score-fn p q)))))
+                    (loop for j from 1 to jmax
+                       do (global-align-score-mac m n 0 j +gap-char+ (aref b (- j 1))
+                                                  (lambda (p q)
+                                                    (or *initial-gap*
+                                                        (,score-fn p q)))))
+
+                    (loop for i from 1 below imax
+                       do
+                         (loop for j from 1 below jmax
+                            do (global-align-score-mac m n i j
+                                                       (aref a (1- i)) (aref b (1- j)) ,score-fn)))
+                    (loop for i from 1 below imax
+                       do (global-align-score-mac m n i jmax
+                                                  (aref a (1- i))
+                                                  (aref b (1- jmax))
+                                                  (lambda (p q)
+                                                    (let ((*gap* *terminal-gap*))
+                                                      (,score-fn p q)))))
+                    (loop for j from 1 to jmax
+                       do (global-align-score-mac m n imax j
+                                                  (aref a (1- imax))
+                                                  (aref b (1- j))
+                                                  (lambda (p q)
+                                                    (let ((*gap* *terminal-gap*))
+                                                      (,score-fn p q))))))
                   (let ((z (emit m n (+ (length a) 0) (+ (length b) 0) a b)))
                     (make-alignment
                      :score (aref m (length a) (length b))
@@ -344,21 +349,41 @@
   (def-global-align-fun %global-align-aa aa-score)
   (def-global-align-fun %global-align-na na-score))
 
-(defgeneric global-align-aa (seq1 seq2))
+
+(defmethod global-align-aa ((seq1 string)
+                            (seq2 string))
+  (%global-align-aa seq1 seq2))
+
 (defmethod global-align-aa ((seq1 aa-sequence-with-residues)
                             (seq2 aa-sequence-with-residues))
-  (%global-align-aa (residues-string seq1)
-                    (residues-string seq2)))
+  (global-align-aa (residues-string seq1)
+                   (residues-string seq2)))
 
-(defgeneric global-align-na (seq1 seq2))
+(defmethod global-align-na ((seq1 string)
+                            (seq2 string)
+                            &key
+                            (gap *gap*)
+                            (match *match*)
+                            (mismatch *mismatch*)
+                            (transition *transition*)
+                            (initial-gap *initial-gap*)
+                            (terminal-gap *terminal-gap*))
+  (let ((*gap* gap)
+        (*match* match)
+        (*mismatch* mismatch)
+        (*transition* transition)
+        (*initial-gap* initial-gap)
+        (*terminal-gap* terminal-gap))
+    (%global-align-na seq1 seq2)))
+
 (defmethod global-align-na ((seq1 na-sequence-with-residues)
-                            (seq2 na-sequence-with-residues))
-  (%global-align-na (residues-string seq1)
-                     (residues-string seq2)))
+                            (seq2 na-sequence-with-residues)
+                            &rest args)
+  (apply #'global-align-na (residues-string seq1)
+         (residues-string seq2)
+         args))
 
-(defgeneric global-align-affine-gaps (a b score-fn))
-
-(defmethod global-align-affine-gaps ((a vector) (b vector) score-fn)
+(defun global-align-affine-gaps (a b score-fn)
   (let ((m (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
         (n (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
         (d (make-array (list (+ (length a) 1) (+ (length b) 1)) :initial-element 0))
@@ -387,30 +412,52 @@
        :dp-right-matrix r
        :dp-traceback n))))
 
-(defmethod global-align-affine-gaps ((seq1 aa-sequence-with-residues)
-                                     (seq2 aa-sequence-with-residues)
-                                     score-fn)
-  (global-align-affine-gaps (residues-string seq1)
-                            (residues-string seq2)
-                            score-fn))
+(defmethod global-align-aa-affine-gaps ((seq1 string)
+                                        (seq2 string)
+                                        &key
+                                        (gap *gap*)
+                                        (gap-extend *gap-extend*)
+                                        (initial-gap *initial-gap*)
+                                        (terminal-gap *terminal-gap*))
+  (let ((*gap* gap)
+        (*gap-extend* gap-extend)
+        (*initial-gap* initial-gap)
+        (*terminal-gap* terminal-gap))
+    (global-align-affine-gaps seq1 seq2 #'aa-score)))
 
-(defun %global-align-aa-affine-gaps (a b)
-  (global-align-affine-gaps a b #'aa-score))
-
-(defgeneric global-align-aa-affine-gaps (seq1 seq2))
 (defmethod global-align-aa-affine-gaps ((seq1 aa-sequence-with-residues)
-                                        (seq2 aa-sequence-with-residues))
-  (%global-align-aa-affine-gaps (residues-string seq1)
-                                (residues-string seq2)))
+                                        (seq2 aa-sequence-with-residues)
+                                        &rest args)
+  (apply #'global-align-aa-affine-gaps (residues-string seq1)
+         (residues-string seq2)
+         args))
 
-(defun %global-align-na-affine-gaps (a b)
-  (global-align-affine-gaps a b #'na-score))
+(defmethod global-align-na-affine-gaps ((seq1 string)
+                                        (seq2 string)
+                                        &key
+                                        (gap *gap*)
+                                        (gap-extend *gap-extend*)
+                                        (match *match*)
+                                        (mismatch *mismatch*)
+                                        (transition *transition*)
+                                        (initial-gap *initial-gap*)
+                                        (terminal-gap *terminal-gap*))
+  (let ((*gap* gap)
+        (*gap-extend* gap-extend)
+        (*match* match)
+        (*mismatch* mismatch)
+        (*transition* transition)
+        (*initial-gap* initial-gap)
+        (*terminal-gap* terminal-gap))
+    (global-align-affine-gaps seq1 seq2 #'na-score)))
 
-(defgeneric global-align-na-affine-gaps (seq1 seq2))
 (defmethod global-align-na-affine-gaps ((seq1 na-sequence-with-residues)
-                                        (seq2 na-sequence-with-residues))
-  (%global-align-na-affine-gaps (residues-string seq1)
-                                (residues-string seq2)))
+                                        (seq2 na-sequence-with-residues)
+                                        &rest args)
+  (apply #'global-align-affine-gaps
+         (residues-string seq1)
+         (residues-string seq2)
+         args))
 
 
 (defun local-align-score-affine-gaps (m n d r i j k l score-fn)
@@ -598,3 +645,8 @@
   (%local-align-na (residues-string seq1)
                    (residues-string seq2)))
 
+(defun alignment-data (align)
+  (cons
+   (alignment-dp-matrix align)
+   (multiple-value-list
+    (alignment-results align))))
