@@ -5,26 +5,23 @@
 (defpackage #:cl-bio-doc-system (:use #:cl #:asdf #:ch-asdf #:smarkup))
 (in-package #:cl-bio-doc-system)
 
-#.(smarkup::enable-quote-reader-macro)
-
 (defsystem :cl-bio-doc
   :name "cl-bio-doc"
   :author "Cyrus Harmon" 
   :version "0.2.7"
-  :depends-on (ch-asdf ch-bib ch-util puri smarkup cl-graph cl-bio
-               cl-bio-taxonomy cl-bio-entrez)
+  :depends-on (ch-asdf puri smarkup cl-bio cl-bio-taxonomy cl-bio-entrez)
   :components
   ((:module
     "doc"
     :components
-    ((:object-from-file :cl-bio-doc-sexp
-                        :pathname #p"cl-bio-doc.sexp")
+    ((:smarkup-object-from-file :cl-bio-doc-sexp
+                                :pathname #p"cl-bio-doc.sexp")
 
      (:filtered-object :cl-bio-doc-filtered-sexp
                        :filters (:lisp :smarkup-metadata :html-metadata)
                        :depends-on (:cl-bio-doc-sexp)
                        :input-object :cl-bio-doc-sexp)
-   
+
      (:filtered-object :cl-bio-doc-html-filtered-sexp
                        :filters (:html-metadata)
                        :depends-on (:cl-bio-doc-filtered-sexp)
