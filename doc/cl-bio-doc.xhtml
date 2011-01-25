@@ -2,155 +2,7 @@
 <!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><title>cl-bio</title>
-<link rel="stylesheet" type="text/css" href="simple.css"><style>
-body {
-    color: #333;
-    background-color: #FFF;
-    background-attachment: fixed;
-    font-size: 12px;
-    font-family: "helvetica neue", "helvetica" sans-serif;
-    padding: 12px;
-    counter-reset: chapter;
-}
-
-div[class&#xa0;="title"] {
-   font-style: normal;
-   font-weight: bold;
-   padding: 0px;
-   margin-top: 0px;
-   margin-bottom: 0px;
-   font-size: 20px;
-   border-bottom: 1px solid;
-}
-
-h1 {
-   padding: 2px;
-   margin-top: 2px;
-   padding-top: 4px;
-   font-size: 14px;
-   font-style: italic;
-   padding-bottom: 6px;
-}
-
-h2[class&#xa0;="author"] {
-   padding-top: 0px;
-   padding-bottom: 0px;
-   margin-top: 2px;
-   margin-bottom: 2px;
-}
-
-h2[class&#xa0;="date"] {
-   padding-top: 0px;
-   padding-bottom: 0px;
-   margin-top: 2px;
-   margin-bottom: 2px;
-}
-
-h2 {
-   font-size: 16px;
-}
-
-h3 {
-   font-size: 14px;
-}
-
-h4 {
-   font-size: 12px;
-}
-
-ul {
-   padding-left: 6px;
-   margin-left: 6px;
-}
-
-li {
-   margin-left: 12px;
-}
-
-li[class&#xa0;="pub"] {
-   padding-top: 3px;
-   margin-left: 6px;
-   font-size: 9px;
-}
-
-tbody[class&#xa0;="nav2"] { 
-   text-align: left;
-}
-
-table[class&#xa0;="nav2"] {
-   padding-top: 24px;
-}
-
-tr, td, tbody, table {
-   border-collapse: collapse;
-   vertical-align: top;
-}
-
-tbody {
-   vertical-align: top;
-}
-
-td {
-   vertical-align: top;
-   padding: 4px;
-}
-
-pre {
-  background: #ccc;
-  padding: 12px;
-}
-
-p {
-    line-height: 125%;
-  }
-
-div[class&#xa0;="lisp"] {
-    background: #DDD;
-    font-size: 12px;
-    padding: 12px;
-    margin: 4px;
-}
-
-div[class&#xa0;="lisp"] &gt; code &gt; pre {
- margin: 0px;
-}
-
-div[class&#xa0;="lisp"] code[class&#xa0;="results"] {
-  font-style: italic;
-}
-
-div[class&#xa0;="doc"] {
-    border: solid green 1px;
-    margin: 4px;
-    padding: 2px;
-}
-
-div[class&#xa0;="doc"] p {
-    margin: 4px;
-}
-
-div[class&#xa0;="doc"] p[class&#xa0;="doc-name"] {
-    font-weight: bold;
-}
-
-
-h3, h4 { text-decoration: underline; }
-a { text-decoration: none; padding: 1px 2px 1px 2px; }
-a:visited { text-decoration: none; padding: 1px 2px 1px 2px; }
-a:hover { text-decoration: none; padding: 1px 1px 1px 1px; border: 1px solid #000000; } 
-a:focus { text-decoration: none; padding: 1px 2px 1px 2px; border: none; }
-a.none { text-decoration: none; padding: 0; }
-a.none:visited { text-decoration: none; padding: 0; } 
-a.none:hover { text-decoration: none; border: none; padding: 0; } 
-a.none:focus { text-decoration: none; border: none; padding: 0; } 
-a.noborder { text-decoration: none; padding: 0; } 
-a.noborder:visited { text-decoration: none; padding: 0; } 
-a.noborder:hover { text-decoration: none; border: none; padding: 0; } 
-a.noborder:focus { text-decoration: none; border: none; padding: 0; }  
-pre.none { padding:5px; background-color:#ffffff }
-</style>
-</link>
-</head>
+<link rel="stylesheet" type="text/css" href="simple.css"/></head>
 <body><span><title>cl-bio</title>
 <p>cl-bio is a library for the representation, processing, and
   analysis of various forms of biological data.</p>
@@ -314,7 +166,7 @@ pre.none { padding:5px; background-color:#ffffff }
  of common (and not so common, completely contrived) bioinformatics
  tasks with the cl-bio library.</p>
 <span><h2>Loading a FASTA file</h2>
-<div class="lisp"><code><pre>(defparameter *dpp* (bio-io:read-fasta-file "data/dpp.fasta"))
+<div class="lisp"><code><pre>(defparameter *dpp* (bio:read-fasta-file "data/dpp.fasta"))
 </pre>
 </code>
 <code class="results">*DPP*
@@ -754,47 +606,16 @@ are set to random values.</p>
 <p>The following code can be used to retrieve all the taxa
    containing the word Canis</p>
 <pre><div class="lisp"><code><pre>(bio-taxonomy:with-bio-rucksack (rucksack)
-                                (mapcar
-                                 (lambda (x)
-                                   (cons
-                                    (bio-taxonomy:rank
-                                     (bio-taxonomy:get-tax-node
-                                      (bio-taxonomy:tax-id x) :rucksack
-                                      rucksack))
-                                    (cons (bio-taxonomy:name x)
-                                          (bio-taxonomy:name-class x))))
-                                 (bio-taxonomy:lookup-tax-name "Canis" :partial
-                                                               t :rucksack
-                                                               rucksack)))
+  (mapcar
+   (lambda (x)
+     (cons
+      (bio-taxonomy:rank
+       (bio-taxonomy:get-tax-node (bio-taxonomy:tax-id x) :rucksack rucksack))
+      (cons (bio-taxonomy:name x) (bio-taxonomy:name-class x))))
+   (bio-taxonomy:lookup-tax-name "Canis" :partial t :rucksack rucksack)))
 </pre>
 </code>
-<code class="results">(("genus" "Canis" . "scientific name")
- ("species" "Canis adustus" . "scientific name")
- ("species" "Canis aureus" . "scientific name")
- ("species" "Canis canis" . "synonym")
- ("species" "Canis domesticus" . "synonym")
- ("species" "Canis familiaris" . "scientific name")
- ("subspecies" "Canis familiaris dingo" . "scientific name")
- ("species" "Canis latrans" . "scientific name")
- ("species" "Canis lupus" . "scientific name")
- ("subspecies" "Canis lupus baileyi" . "scientific name")
- ("subspecies" "Canis lupus chanco" . "scientific name")
- ("species" "Canis lupus familiaris" . "synonym")
- ("subspecies" "Canis lupus himalayensis" . "scientific name")
- ("subspecies" "Canis lupus hodophilax" . "scientific name")
- ("subspecies" "Canis lupus indica" . "scientific name")
- ("species" "Canis lupus lycaon" . "synonym")
- ("subspecies" "Canis lupus pallipes" . "scientific name")
- ("species" "Canis lycaon" . "scientific name")
- ("species" "Canis mesomelas" . "scientific name")
- ("subspecies" "Canis mesomelas elongae" . "scientific name")
- ("species" "Canis procyonoides" . "synonym")
- ("species" "Canis rufus" . "scientific name")
- ("species" "Canis simensis" . "scientific name")
- ("species" "Canis sp." . "scientific name")
- ("genus" "Canistrum" . "scientific name")
- ("species" "Canistrum fosterianum" . "scientific name")
- ("species" "Canistrum giganteum" . "scientific name"))
+<code class="results">NIL
 </code>
 <br/></div>
 </pre>
@@ -824,8 +645,8 @@ are set to random values.</p>
 <div class="lisp"><code><pre>(mapcar #'bio:id (bio:members *esr1-gene-search*))
 </pre>
 </code>
-<code class="results">(2099 24890 13982 397435 443228 394461 259252 407238 396099 552888 751998
- 281145 463079 791249 100136461 613025 403640 100136026 2100 133522)
+<code class="results">(2099 24890 13982 407238 259252 396099 397435 791249 398734 394461 552888
+ 613025 100303417 443228 751998 100136461 403640 463079 281145 100190863)
 </code>
 <br/></div>
 <p>To retrieve a gene from entrez, one can use the bio:fetch

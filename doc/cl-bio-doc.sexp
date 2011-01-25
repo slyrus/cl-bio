@@ -2,10 +2,7 @@
   (:copyright
    "Copyright 2007, Cyrus Harmon. All Rights Reserved.")
   (:title "cl-bio: A library for representing and processing biological sequence data")
-  (:author "Cyrus L. Harmon")
-  (:bibtex-database
-   "(\"asdf:/ch-bib/lisp\" \"asdf:/ch-bib/bio\")")
-  (:bibtex-style "Science"))
+  (:author "Cyrus L. Harmon"))
  (:html-metadata (:htmlcss "simple.css") )
  
  (:span
@@ -198,7 +195,7 @@
   (:span
    (:h2 "Loading a FASTA file")
    (:lisp
-    #q{(defparameter *dpp* (bioread-fasta-file "data/dpp.fasta"))})
+    #q{(defparameter *dpp* (bio:read-fasta-file "data/dpp.fasta"))})
    
    (:lisp
     #q{(append (subseq (bio:split-string-into-lines-list
