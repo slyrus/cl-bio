@@ -55,8 +55,8 @@
    (seq1 :accessor alignment-seq1 :initarg :seq1)
    (seq2 :accessor alignment-seq2 :initarg :seq2)
    (dp-matrix :accessor alignment-dp-matrix :initarg :dp-matrix)
-   (dp-down-matrix :accessor alignment-dp-down-matrix :initarg :dp-down-matrix)
-   (dp-right-matrix :accessor alignment-dp-right-matrix :initarg :dp-right-matrix)
+   (dp-down-matrix :accessor alignment-dp-down-matrix :initarg :dp-down-matrix :initform nil)
+   (dp-right-matrix :accessor alignment-dp-right-matrix :initarg :dp-right-matrix :initform nil)
    (dp-traceback :accessor alignment-dp-traceback :initarg :dp-traceback)))
 
 (defun make-alignment (&key score seq1 seq2 dp-matrix dp-down-matrix dp-right-matrix dp-traceback)
