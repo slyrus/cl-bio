@@ -48,18 +48,11 @@
 (defgeneric local-align-aa-affine-gaps (seq1 seq2))
 (defgeneric local-align-na-affine-gaps (seq1 seq2))
 
-(defclass score-matrix ()
-  ((list :accessor score-matrix-list :initarg :list)
-   (hash :accessor score-matrix-hash :initarg :hash)
-   (scores :accessor score-matrix-scores :initarg :scores)))
-
-(defun make-score-matrix (&key list hash scores)
-  (apply #'make-instance 'score-matrix
-         (append
-          (when list `(:list ,list))
-          (when hash `(:hash ,hash))
-          (when scores `(:scores ,scores)))))
-
+;;
+;; alignment objects are used to store information about a pairwise
+;; alignment, e.g. the two sequences being aligned, the dynamic
+;; programming matrix, three matrices used in computing the alignment,
+;; and the matrix used to store the traceback.
 (defclass alignment ()
   ((score :accessor alignment-score :initarg :score)
    (seq1 :accessor alignment-seq1 :initarg :seq1)
@@ -93,25 +86,46 @@
     (print (alignment-dp-right-matrix a)))
   (print (alignment-dp-traceback a)))
 
-(defun parse-matrix (m-in)
+;;
+;; score-matrix objects describe various scoring matrices,
+;; e.g. BLOSUM62, PAM matrices, etc...
+(defclass score-matrix ()
+  ((list :accessor score-matrix-list :initarg :list)
+   (char-hash :accessor score-matrix-char-hash :initarg :char-hash)
+   (scores :accessor score-matrix-scores :initarg :scores)))
+
+(defun make-score-matrix (&key list char-hash scores)
+  (apply #'make-instance 'score-matrix
+         (append
+          (when list `(:list ,list))
+          (when char-hash `(:char-hash ,char-hash))
+          (when scores `(:scores ,scores)))))
+
+(defun parse-matrix (input-matrix)
   (let ((m (make-score-matrix
-            :hash (make-hash-table :test #'equal)
+            :char-hash (make-hash-table :test #'equal)
             :scores (make-hash-table :test #'equal))))
-    (let ((aa-list (first m-in)) (i 0))
-      (setf (score-matrix-list m) (make-array (list (length m-in)) :initial-element 0))
+    (let ((aa-list (first input-matrix)) (i 0))
+      (setf (score-matrix-list m) (make-array (list (length input-matrix)) :initial-element 0))
       (dolist (symbol aa-list)
         (let ((c (aref (string symbol) 0))) 
           (setf (aref (score-matrix-list m) i) c)
-          (setf (gethash c (score-matrix-hash m)) i)
+          (setf (gethash c (score-matrix-char-hash m)) i)
           (incf i))))
     (let ((i 0) (j 0))
-      (dolist (l (rest m-in))
+      (dolist (l (rest input-matrix))
         (dolist (c l)
           (setf (gethash (list i j) (score-matrix-scores m)) c)
           (incf j))
         (setf j 0)
         (incf i)))
     m))
+
+;;
+;; FIXME: this should be memoized!
+(defun get-score (m k l)  
+  (gethash (list (gethash k (score-matrix-char-hash m)) (gethash l (score-matrix-char-hash m)))
+           (score-matrix-scores m)))
 
 (defparameter *blosum-62*
   (parse-matrix
@@ -121,10 +135,6 @@
          (reduce #'asdf:find-component
                  (list nil "cl-bio-align" "align" "matrix" "blosum62"))))
      (read matrix))))
-
-(defun get-score (m k l)  
-  (gethash (list (gethash k (score-matrix-hash m)) (gethash l (score-matrix-hash m)))
-           (score-matrix-scores m)))
 
 (defun aa-score (k l &key (scoring-matrix *blosum-62*))
   (get-score scoring-matrix k l))
