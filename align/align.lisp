@@ -639,11 +639,25 @@
   (%local-align-aa (residues-string seq1)
                    (residues-string seq2)))
 
-(defgeneric local-align-na (seq1 seq2))
+(defgeneric local-align-na (seq1 seq2 &key gap match mismatch))
+
+(defmethod local-align-na ((seq1 string)
+                           (seq2 string)
+                           &key
+                             (gap *gap*)
+                             (match *match*)
+                             (mismatch *mismatch*))
+  (let ((*gap* gap)
+        (*match* match)
+        (*mismatch* mismatch))
+    (%local-align-na seq1 seq2)))
+
 (defmethod local-align-na ((seq1 na-sequence-with-residues)
-                           (seq2 na-sequence-with-residues))
-  (%local-align-na (residues-string seq1)
-                   (residues-string seq2)))
+                            (seq2 na-sequence-with-residues)
+                            &rest args)
+  (apply #'local-align-na
+         (residues-string seq1) (residues-string seq2)
+         args))
 
 (defun alignment-data (align)
   (cons
