@@ -33,10 +33,20 @@
 (in-package :bio-align)
 
 (defgeneric global-align-aa (seq1 seq2))
-(defgeneric global-align-na (seq1 seq2 &key gap match mismatch transition initial-gap terminal-gap))
-(defgeneric global-align-aa-affine-gaps (seq1 seq2 &key gap gap-extend initial-gap terminal-gap))
-(defgeneric global-align-na-affine-gaps (seq1 seq2 &key gap gap-extend match mismatch
-                                              transition initial-gap terminal-gap))
+(defgeneric global-align-na (seq1 seq2
+                             &key gap match mismatch transition
+                               initial-gap terminal-gap))
+
+(defgeneric global-align-aa-affine-gaps (seq1 seq2
+                                         &key gap gap-extend initial-gap terminal-gap))
+(defgeneric global-align-na-affine-gaps (seq1 seq2
+                                         &key gap gap-extend match mismatch
+                                           transition initial-gap terminal-gap))
+
+(defgeneric local-align-aa (seq1 seq2))
+(defgeneric local-align-na (seq1 seq2 &key gap match mismatch))
+(defgeneric local-align-aa-affine-gaps (seq1 seq2))
+(defgeneric local-align-na-affine-gaps (seq1 seq2))
 
 (defclass score-matrix ()
   ((list :accessor score-matrix-list :initarg :list)
@@ -532,7 +542,6 @@
 (defun %local-align-aa-affine-gaps (a b)
   (local-align-affine-gaps a b #'aa-score))
 
-(defgeneric local-align-aa-affine-gaps (seq1 seq2))
 (defmethod local-align-aa-affine-gaps ((seq1 na-sequence-with-residues)
                                        (seq2 na-sequence-with-residues))
   (%local-align-aa-affine-gaps (residues-string seq1)
@@ -541,7 +550,6 @@
 (defun %local-align-na-affine-gaps (a b)
   (local-align-affine-gaps a b #'na-score))
 
-(defgeneric local-align-na-affine-gaps (seq1 seq2))
 (defmethod local-align-na-affine-gaps ((seq1 na-sequence-with-residues)
                                        (seq2 na-sequence-with-residues))
   (%local-align-na-affine-gaps (residues-string seq1)
@@ -633,13 +641,10 @@
 (defun %local-align-na (a b)
   (local-align a b #'na-score))
 
-(defgeneric local-align-aa (seq1 seq2))
 (defmethod local-align-aa ((seq1 aa-sequence-with-residues)
                            (seq2 aa-sequence-with-residues))
   (%local-align-aa (residues-string seq1)
                    (residues-string seq2)))
-
-(defgeneric local-align-na (seq1 seq2 &key gap match mismatch))
 
 (defmethod local-align-na ((seq1 string)
                            (seq2 string)
