@@ -135,7 +135,7 @@
 (defparameter *gap* -8)
 (defparameter *initial-gap* 0)
 (defparameter *terminal-gap* 0)
-(defparameter *gap-extgend* -2)
+(defparameter *gap-extend* -2)
 (defparameter *match* 4)
 (defparameter *mismatch* -4)
 (defparameter *transition* nil)
