@@ -19,6 +19,7 @@
               list)
     (nreverse results)))
 
+#+nil
 (defun escape-uri-query-parameter (param)
   (puri::encode-escaped-encoding
    param
@@ -29,9 +30,12 @@
   (format nil "~{~{~A=~A~}~^&~}"
           (mapcar #'(lambda (x)
                       (mapcar #'(lambda (y)
-                                  (escape-uri-query-parameter (cond ((stringp y) y)
-                                                                    ((numberp y)
-                                                                     (format nil "~A" y)))))
+                                  ;; we used to call
+                                  ;; escape-uri-query-parameter
+                                  ;; here. let's try without.
+                                  (cond ((stringp y) y)
+                                        ((numberp y)
+                                         (format nil "~A" y))))
                               x))
                   query-list)))
 
@@ -41,13 +45,14 @@
 ;;; utility function for copying remote documents
 (defun http-get-file (url file
                       &key
-                      (if-exists :supersede)
-                      (if-does-not-exist :create))
+                        parameters
+                        (if-exists :supersede)
+                        (if-does-not-exist :create))
   (with-open-file (out file
                        :direction :output
                        :if-exists if-exists
                        :if-does-not-exist if-does-not-exist)
-    (let ((stream (drakma:http-request url :want-stream t)))
+    (let ((stream (drakma:http-request url :parameters parameters :want-stream t)))
       (loop for line = (read-line stream nil)
          while line
          do (write-line line out)))))
