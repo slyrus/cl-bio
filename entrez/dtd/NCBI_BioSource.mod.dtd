@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 08/18/2008 23:06:55
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 09/28/2012 23:04:43
      ============================================ -->
 
 <!-- ============================================ -->
@@ -19,7 +19,8 @@
 -->
 
 <!-- Elements used by other modules:
-          BioSource -->
+          BioSource,
+          SubSource -->
 
 <!-- Elements referenced from other modules:
           Org-ref FROM NCBI-Organism -->
@@ -185,6 +186,9 @@
         mating-type |
         linkage-group |
         haplogroup |
+        whole-replicon |
+        phenotype |
+        altitude |
         other
         ) #IMPLIED >
 

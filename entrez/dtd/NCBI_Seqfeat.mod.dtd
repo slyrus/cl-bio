@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 2.0.0
-     ::DATATOOL:: on 04/26/2010 23:04:43
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 11/29/2013 23:03:58
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 189795 $
+$Revision: 413228 $
 **********************************************************************
 
   NCBI Sequence Feature elements
@@ -22,7 +22,8 @@ $Revision: 189795 $
 <!-- Elements used by other modules:
           Seq-feat,
           Feat-id,
-          Genetic-code -->
+          Genetic-code,
+          ModelEvidenceSupport -->
 
 <!-- Elements referenced from other modules:
           Gene-ref FROM NCBI-Gene,
@@ -31,6 +32,7 @@ $Revision: 189795 $
           Variation-ref FROM NCBI-Variation,
           BioSource FROM NCBI-BioSource,
           RNA-ref FROM NCBI-RNA,
+          Seq-id,
           Seq-loc,
           Giimport-id FROM NCBI-Seqloc,
           Pubdesc,
@@ -38,6 +40,8 @@ $Revision: 189795 $
           Heterogen FROM NCBI-Sequence,
           Rsite-ref FROM NCBI-Rsite,
           Txinit FROM NCBI-TxInit,
+          DOI,
+          PubMedId FROM NCBI-Biblio,
           Pub-set FROM NCBI-Pub,
           Object-id,
           Dbtag,
@@ -88,7 +92,8 @@ $Revision: 189795 $
         Seq-feat_pseudo?, 
         Seq-feat_except-text?, 
         Seq-feat_ids?, 
-        Seq-feat_exts?)>
+        Seq-feat_exts?, 
+        Seq-feat_support?)>
 <!--
 *** Feature identifiers ********************************
 *
@@ -159,6 +164,9 @@ $Revision: 189795 $
 
 <!-- set of extensions; will replace 'ext' field -->
 <!ELEMENT Seq-feat_exts (User-object*)>
+
+<!-- will replace /experiment, /inference, model-evidence -->
+<!ELEMENT Seq-feat_support (SeqFeatSupport)>
 
 
 <!ELEMENT SeqFeatData (
@@ -315,6 +323,163 @@ $Revision: 189795 $
 
 <!-- the specific data -->
 <!ELEMENT SeqFeatXref_data (SeqFeatData)>
+
+
+<!ELEMENT SeqFeatSupport (
+        SeqFeatSupport_experiment?, 
+        SeqFeatSupport_inference?, 
+        SeqFeatSupport_model-evidence?)>
+
+<!ELEMENT SeqFeatSupport_experiment (ExperimentSupport*)>
+
+<!ELEMENT SeqFeatSupport_inference (InferenceSupport*)>
+
+<!ELEMENT SeqFeatSupport_model-evidence (ModelEvidenceSupport*)>
+
+
+<!ELEMENT EvidenceCategory (%INTEGER;)>
+<!ATTLIST EvidenceCategory value (
+        not-set |
+        coordinates |
+        description |
+        existence
+        ) #IMPLIED >
+
+
+
+<!ELEMENT ExperimentSupport (
+        ExperimentSupport_category?, 
+        ExperimentSupport_explanation, 
+        ExperimentSupport_pmids?, 
+        ExperimentSupport_dois?)>
+
+<!ELEMENT ExperimentSupport_category (EvidenceCategory)>
+
+<!ELEMENT ExperimentSupport_explanation (#PCDATA)>
+
+<!ELEMENT ExperimentSupport_pmids (PubMedId*)>
+
+<!ELEMENT ExperimentSupport_dois (DOI*)>
+
+
+<!ELEMENT Program-id (
+        Program-id_name, 
+        Program-id_version?)>
+
+<!ELEMENT Program-id_name (#PCDATA)>
+
+<!ELEMENT Program-id_version (#PCDATA)>
+
+
+<!ELEMENT EvidenceBasis (
+        EvidenceBasis_programs?, 
+        EvidenceBasis_accessions?)>
+
+<!ELEMENT EvidenceBasis_programs (Program-id*)>
+
+<!ELEMENT EvidenceBasis_accessions (Seq-id*)>
+
+
+<!ELEMENT InferenceSupport (
+        InferenceSupport_category?, 
+        InferenceSupport_type?, 
+        InferenceSupport_other-type?, 
+        InferenceSupport_same-species?, 
+        InferenceSupport_basis, 
+        InferenceSupport_pmids?, 
+        InferenceSupport_dois?)>
+
+<!ELEMENT InferenceSupport_category (EvidenceCategory)>
+
+<!ELEMENT InferenceSupport_type (%INTEGER;)>
+<!ATTLIST InferenceSupport_type value (
+        not-set |
+        similar-to-sequence |
+        similar-to-aa |
+        similar-to-dna |
+        similar-to-rna |
+        similar-to-mrna |
+        similiar-to-est |
+        similar-to-other-rna |
+        profile |
+        nucleotide-motif |
+        protein-motif |
+        ab-initio-prediction |
+        alignment |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT InferenceSupport_other-type (#PCDATA)>
+
+<!ELEMENT InferenceSupport_same-species EMPTY>
+<!ATTLIST InferenceSupport_same-species value ( true | false ) "false" >
+
+
+<!ELEMENT InferenceSupport_basis (EvidenceBasis)>
+
+<!ELEMENT InferenceSupport_pmids (PubMedId*)>
+
+<!ELEMENT InferenceSupport_dois (DOI*)>
+
+
+<!ELEMENT ModelEvidenceItem (
+        ModelEvidenceItem_id, 
+        ModelEvidenceItem_exon-count?, 
+        ModelEvidenceItem_exon-length?, 
+        ModelEvidenceItem_full-length?, 
+        ModelEvidenceItem_supports-all-exon-combo?)>
+
+<!ELEMENT ModelEvidenceItem_id (Seq-id)>
+
+<!ELEMENT ModelEvidenceItem_exon-count (%INTEGER;)>
+
+<!ELEMENT ModelEvidenceItem_exon-length (%INTEGER;)>
+
+<!ELEMENT ModelEvidenceItem_full-length EMPTY>
+<!ATTLIST ModelEvidenceItem_full-length value ( true | false ) "false" >
+
+
+<!ELEMENT ModelEvidenceItem_supports-all-exon-combo EMPTY>
+<!ATTLIST ModelEvidenceItem_supports-all-exon-combo value ( true | false ) "false" >
+
+
+
+<!ELEMENT ModelEvidenceSupport (
+        ModelEvidenceSupport_method?, 
+        ModelEvidenceSupport_mrna?, 
+        ModelEvidenceSupport_est?, 
+        ModelEvidenceSupport_protein?, 
+        ModelEvidenceSupport_identification?, 
+        ModelEvidenceSupport_dbxref?, 
+        ModelEvidenceSupport_exon-count?, 
+        ModelEvidenceSupport_exon-length?, 
+        ModelEvidenceSupport_full-length?, 
+        ModelEvidenceSupport_supports-all-exon-combo?)>
+
+<!ELEMENT ModelEvidenceSupport_method (#PCDATA)>
+
+<!ELEMENT ModelEvidenceSupport_mrna (ModelEvidenceItem*)>
+
+<!ELEMENT ModelEvidenceSupport_est (ModelEvidenceItem*)>
+
+<!ELEMENT ModelEvidenceSupport_protein (ModelEvidenceItem*)>
+
+<!ELEMENT ModelEvidenceSupport_identification (Seq-id)>
+
+<!ELEMENT ModelEvidenceSupport_dbxref (Dbtag*)>
+
+<!ELEMENT ModelEvidenceSupport_exon-count (%INTEGER;)>
+
+<!ELEMENT ModelEvidenceSupport_exon-length (%INTEGER;)>
+
+<!ELEMENT ModelEvidenceSupport_full-length EMPTY>
+<!ATTLIST ModelEvidenceSupport_full-length value ( true | false ) "false" >
+
+
+<!ELEMENT ModelEvidenceSupport_supports-all-exon-combo EMPTY>
+<!ATTLIST ModelEvidenceSupport_supports-all-exon-combo value ( true | false ) "false" >
+
 
 <!--
 *** CdRegion ***********************************************
@@ -513,6 +678,9 @@ $Revision: 189795 $
     end-seq	-  Clone placed by end sequence
     insert-alignment	-  Clone placed by insert alignment
     sts	-  Clone placed by STS
+    end-seq-insert-alignment	-  combined end-seq and insert align
+    external	-  Placement provided externally
+    curated	-  Human placed or approved
 -->
 <!ATTLIST Clone-ref_placement-method value (
         end-seq |
@@ -520,6 +688,9 @@ $Revision: 189795 $
         sts |
         fish |
         fingerprint |
+        end-seq-insert-alignment |
+        external |
+        curated |
         other
         ) #IMPLIED >
 
@@ -535,7 +706,8 @@ $Revision: 189795 $
         Clone-seq_confidence?, 
         Clone-seq_location, 
         Clone-seq_seq?, 
-        Clone-seq_align-id?)>
+        Clone-seq_align-id?, 
+        Clone-seq_support?)>
 
 <!ELEMENT Clone-seq_type (%INTEGER;)>
 <!ATTLIST Clone-seq_type value (
@@ -550,10 +722,13 @@ $Revision: 189795 $
 <!--
     multiple	-  Multiple hits
     na	-  Unspecified
-    nohit-rep	-  No hits, repetitive
-    nohitnorep	-  No hits, not repetitive
+    nohit-rep	-  No hits, end flagged repetitive
+    nohitnorep	-  No hits, end not flagged repetitive
     other-chrm	-  Hit on different chromosome
     virtual	-  Virtual (hasn't been sequenced)
+    multiple-rep	-  Multiple hits, end flagged repetitive
+    multiplenorep	-  Multiple hits, end not flagged repetitive
+    no-hit	-  No hits
 -->
 <!ATTLIST Clone-seq_confidence value (
         multiple |
@@ -563,6 +738,9 @@ $Revision: 189795 $
         other-chrm |
         unique |
         virtual |
+        multiple-rep |
+        multiplenorep |
+        no-hit |
         other
         ) #IMPLIED >
 
@@ -573,5 +751,22 @@ $Revision: 189795 $
 <!-- clone sequence location -->
 <!ELEMENT Clone-seq_seq (Seq-loc)>
 
+<!-- internal alignment identifier -->
 <!ELEMENT Clone-seq_align-id (Dbtag)>
+
+<!ELEMENT Clone-seq_support (%INTEGER;)>
+
+<!--
+    prototype	-  sequence used to place clone
+    supporting	-  sequence supports placement
+    supports-other	-  supports a different placement
+    non-supporting	-  does not support any placement
+-->
+<!ATTLIST Clone-seq_support value (
+        prototype |
+        supporting |
+        supports-other |
+        non-supporting
+        ) #IMPLIED >
+
 

@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seq.asn"
-     ::DATATOOL:: by application DATATOOL version 2.0.0
-     ::DATATOOL:: on 04/26/2010 23:04:43
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 09/25/2012 23:04:47
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 189794 $
+$Revision: 375986 $
 **********************************************************************
 
   NCBI Sequence elements
@@ -47,7 +47,8 @@ $Revision: 189794 $
           Object-id,
           User-object FROM NCBI-General,
           Seq-align FROM NCBI-Seqalign,
-          Seq-feat FROM NCBI-Seqfeat,
+          Seq-feat,
+          ModelEvidenceSupport FROM NCBI-Seqfeat,
           Seq-graph FROM NCBI-Seqres,
           Pub-equiv FROM NCBI-Pub,
           Org-ref FROM NCBI-Organism,
@@ -115,7 +116,8 @@ $Revision: 189794 $
         Seqdesc_pdb | 
         Seqdesc_het | 
         Seqdesc_source | 
-        Seqdesc_molinfo)>
+        Seqdesc_molinfo | 
+        Seqdesc_modelev)>
 
 <!-- type of molecule -->
 <!ELEMENT Seqdesc_mol-type (GIBB-mol)>
@@ -189,6 +191,9 @@ $Revision: 189794 $
 <!-- info on the molecule and techniques -->
 <!ELEMENT Seqdesc_molinfo (MolInfo)>
 
+<!-- model evidence for XM records -->
+<!ELEMENT Seqdesc_modelev (ModelEvidenceSupport)>
+
 <!--
 ******* NOTE:
 *       mol-type, modif, method, and org are consolidated and expanded
@@ -216,7 +221,7 @@ $Revision: 189794 $
 <!ELEMENT MolInfo_biomol (%INTEGER;)>
 
 <!--
-    pre-RNA	-  precursor RNA of any sort really 
+    pre-RNA	-  precursor RNA of any sort really
     other-genetic	-  other genetic material
     genomic-mRNA	-  reported a mix of genomic and cdna sequence
     cRNA	-  viral RNA genome copy intermediate
@@ -343,7 +348,7 @@ $Revision: 189794 $
 <!ELEMENT GIBB-mol %ENUM;>
 
 <!--
-    pre-mRNA	-  precursor RNA of any sort really 
+    pre-mRNA	-  precursor RNA of any sort really
     other-genetic	-  other genetic material
     genomic-mRNA	-  reported a mix of genomic and cdna sequence
 -->
@@ -843,9 +848,15 @@ $Revision: 189794 $
 
 <!ELEMENT Seq-gap (
         Seq-gap_type, 
-        Seq-gap_linkage?)>
+        Seq-gap_linkage?, 
+        Seq-gap_linkage-evidence?)>
 
 <!ELEMENT Seq-gap_type (%INTEGER;)>
+
+<!--
+    fragment	-  Deprecated. Used only for AGP 1.1
+    clone	-  Deprecated. Used only for AGP 1.1
+-->
 <!ATTLIST Seq-gap_type value (
         unknown |
         fragment |
@@ -856,6 +867,7 @@ $Revision: 189794 $
         telomere |
         repeat |
         contig |
+        scaffold |
         other
         ) #IMPLIED >
 
@@ -864,6 +876,28 @@ $Revision: 189794 $
 <!ATTLIST Seq-gap_linkage value (
         unlinked |
         linked |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Seq-gap_linkage-evidence (Linkage-evidence*)>
+
+
+<!ELEMENT Linkage-evidence (
+        Linkage-evidence_type)>
+
+<!ELEMENT Linkage-evidence_type (%INTEGER;)>
+<!ATTLIST Linkage-evidence_type value (
+        paired-ends |
+        align-genus |
+        align-xgenus |
+        align-trnscpt |
+        within-clone |
+        clone-contig |
+        map |
+        strobe |
+        unspecified |
+        pcr |
         other
         ) #IMPLIED >
 
