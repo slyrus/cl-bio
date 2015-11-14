@@ -196,24 +196,24 @@
      (emit m n i (1- j) a b
            (cons #\- s1) (cons (aref b (1- j)) s2)))
     ((or (= j 0) (= (aref n i j) +up+))
-     (emit m n (- i 1) j a b
-           (cons (aref a (- i 1)) s1) (cons #\- s2)))
+     (emit m n (1- i) j a b
+           (cons (aref a (1- i)) s1) (cons #\- s2)))
     (t
-     (emit m n (- i 1) (- j 1) a b
-           (cons (aref a (- i 1)) s1) (cons (aref b (- j 1)) s2)))))
+     (emit m n (1- i) (1- j) a b
+           (cons (aref a (1- i)) s1) (cons (aref b (1- j)) s2)))))
 
 (defun global-align-score (m n i j k l score-fn)
   (cond
     ((and (> i 0) (= j 0))
-     (let ((y (+ (aref m (- i 1) j) (apply score-fn (list k +gap-char+)))))
+     (let ((y (+ (aref m (1- i) j) (apply score-fn (list k +gap-char+)))))
        (setf (aref m i j) y) (setf (aref n i j) +up+)))
     ((and (= i 0) (> j 0))       
-     (let ((z (+ (aref m i (- j 1)) (apply score-fn (list +gap-char+ l)))))
+     (let ((z (+ (aref m i (1- j)) (apply score-fn (list +gap-char+ l)))))
        (setf (aref m i j) z) (setf (aref n i j) +left+)))
     (t
-     (let ((x (+ (aref m (- i 1) (- j 1)) (apply score-fn (list k l))))
-           (y (+ (aref m (- i 1) j) (apply score-fn (list k +gap-char+))))
-           (z (+ (aref m i (- j 1)) (apply score-fn (list +gap-char+ l)))))
+     (let ((x (+ (aref m (1- i) (1- j)) (apply score-fn (list k l))))
+           (y (+ (aref m (1- i) j) (apply score-fn (list k +gap-char+))))
+           (z (+ (aref m i (1- j)) (apply score-fn (list +gap-char+ l)))))
        (cond
          ((and (>= x y) (>= x z))
           (setf (aref m i j) x
@@ -228,27 +228,27 @@
 (defun global-align-score-affine-gaps (m n d r i j k l score-fn)
   (cond
     ((and (> i 0) (= j 0))
-     (let ((y (max (+ (aref d (- i 1) j) (if (> i 1) *gap-extend* *gap*))
-                   (+ (aref m (- i 1) j) (apply score-fn (list k +gap-char+))))))
+     (let ((y (max (+ (aref d (1- i) j) (if (> i 1) *gap-extend* *gap*))
+                   (+ (aref m (1- i) j) (apply score-fn (list k +gap-char+))))))
        (setf (aref m i j) y)
        (setf (aref n i j) +up+)
        (setf (aref d i j) y)
        (setf (aref r i j)
-             (+ (aref r (- i 1) j) *gap*))))
+             (+ (aref r (1- i) j) *gap*))))
     ((and (= i 0) (> j 0))
-     (let ((z (max (+ (aref r i (- j 1))  (if (> j 1) *gap-extend* *gap*))
-                   (+ (aref m i (- j 1)) (apply score-fn (list +gap-char+ l))))))
+     (let ((z (max (+ (aref r i (1- j))  (if (> j 1) *gap-extend* *gap*))
+                   (+ (aref m i (1- j)) (apply score-fn (list +gap-char+ l))))))
        (setf (aref m i j) z)
        (setf (aref n i j) +left+)
        (setf (aref r i j) z)
        (setf (aref d i j)
-             (+ (aref d i (- j 1)) *gap*))))
+             (+ (aref d i (1- j)) *gap*))))
     (t
-     (let ((x (+ (aref m (- i 1) (- j 1)) (apply score-fn (list k l))))
-           (y (max (+ (aref d (- i 1) j) *gap-extend*)
-                   (+ (aref m (- i 1) j) (apply score-fn (list k +gap-char+)))))
-           (z (max (+ (aref r i (- j 1)) *gap-extend*)
-                   (+ (aref m i (- j 1)) (apply score-fn (list +gap-char+ l))))))
+     (let ((x (+ (aref m (1- i) (1- j)) (apply score-fn (list k l))))
+           (y (max (+ (aref d (1- i) j) *gap-extend*)
+                   (+ (aref m (1- i) j) (apply score-fn (list k +gap-char+)))))
+           (z (max (+ (aref r i (1- j)) *gap-extend*)
+                   (+ (aref m i (1- j)) (apply score-fn (list +gap-char+ l))))))
        (setf (aref d i j) y)
        (setf (aref r i j) z)
        (cond
@@ -269,17 +269,17 @@
     (declare (type (simple-array (signed-byte 31) (* *)) m n))
     (dotimes (i (1+ (length a)))
       (if (> i 0)
-          (global-align-score m n i 0 (aref a (- i 1)) +gap-char+ score-fn)
+          (global-align-score m n i 0 (aref a (1- i)) +gap-char+ score-fn)
           (setf (aref m i 0) 0)))
     (dotimes (j (1+ (length b)))
       (if (> j 0)
-          (global-align-score m n 0 j +gap-char+ (aref b (- j 1)) score-fn)
+          (global-align-score m n 0 j +gap-char+ (aref b (1- j)) score-fn)
           (setf (aref m 0 j) 0)))
     (do ((i 1 (1+ i)))
         ((> i (length a)))
       (do ((j 1 (1+ j)))
           ((> j (length b)))
-          (global-align-score m n i j (aref a (- i 1)) (aref b (- j 1)) score-fn)))
+          (global-align-score m n i j (aref a (1- i)) (aref b (1- j)) score-fn)))
     (let ((z (emit m n (length a) (length b) a b)))
       (make-alignment
        :score (aref m (length a) (length b))
@@ -329,12 +329,12 @@
                   (let ((imax (length a))
                         (jmax (length b)))
                     (loop for i from 1 to imax
-                       do (global-align-score-mac m n i 0 (aref a (- i 1)) +gap-char+
+                       do (global-align-score-mac m n i 0 (aref a (1- i)) +gap-char+
                                                   (lambda (p q)
                                                     (or *initial-gap*
                                                         (,score-fn p q)))))
                     (loop for j from 1 to jmax
-                       do (global-align-score-mac m n 0 j +gap-char+ (aref b (- j 1))
+                       do (global-align-score-mac m n 0 j +gap-char+ (aref b (1- j))
                                                   (lambda (p q)
                                                     (or *initial-gap*
                                                         (,score-fn p q)))))
@@ -410,18 +410,18 @@
         (r (make-array (list (1+ (length a)) (1+ (length b))) :initial-element 0)))
     (dotimes (i (1+ (length a)))
       (if (> i 0)
-          (global-align-score-affine-gaps m n d r i 0 (aref a (- i 1)) +gap-char+ score-fn)
+          (global-align-score-affine-gaps m n d r i 0 (aref a (1- i)) +gap-char+ score-fn)
           (setf (aref m i 0) 0)))
     (dotimes (j (1+ (length b)))
       (if (> j 0)
-          (global-align-score-affine-gaps m n d r 0 j +gap-char+ (aref b (- j 1)) score-fn)
+          (global-align-score-affine-gaps m n d r 0 j +gap-char+ (aref b (1- j)) score-fn)
           (setf (aref m 0 j) 0)))
     (do ((i 1 (1+ i)))
         ((> i (length a)))
         (do ((j 1 (1+ j)))
             ((> j (length b)))
           (global-align-score-affine-gaps m n d r i j
-                                          (aref a (- i 1)) (aref b (- j 1)) score-fn)))
+                                          (aref a (1- i)) (aref b (1- j)) score-fn)))
     (let ((z (emit m n (length a) (length b) a b)))
       (make-alignment
        :score (aref m (length a) (length b))
@@ -483,25 +483,25 @@
 (defun local-align-score-affine-gaps (m n d r i j k l score-fn)
   (cond
     ((and (> i 0) (= j 0))
-     (let ((y (max (+ (aref d (- i 1) j) (if (> i 1) *gap-extend* *gap*))
-                   (+ (aref m (- i 1) j) (apply score-fn (list k +gap-char+))))))
+     (let ((y (max (+ (aref d (1- i) j) (if (> i 1) *gap-extend* *gap*))
+                   (+ (aref m (1- i) j) (apply score-fn (list k +gap-char+))))))
        (if (> 0 y)
            (progn (setf (aref m i j) 0) (setf (aref n i j) +terminate+) 0)
            (progn (setf (aref m i j) y) (setf (aref n i j) +up+)))
        (setf (aref d i j) y)))
     ((and (= i 0) (> j 0))       
-     (let ((z (max (+ (aref r i (- j 1)) (if (> j 1) *gap-extend* *gap*))
-                   (+ (aref m i (- j 1)) (apply score-fn (list +gap-char+ l))))))
+     (let ((z (max (+ (aref r i (1- j)) (if (> j 1) *gap-extend* *gap*))
+                   (+ (aref m i (1- j)) (apply score-fn (list +gap-char+ l))))))
        (if (> 0 z)
            (progn (setf (aref m i j) 0) (setf (aref n i j) +terminate+) 0)
            (progn (setf (aref m i j) z) (setf (aref n i j) +left+)))
        (setf (aref r i j) z)))
     (t
-     (let ((x (+ (aref m (- i 1) (- j 1)) (apply score-fn (list k l))))
-           (y (max (+ (aref d (- i 1) j) *gap-extend*)
-                   (+ (aref m (- i 1) j) (apply score-fn (list k +gap-char+)))))
-           (z (max (+ (aref r i (- j 1)) *gap-extend*)
-                   (+ (aref m i (- j 1)) (apply score-fn (list +gap-char+ l))))))
+     (let ((x (+ (aref m (1- i) (1- j)) (apply score-fn (list k l))))
+           (y (max (+ (aref d (1- i) j) *gap-extend*)
+                   (+ (aref m (1- i) j) (apply score-fn (list k +gap-char+)))))
+           (z (max (+ (aref r i (1- j)) *gap-extend*)
+                   (+ (aref m i (1- j)) (apply score-fn (list +gap-char+ l))))))
        (setf (aref d i j) y)
        (setf (aref r i j) z)
        (cond
@@ -533,7 +533,7 @@
       (do ((j 1 (1+ j)))
           ((> j (length b)))
         (let ((s (local-align-score-affine-gaps m n d r i j
-                                                (aref a (- i 1)) (aref b (- j 1)) score-fn)))
+                                                (aref a (1- i)) (aref b (1- j)) score-fn)))
           (if (> s maxscore)
               (progn
                 (setf maxscore s)
@@ -578,7 +578,7 @@
            (type (simple-array fixnum (* *)) n m))
   (cond
     ((and (> i 0) (= j 0))
-     (let ((y (+ (aref m (- i 1) j) (apply score-fn (list k +gap-char+)))))
+     (let ((y (+ (aref m (1- i) j) (apply score-fn (list k +gap-char+)))))
        (declare (type fixnum y))
        (if (> 0 y)
            (progn
@@ -588,15 +588,15 @@
            (setf (aref m i j) y
                  (aref n i j) +up+))))
     ((and (= i 0) (> j 0))       
-     (let ((z (+ (aref m i (- j 1)) (apply score-fn (list +gap-char+ l)))))
+     (let ((z (+ (aref m i (1- j)) (apply score-fn (list +gap-char+ l)))))
        (declare (type fixnum z))
        (if (> 0 z)
            (progn (setf (aref m i j) 0) (setf (aref n i j) +terminate+) 0)
            (progn (setf (aref m i j) z) (setf (aref n i j) +left+)))))
     (t
-     (let ((x (+ (aref m (- i 1) (- j 1)) (apply score-fn (list k l))))
-           (y (+ (aref m (- i 1) j) (apply score-fn (list k +gap-char+))))
-           (z (+ (aref m i (- j 1)) (apply score-fn (list +gap-char+ l)))))
+     (let ((x (+ (aref m (1- i) (1- j)) (apply score-fn (list k l))))
+           (y (+ (aref m (1- i) j) (apply score-fn (list k +gap-char+))))
+           (z (+ (aref m i (1- j)) (apply score-fn (list +gap-char+ l)))))
        (declare (type fixnum x y z))
        (cond
          ((and (> 0 x) (> 0 y) (> 0 z))
@@ -631,7 +631,7 @@
           ((> j lenb))
         (declare (type fixnum j))
         (let ((s (local-align-score m n i j
-                                    (aref a (- i 1)) (aref b (- j 1)) score-fn)))
+                                    (aref a (1- i)) (aref b (1- j)) score-fn)))
           (if (> s maxscore)
               (progn
                 (setf maxscore s)
