@@ -4,7 +4,8 @@
 (defparameter *feature-annotation-type-list*
   '(("exon" . bio:exon)
     ("cds" . bio::cds)
-    ("STS" . bio::sts)))
+    ("STS" . bio::sts)
+    ("repeat_region" . bio::repeat-region)))
 
 (defparameter *feature-annotation-type-hash-table*
   (make-hash-table :test 'equalp))
