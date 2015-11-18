@@ -219,7 +219,6 @@
           (setf (aref m i j) z
                 (aref n i j) +left+)))))))
 
-;;; FIXME! global-align-scare-affine-gaps doesn't use the *tarminal-gap* and *terminal-gap-extend*
 (defun global-align-score-affine-gaps (m n d r i j k l score-fn)
   (cond
     ((and (> i 0) (= j 0))
