@@ -22,11 +22,6 @@
                        :depends-on (:cl-bio-doc-sexp)
                        :input-object :cl-bio-doc-sexp)
 
-     (:filtered-object :cl-bio-doc-html-filtered-sexp
-                       :filters (:html-metadata)
-                       :depends-on (:cl-bio-doc-filtered-sexp)
-                       :input-object :cl-bio-doc-filtered-sexp)
-
      (:object-xhtml-file :cl-bio-doc-xhtml
                          :pathname #p"cl-bio-doc.xhtml"
                          :depends-on (:cl-bio-doc-filtered-sexp)
