@@ -33,10 +33,10 @@
 (in-package :bio-align)
 
 (defgeneric global-align-aa (seq1 seq2))
-(defgeneric global-align-na (seq1 seq2 &key gap match mismatch transition initial-gap terminal-gap))
-(defgeneric global-align-aa-affine-gaps (seq1 seq2 &key gap gap-extend initial-gap terminal-gap))
+(defgeneric global-align-na (seq1 seq2 &key gap gap-extend match mismatch transition terminal-gap terminal-gap-extend))
+(defgeneric global-align-aa-affine-gaps (seq1 seq2 &key gap gap-extend terminal-gap terminal-gap-extend))
 (defgeneric global-align-na-affine-gaps (seq1 seq2 &key gap gap-extend match mismatch
-                                              transition initial-gap terminal-gap))
+                                              transition terminal-gap terminal-gap-extend))
 
 (defclass score-matrix ()
   ((list :accessor score-matrix-list :initarg :list)
@@ -133,15 +133,15 @@
 (declaim (type base-char +gap-char+))
 
 (defparameter *gap* -8)
-(defparameter *initial-gap* 0)
 (defparameter *terminal-gap* 0)
 (defparameter *gap-extend* -2)
+(defparameter *terminal-gap-extend* 0)
 (defparameter *match* 4)
 (defparameter *mismatch* -4)
 (defparameter *transition* nil)
 
-(declaim (type (signed-byte 8) *gap* *gap-extend* *match* *mismatch*))
-(declaim (type (or null (signed-byte 8)) *transition* *initial-gap* *terminal-gap*))
+(declaim (type (signed-byte 8) *gap* *gap-extend* *terminal-gap-extend* *match* *mismatch*))
+(declaim (type (or null (signed-byte 8)) *transition* *terminal-gap*))
 
 (defun na-score (k l)
   (declare (type base-char k l)
@@ -205,6 +205,7 @@
           (setf (aref m i j) z
                 (aref n i j) +left+)))))))
 
+;;; FIXME! global-align-scare-affine-gaps doesn't use the *tarminal-gap* and *terminal-gap-extend*
 (defun global-align-score-affine-gaps (m n d r i j k l score-fn)
   (cond
     ((and (> i 0) (= j 0))
@@ -273,13 +274,13 @@
                `(cond
                   ((and (> ,i 0) (= ,j 0))
                    (let ((y (+ (aref ,m (1- ,i) ,j) 
-                               (let ((*gap* (or *initial-gap* *gap*)))
+                               (let ((*gap* (or *terminal-gap* *gap*)))
                                  (,score-fn ,k +gap-char+)))))
                      (setf (aref ,m ,i ,j) y
                            (aref ,n ,i ,j) +up+)))
                   ((and (= ,i 0) (> ,j 0))       
                    (let ((z (+ (aref ,m ,i (1- ,j))
-                               (let ((*gap* (or *initial-gap* *gap*)))
+                               (let ((*gap* (or *terminal-gap* *gap*)))
                                  (,score-fn +gap-char+ ,l)))))
                      (setf (aref ,m ,i ,j) z
                            (aref ,n ,i ,j) +left+)))
@@ -311,12 +312,12 @@
                     (loop for i from 1 to imax
                        do (global-align-score-mac m n i 0 (aref a (- i 1)) +gap-char+
                                                   (lambda (p q)
-                                                    (or *initial-gap*
+                                                    (or *terminal-gap*
                                                         (,score-fn p q)))))
                     (loop for j from 1 to jmax
                        do (global-align-score-mac m n 0 j +gap-char+ (aref b (- j 1))
                                                   (lambda (p q)
-                                                    (or *initial-gap*
+                                                    (or *terminal-gap*
                                                         (,score-fn p q)))))
 
                     (loop for i from 1 below imax
@@ -359,21 +360,21 @@
   (global-align-aa (residues-string seq1)
                    (residues-string seq2)))
 
-(defmethod global-align-na ((seq1 string)
-                            (seq2 string)
-                            &key
-                            (gap *gap*)
-                            (match *match*)
-                            (mismatch *mismatch*)
-                            (transition *transition*)
-                            (initial-gap *initial-gap*)
-                            (terminal-gap *terminal-gap*))
+(defmethod global-align-na ((seq1 string) (seq2 string)
+                            &key (gap *gap*)
+                                 (gap-extend *gap-extend*)
+                                 (match *match*)
+                                 (mismatch *mismatch*)
+                                 (transition *transition*)
+                                 (terminal-gap *terminal-gap*)
+                                 (terminal-gap-extend *terminal-gap-extend*))
   (let ((*gap* gap)
+        (*gap-extend* gap-extend)
         (*match* match)
         (*mismatch* mismatch)
         (*transition* transition)
-        (*initial-gap* initial-gap)
-        (*terminal-gap* terminal-gap))
+        (*terminal-gap* terminal-gap)
+        (*terminal-gap-extend* terminal-gap-extend))
     (%global-align-na seq1 seq2)))
 
 (defmethod global-align-na ((seq1 na-sequence-with-residues)
@@ -412,17 +413,15 @@
        :dp-right-matrix r
        :dp-traceback n))))
 
-(defmethod global-align-aa-affine-gaps ((seq1 string)
-                                        (seq2 string)
-                                        &key
-                                        (gap *gap*)
-                                        (gap-extend *gap-extend*)
-                                        (initial-gap *initial-gap*)
-                                        (terminal-gap *terminal-gap*))
+(defmethod global-align-aa-affine-gaps ((seq1 string) (seq2 string)
+                                        &key (gap *gap*)
+                                             (gap-extend *gap-extend*)
+                                             (terminal-gap *terminal-gap*)
+                                             (terminal-gap-extend *terminal-gap-extend*))
   (let ((*gap* gap)
         (*gap-extend* gap-extend)
-        (*initial-gap* initial-gap)
-        (*terminal-gap* terminal-gap))
+        (*terminal-gap* terminal-gap)
+        (*terminal-gap-extend* terminal-gap-extend))
     (global-align-affine-gaps seq1 seq2 #'aa-score)))
 
 (defmethod global-align-aa-affine-gaps ((seq1 aa-sequence-with-residues)
@@ -432,29 +431,27 @@
          (residues-string seq2)
          args))
 
-(defmethod global-align-na-affine-gaps ((seq1 string)
-                                        (seq2 string)
-                                        &key
-                                        (gap *gap*)
-                                        (gap-extend *gap-extend*)
-                                        (match *match*)
-                                        (mismatch *mismatch*)
-                                        (transition *transition*)
-                                        (initial-gap *initial-gap*)
-                                        (terminal-gap *terminal-gap*))
+(defmethod global-align-na-affine-gaps ((seq1 string) (seq2 string)
+                                        &key (gap *gap*)
+                                             (gap-extend *gap-extend*)
+                                             (match *match*)
+                                             (mismatch *mismatch*)
+                                             (transition *transition*)
+                                             (terminal-gap *terminal-gap*)
+                                             (terminal-gap-extend *terminal-gap-extend*))
   (let ((*gap* gap)
         (*gap-extend* gap-extend)
         (*match* match)
         (*mismatch* mismatch)
         (*transition* transition)
-        (*initial-gap* initial-gap)
-        (*terminal-gap* terminal-gap))
+        (*terminal-gap* terminal-gap)
+        (*terminal-gap-extend* terminal-gap-extend))
     (global-align-affine-gaps seq1 seq2 #'na-score)))
 
 (defmethod global-align-na-affine-gaps ((seq1 na-sequence-with-residues)
                                         (seq2 na-sequence-with-residues)
                                         &rest args)
-  (apply #'global-align-affine-gaps
+  (apply #'global-align-na-affine-gaps
          (residues-string seq1)
          (residues-string seq2)
          args))
