@@ -6,35 +6,23 @@
   :licence "BSD"
   :description "A library for representing various biological objects"
   :depends-on (cl-ppcre flexichain)
+  :serial t
   :components
   ((:cl-source-file "defpackage")
-   (:cl-source-file "utilities" :depends-on ("defpackage"))
-   (:cl-source-file "cl-bio" :depends-on ("defpackage"))
-   (:cl-source-file "descriptor" :depends-on ("defpackage" "utilities"))
-   (:cl-source-file "bio-object" :depends-on ("defpackage"))
-   (:cl-source-file "article" :depends-on ("defpackage" "bio-object"))
-   (:cl-source-file "gene" :depends-on ("defpackage" "bio-object"))
-   (:cl-source-file "range" :depends-on ("defpackage"))
-   (:cl-source-file "encoding" :depends-on ("defpackage" "utilities"))
-   (:cl-source-file "identifier" :depends-on ("defpackage" "utilities" "descriptor"))
-   (:cl-source-file "bio-sequence" :depends-on ("defpackage"
-                                                "encoding"
-                                                "range"
-                                                "descriptor"
-                                                "bio-object"))
-   (:cl-source-file "annotation" :depends-on ("defpackage"
-                                              "encoding"
-                                              "range"
-                                              "descriptor"
-                                              "bio-object"
-                                              "bio-sequence"))
-   (:cl-source-file "dictionary" :depends-on ("defpackage" "bio-object"))
+   (:cl-source-file "utilities")
+   (:cl-source-file "cl-bio")
+   (:cl-source-file "descriptor")
+   (:cl-source-file "bio-object")
+   (:cl-source-file "article")
+   (:cl-source-file "gene")
+   (:cl-source-file "range")
+   (:cl-source-file "encoding")
+   (:cl-source-file "identifier")
+   (:cl-source-file "bio-sequence")
+   (:cl-source-file "annotation")
+   (:cl-source-file "dictionary")
    (:module :io
             :components
             ((:cl-source-file "utilities")
-             (:cl-source-file "fasta" :depends-on ("utilities")))
-            :depends-on ("defpackage" "encoding" "range" "bio-sequence" "identifier"))
-   (:static-file "COPYRIGHT")
-   (:static-file "README")
-   (:static-file "make-dist" :pathname #.(make-pathname :name "make-dist" :type "sh"))))
+             (:cl-source-file "fasta" :depends-on ("utilities"))))))
 

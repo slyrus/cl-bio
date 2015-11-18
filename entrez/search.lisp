@@ -33,30 +33,30 @@
 
 (defun get-entrez-search-stream (term
                                  &key
-                                 (database "nucleotide")
-                                 (retmode "xml")
-                                 (retstart 0)
-                                 (retmax 20)
-                                 copy-to-file
-                                 if-exists
-                                 if-does-not-exist)
-  (let ((query-params `(("db" ,database)
-                        ("term" ,term)
-                        ("retmode" ,retmode)
-                        ("retstart" ,retstart)
-                        ("retmax" ,retmax))))
-    (let* ((entrez-url (puri:merge-uris (make-query-uri query-params)
-                                        *esearch-url-base*))
+                                   (database "nucleotide")
+                                   (retmode "xml")
+                                   (retstart (princ-to-string 0))
+                                   (retmax (princ-to-string 20))
+                                   copy-to-file
+                                   if-exists
+                                   if-does-not-exist)
+  (let ((query-params `(("db" . ,database)
+                        ("term" . ,term)
+                        ("retmode" . ,retmode)
+                        ("retstart" . ,retstart)
+                        ("retmax" . ,retmax))))
+    (let* ((entrez-url (puri:uri *esearch-url-base*))
            (rendered-url (puri:render-uri entrez-url nil)))
       (let ((drakma:*body-format-function* (constantly :latin1)))
         (if copy-to-file
             (progn
               (apply #'http-get-file rendered-url copy-to-file
+                     :parameters query-params
                      (append
                       (when if-exists `(:if-exists ,if-exists))
                       (when if-does-not-exist `(:if-does-not-exist ,if-does-not-exist))))
               (open copy-to-file :direction :input :element-type :default))
-            (drakma:http-request rendered-url :want-stream t))))))
+            (drakma:http-request rendered-url :parameters query-params :want-stream t))))))
 
 (defun entrez-search (term
                       &key

@@ -14,13 +14,13 @@
 (in-package #:alignment-example)
 
 (defparameter *esr1-gene-search*
-  (bio:lookup "ESR1 estrogen" entrez:*entrez-dictionary* :database "gene"))
+  (bio:lookup "ESR1[GENE] human[Organism]" entrez:*entrez-dictionary* :database "gene"))
 
 ;;; get the id first hit from the search set returned above, and load
 ;;; the corresponding gene from the entrez "gene" database.
 (defparameter *esr1-gene*
   (car (bio:members
-        (bio:fetch (bio:id (car (bio:members *esr1-gene-search*)))
+        (bio:fetch (bio:id (first (bio:members *esr1-gene-search*)))
                    entrez:*entrez-dictionary*
                    :database "gene"))))
 
@@ -33,13 +33,13 @@
          entrez:*entrez-dictionary*))))
 
 (defparameter *esr2-gene-search*
-  (bio:lookup "ESR2 estrogen" entrez:*entrez-dictionary* :database "gene"))
+  (bio:lookup "ESR2[GENE] human[Organism]" entrez:*entrez-dictionary* :database "gene"))
 
 ;;; get the id first hit from the search set returned above, and load
 ;;; the corresponding gene from the entrez "gene" database.
 (defparameter *esr2-gene*
   (car (bio:members
-        (bio:fetch (bio:id (car (bio:members *esr2-gene-search*)))
+        (bio:fetch (bio:id (first (bio:members *esr2-gene-search*)))
                    entrez:*entrez-dictionary*
                    :database "gene"))))
 

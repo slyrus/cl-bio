@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqloc.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.2
-     ::DATATOOL:: on 02/03/2010 23:05:21
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 182744 $
+$Revision: 182653 $
 **********************************************************************
 
   NCBI Sequence location and identifier elements
