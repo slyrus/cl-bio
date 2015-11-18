@@ -37,13 +37,6 @@
 (defgeneric global-align-aa-affine-gaps (seq1 seq2 &key gap gap-extend terminal-gap terminal-gap-extend))
 (defgeneric global-align-na-affine-gaps (seq1 seq2 &key gap gap-extend match mismatch
                                               transition terminal-gap terminal-gap-extend))
-
-(defgeneric global-align-aa-affine-gaps (seq1 seq2
-                                         &key gap gap-extend initial-gap terminal-gap))
-(defgeneric global-align-na-affine-gaps (seq1 seq2
-                                         &key gap gap-extend match mismatch
-                                           transition initial-gap terminal-gap))
-
 (defgeneric local-align-aa (seq1 seq2))
 (defgeneric local-align-na (seq1 seq2 &key gap match mismatch))
 (defgeneric local-align-aa-affine-gaps (seq1 seq2))
