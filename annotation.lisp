@@ -51,3 +51,6 @@
 (defclass sts (annotation)
   ((type :accessor annotation-type :initarg type :initform "sts")))
 
+(defclass repeat-region (annotation)
+  ((type :accessor annotation-type :initarg type :initform "repeat-region")))
+
