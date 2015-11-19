@@ -8,10 +8,10 @@
 (asdf:oos 'asdf:load-op :cl-bio-entrez)
 (asdf:oos 'asdf:load-op :cl-bio-align)
 
-(defpackage #:alignment-example
+(defpackage #:rna-alignment-example
   (:use :cl :bio :bio-entrez :bio-align))
 
-(in-package #:alignment-example)
+(in-package #:rna-alignment-example)
 
 (defparameter *esr1-gene-search*
   (bio:lookup "ESR1[GENE] human[Organism]" entrez:*entrez-dictionary* :database "gene"))
