@@ -154,8 +154,8 @@
 (defparameter *mismatch* -4)
 (defparameter *transition* nil)
 
-(declaim (type (signed-byte 8) *gap* *gap-extend* *terminal-gap-extend* *match* *mismatch*))
-(declaim (type (or null (signed-byte 8)) *transition* *terminal-gap*))
+(declaim (type (signed-byte 8) *gap* *gap-extend* *match* *mismatch*))
+(declaim (type (or null (signed-byte 8)) *transition* *terminal-gap* *terminal-gap-extend*))
 
 (defun na-score (k l)
   (declare (type base-char k l)
