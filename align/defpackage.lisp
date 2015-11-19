@@ -42,5 +42,6 @@
            #:local-align-na-affine-gaps
            #:local-align-aa-affine-gaps
            
+           #:alignment-score
            #:alignment-results))
 
