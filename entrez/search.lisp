@@ -61,8 +61,8 @@
 (defun entrez-search (term
                       &key
                       (database "nucleotide")
-                      (retstart 0)
-                      (retmax 20)
+                      (retstart nil retstart-supplied-p)
+                      (retmax nil retmax-supplied-p)
                       builder
                       copy-to-file
                       if-exists
@@ -71,8 +71,8 @@
                        term
                        (append
                         (when database `(:database ,database))
-                        (when retstart `(:retstart ,retstart))
-                        (when retmax `(:retmax ,retmax))
+                        (when retstart-supplied-p `(:retstart ,retstart))
+                        (when retmax-supplied-p `(:retmax ,retmax))
                         (when copy-to-file `(:copy-to-file ,copy-to-file))
                         (when if-exists `(:if-exists ,if-exists))
                         (when if-does-not-exist `(:if-does-not-exist ,if-does-not-exist))))))
