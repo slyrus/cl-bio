@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
      ::DATATOOL:: by application DATATOOL version 2.4.4
-     ::DATATOOL:: on 09/28/2012 23:04:43
+     ::DATATOOL:: on 01/01/2016 23:04:03
      ============================================ -->
 
 <!-- ============================================ -->
@@ -66,7 +66,9 @@
         endogenous-virus |
         hydrogenosome |
         chromosome |
-        chromatophore
+        chromatophore |
+        plasmid-in-mitochondrion |
+        plasmid-in-plastid
         ) #IMPLIED >
 
 
