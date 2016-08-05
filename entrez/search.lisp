@@ -35,16 +35,16 @@
                                  &key
                                    (database "nucleotide")
                                    (retmode "xml")
-                                   (retstart (princ-to-string 0))
-                                   (retmax (princ-to-string 20))
+                                   (retstart 0)
+                                   (retmax 20)
                                    copy-to-file
                                    if-exists
                                    if-does-not-exist)
   (let ((query-params `(("db" . ,database)
                         ("term" . ,term)
                         ("retmode" . ,retmode)
-                        ("retstart" . ,retstart)
-                        ("retmax" . ,retmax))))
+                        ("retstart" . ,(princ-to-string retstart))
+                        ("retmax" . ,(princ-to-string retmax)))))
     (let* ((entrez-url (puri:uri *esearch-url-base*))
            (rendered-url (puri:render-uri entrez-url nil)))
       (let ((drakma:*body-format-function* (constantly :latin1)))
@@ -71,8 +71,8 @@
                        term
                        (append
                         (when database `(:database ,database))
-                        (when retstart-supplied-p `(:retstart ,retstart))
-                        (when retmax-supplied-p `(:retmax ,retmax))
+                        (when retstart-supplied-p `(:retstart ,(princ-to-string retstart)))
+                        (when retmax-supplied-p `(:retmax ,(princ-to-string retmax)))
                         (when copy-to-file `(:copy-to-file ,copy-to-file))
                         (when if-exists `(:if-exists ,if-exists))
                         (when if-does-not-exist `(:if-does-not-exist ,if-does-not-exist))))))
