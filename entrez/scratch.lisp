@@ -3,7 +3,7 @@
 
 (in-package :entrez-user)
 
-;; (http-get-entrez-dtds)
+;; (entrez::http-get-entrez-dtds)
 
 ;;; xpath stuff
 
@@ -19,7 +19,7 @@
 ;;; search entrez the entrez "gene" database for the terms "ESR1" and
 ;;; "estrogen"
 (defparameter *esr1-gene-search*
-  (bio:lookup "ESR1 estrogen" *entrez-dictionary* :database "gene"))
+  (bio:lookup "ESR1[sym] human[ORGN]" *entrez-dictionary* :database "gene" :use-cache-for-lookup nil))
 
 ;;; get the id first hit from the search set returned above, and load
 ;;; the corresponding gene from the entrez "gene" database.
