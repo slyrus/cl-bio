@@ -19,7 +19,7 @@
 ;;; search entrez the entrez "gene" database for the terms "ESR1" and
 ;;; "estrogen"
 (defparameter *esr1-gene-search*
-  (bio:lookup "ESR1[sym] human[ORGN]" *entrez-dictionary* :database "gene" :use-cache-for-lookup nil))
+  (bio:lookup "ESR1[sym] human[ORGN]" *entrez-dictionary* :database "gene"))
 
 ;;; get the id first hit from the search set returned above, and load
 ;;; the corresponding gene from the entrez "gene" database.
@@ -30,17 +30,36 @@
                    :database "gene"))))
 
 (defparameter *esr1-nucleotide-search*
-  (bio:lookup "ESR1 estrogen"
+  (bio:lookup "ESR1[sym] human[ORGN]"
               *entrez-dictionary*
               :database "nucleotide"))
 
-(defparameter *esr1-nucleotide*
+;;
+;; the problem with this is that there are a ton of products in the
+;; gene report. how do we know which one we want to use?
+(defparameter *esr1-nucleotide-from-gene*
   (car (bio:members
         (bio:fetch
          (bio:id
           (car (bio:get-genbank-accessions
                 (car (bio:gene-products *esr1-gene*)))))
          *entrez-dictionary*))))
+
+(defparameter *esr1-nucleotide-search*
+  (bio:lookup "ESR1 human[ORGN]"
+              *entrez-dictionary*
+              :database "nucleotide"))
+
+(defparameter *esr1-nucleotide-results*
+  (bio:fetch (bio:id (car (bio:members *esr1-nucleotide-search*)))
+             *entrez-dictionary*
+             :database "nucleotide"))
+
+(defparameter *esr1-nucleotide*
+  (car (bio:members
+        (bio:fetch (bio:id (car (bio:members *esr1-nucleotide-search*)))
+                   *entrez-dictionary*
+                   :database "nucleotide"))))
 
 (defparameter *esr1-protein-search*
   (bio:lookup "estrogen receptor alpha isoform 1"
@@ -397,3 +416,11 @@
                                       *entrez-dictionary*
                                       :database "pubmed"))))))
   (car (bio:members (bio:fetch pmid *entrez-dictionary* :database "pubmed"))))
+
+;;;
+"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi/entrez/eutils/esearch.fcgi?db=gene&term=ESR1+estrogen&retmode=xml&retstart=0&retmax=20"
+
+"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi/entrez/eutils/esearch.fcgi?db=gene&term=NG_008493%5Baccession%5D&retmode=xml&retstart=0&retmax=20"
+
+(defparameter *esr1-refseqgene-search*
+  (bio:lookup "NG_008493[accession]" *entrez-dictionary* :database "nucleotide"))
