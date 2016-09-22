@@ -24,5 +24,6 @@
    (:module :io
             :components
             ((:cl-source-file "utilities")
-             (:cl-source-file "fasta" :depends-on ("utilities"))))))
+             (:cl-source-file "fasta" :depends-on ("utilities")))))
+  :in-order-to ((test-op (test-op cl-bio-test))))
 

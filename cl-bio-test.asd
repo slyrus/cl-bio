@@ -5,7 +5,8 @@
   :version "0.2.7"
   :licence "BSD"
   :description "Tests for cl-bio"
-  :depends-on (cl-bio)
+  :defsystem-depends-on (:prove-asdf)
+  :depends-on (:cl-bio :prove)
   :components
   ((:module :test
 	    :components
