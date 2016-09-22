@@ -1,4 +1,9 @@
 
+(cl:defpackage cl-bio-asd
+  (:use :cl :asdf))
+
+(in-package :cl-bio-asd)
+
 (asdf:defsystem #:cl-bio
   :name "cl-bio"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
