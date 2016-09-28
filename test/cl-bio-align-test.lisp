@@ -90,4 +90,15 @@
    :gap -10
    :gap-extend -1)))
 
+(is
+ (alignment-score
+  (global-align-na-affine-gaps "AAAGGG" "TTAAAAGGGGTT" :match 1 :mismatch -1 :gap -5))
+ -3)
+
+(is
+ (alignment-score
+  (global-align-na-affine-gaps "AAAGGG" "TTAAAAGGGGTT" :match 1 :mismatch -1 :gap -5 :gap-extend -1))
+ -1)
+
+
 (finalize)
