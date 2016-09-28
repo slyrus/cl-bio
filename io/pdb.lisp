@@ -70,7 +70,8 @@
    (obsolete :initarg :obsolete :accessor obsolete :initform nil)
    (title :initarg :title :accessor title :initform nil)
    (molecules :initarg :molecules :accessor molecules :initform nil)
-   (chains :initarg :chains :accessor chains :initform nil)))
+   (chains :initarg :chains :accessor chains :initform nil)
+   (atom-hash :initarg :atom-hash :accessor atom-hash :initform (make-hash-table))))
 
 (defclass pdb-molecule ()
   ((id :initarg :id :accessor :id)
@@ -192,6 +193,26 @@
   (setf (title entry)
         (data record)))
 
+(defclass pdb-atom (pdb-record)
+  ((record-name :initform "ATOM" :initarg :record-name :accessor record-name)
+   (atom-number :initarg :atom-number :accessor atom-number)
+   (atom-name :initarg :atom-name :accessor atom-name)
+   (alt-loc :initarg :alt-loc :accessor alt-loc)
+   (residue-name :initarg :residue-name :accessor residue-name)
+   (chain-id :initarg :chain-id :accessor chain-id)
+   (residue-seq-number :initarg :residue-seq-number :accessor residue-seq-number)
+   (insertion-code :initarg :insertion-code :accessor insertion-code)
+   (x-coord :initarg :x-coord :accessor x-coord)
+   (y-coord :initarg :y-coord :accessor y-coord)
+   (z-coord :initarg :z-coord :accessor z-coord)
+   (occupancy :initarg :occupancy :accessor occupancy)
+   (temp-factor :initarg :temp-factor :accessor temp-factor)
+   (element-symbol :initarg :element-symbol :accessor element-symbol)
+   (charge :initarg :charge :accessor charge)))
+
+(defclass pdb-hetero-atom (pdb-atom)
+  ((record-name :initform "HETATM" :initarg :record-name :accessor record-name)))
+
 (defclass pdb-compound (continuable-pdb-record)
   ((record-name :initform "COMPND" :allocation :class)))
 
@@ -201,6 +222,52 @@
   (let ((record (make-instance 'pdb-compound)))
     (setf (lines record) (list (apply #'subseq line (field-columns record))))
     record))
+
+(defun parse-pdb-atom-record (record-class line entry)
+  (let ((record-name (remove-trailing-spaces (subseq line 0 6)))
+        (atom-number (parse-integer (subseq line 6 11)))
+        (atom-name (remove-trailing-spaces (subseq line 13 16)))
+        (alt-loc (subseq line 16 17))
+        (residue-name (subseq line 17 20))
+        (chain-id (remove-initial-spaces (subseq line 20 22)))
+        (residue-seq-number (parse-integer (subseq line 22 26)))
+        (insertion-code (subseq line 26 27))
+        (x-coord (parse-number:parse-real-number (subseq line 30 38)))
+        (y-coord (parse-number:parse-real-number (subseq line 38 46)))
+        (z-coord (parse-number:parse-real-number (subseq line 46 54)))
+        (occupancy (parse-number:parse-real-number (subseq line 54 60)))
+        (temp-factor (parse-number:parse-real-number (subseq line 60 66)))
+        (element-symbol (remove-initial-spaces (subseq line 76 78)))
+        (charge (let ((charge (remove-initial-spaces (subseq line 78 80))))
+                  (if (zerop (length charge))
+                      0
+                      (parse-integer charge)))))
+    (let ((atom (make-instance record-class
+                               :record-name record-name 
+                               :atom-number atom-number 
+                               :atom-name atom-name
+                               :alt-loc alt-loc 
+                               :residue-name residue-name 
+                               :chain-id chain-id
+                               :residue-seq-number residue-seq-number 
+                               :insertion-code insertion-code
+                               :x-coord x-coord 
+                               :y-coord y-coord 
+                               :z-coord z-coord
+                               :occupancy occupancy 
+                               :temp-factor temp-factor
+                               :element-symbol element-symbol 
+                               :charge charge)))
+      (setf (gethash atom-number (atom-hash entry))
+            atom))))
+
+(defmethod start-pdb-record ((record-name (eql :atom)) line
+                          &key (entry *current-entry*))
+  (parse-pdb-atom-record 'pdb-atom line entry))
+
+(defmethod start-pdb-record ((record-name (eql :hetatm)) line
+                             &key (entry *current-entry*))
+  (parse-pdb-atom-record 'pdb-hetero-atom line entry))
 
 (defun find-first-char (char string &key (start 0) (escape-char #\\))
   (let ((pos (position char string :start start)))
@@ -296,7 +363,7 @@
           (finish-pdb-record record))
       (setf *current-line* (read-line stream nil nil)))))
 
-(defun parse-pdb-stream (stream)
+(defun read-pdb-stream (stream)
   ;; bind *current-line* per thread to make this thread-safe
   (let ((*current-line* (read-line stream nil nil))
         (*current-entry* (make-instance 'pdb-entry)))
@@ -304,9 +371,9 @@
        do (read-pdb-record stream))
     *current-entry*))
 
-(defun parse-pdb-file (file)
+(defun read-pdb-file (file)
   (with-open-file (stream file)
-    (parse-pdb-stream stream)))
+    (read-pdb-stream stream)))
 
 (defun write-pdb-stream (stream entry)
   (write-pdb-header entry stream)
