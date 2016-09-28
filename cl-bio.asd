@@ -10,7 +10,7 @@
   :version "0.2.7"
   :licence "BSD"
   :description "A library for representing various biological objects"
-  :depends-on (cl-ppcre flexichain)
+  :depends-on (cl-ppcre flexichain parse-number)
   :serial t
   :components
   ((:cl-source-file "defpackage")
@@ -29,6 +29,7 @@
    (:module :io
             :components
             ((:cl-source-file "utilities")
-             (:cl-source-file "fasta" :depends-on ("utilities")))))
+             (:cl-source-file "fasta" :depends-on ("utilities"))
+             (:cl-source-file "pdb" :depends-on ("utilities")))))
   :in-order-to ((test-op (test-op cl-bio-test))))
 
