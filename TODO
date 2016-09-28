@@ -20,3 +20,5 @@ system or do the use the coordinate system of the underlying sequence?
 2. Unify bio-align:alignment and bio:alignment
 
 3. Support reverse-complement for RNA sequences
+
+4. Test suite for alignments
