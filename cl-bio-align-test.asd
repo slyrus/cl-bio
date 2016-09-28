@@ -14,8 +14,8 @@
   :components
   ((:module :test
 	    :components
-	    ((:cl-source-file "cl-bio-align-test"))))
+	    ((:test-file "cl-bio-align-test"))))
   :perform (test-op :after (op c)
-                    (funcall (intern #.(string :run-test-system) :prove-asdf) c)
+                    (funcall (intern #.(string :run) :prove) c)
                     (asdf:clear-system c)))
 
