@@ -63,17 +63,20 @@
       (append-residues seq line))))
 
 (defun read-fasta-sequence (stream &key (sequence-type :dna sequence-type-supplied-p))
-  
-  (let ((seq (cond ((eql sequence-type :dna)
-                    (make-instance 'bio::4-bit-adjustable-dna-sequence :length 0)))))
-    (when seq
-      (read-fasta-header-line stream seq)
-      (apply #'read-fasta-residues
-             stream
-             seq
-             (when sequence-type-supplied-p
-               `(:sequence-type ,sequence-type)))
-      seq)))
+  (let ((seq (ecase sequence-type
+               (:dna
+                (make-instance 'bio::4-bit-adjustable-dna-sequence :length 0))
+               (:rna
+                (make-instance 'bio::adjustable-rna-sequence :length 0))
+               (:aa
+                (make-instance 'bio::adjustable-aa-sequence :length 0)))))
+    (read-fasta-header-line stream seq)
+    (apply #'read-fasta-residues
+           stream
+           seq
+           (when sequence-type-supplied-p
+             `(:sequence-type ,sequence-type)))
+    seq))
 
 (defun read-fasta-sequences (stream &key (sequence-type :dna sequence-type-supplied-p))
   "Returns a list whose elements are bio-sequences, populated from the stream."
