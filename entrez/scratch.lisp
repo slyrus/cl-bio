@@ -1,5 +1,5 @@
 
-(asdf:oos 'asdf:load-op :cl-bio-entrez)
+(asdf:load-system :cl-bio-entrez)
 
 (in-package :entrez-user)
 
