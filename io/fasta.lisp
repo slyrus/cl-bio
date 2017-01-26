@@ -86,9 +86,9 @@
             (when sequence-type-supplied-p
               `(:sequence-type ,sequence-type)))))
 
-(defun read-fasta-file (filespec)
+(defun read-fasta-file (filespec &rest args)
   (with-open-file (stream filespec)
-    (read-fasta-sequences stream)))
+    (apply #'read-fasta-sequences stream args)))
 
 (defun write-fasta-file (sequence filespec &key header)
   (with-open-file (stream filespec :direction :output :if-exists :supersede)
