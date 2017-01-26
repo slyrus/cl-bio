@@ -866,10 +866,10 @@ abbreviation."
 (defmethod dna->rna ((dna dna-sequence-with-residues)
                      &key
                      (rna-class (etypecase dna
-                                  (simple-dna-sequence
-                                   'simple-rna-sequence)
                                   (adjustable-dna-sequence 
-                                   'adjustable-rna-sequence))))
+                                   'adjustable-rna-sequence)
+                                  (dna-sequence
+                                   'simple-rna-sequence))))
   (let ((rna (make-instance rna-class
                             :length (seq-length dna))))
     (loop for i below (seq-length rna)
