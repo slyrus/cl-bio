@@ -944,3 +944,14 @@ abbreviation."
           (3-letter-residues-list aa-sequence)))
 
 
+;;; sequence helper functions
+
+(defun dna-sequence (&rest strings)
+  (make-instance 'simple-dna-sequence
+                 :initial-contents (apply #'oconcatenate 'string strings)))
+
+(defun aa-sequence (&rest strings)
+  (make-instance 'simple-aa-sequence
+                 :initial-contents (apply #'concatenate 'string strings)))
+
+
