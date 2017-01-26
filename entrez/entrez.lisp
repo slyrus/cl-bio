@@ -77,6 +77,9 @@
     (:public-id "-//NLM//DTD eSearchResult, 11 May 2002//EN"
      :system-url "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd"
      :local-file "dtd/DTD_eSearchResult.dtd")
+    (:public-id "-//NLM//DTD esearch 20060628//EN"
+     :system-url "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20060628/esearch.dtd"
+     :local-file "dtd/DTD_eSearch.dtd")
     (:public-id "-//NLM//DTD NCBI-Entrezgene, 21st January 2005//EN"
      :system-url "http://www.ncbi.nlm.nih.gov/dtd/NCBI_Entrezgene.dtd"
      :local-file "dtd/NCBI_Entrezgene.dtd")
@@ -181,10 +184,12 @@
 ;;; call this to cache the DTDs
 (defun http-get-entrez-dtds ()
   (mapcar (lambda (x)
-            (http-get-file (getf x :system-url)
-                           (merge-pathnames 
+            (let ((url (getf x :system-url))
+                  (file (merge-pathnames
                             (getf x :local-file)
                             (entrez-directory))))
+              (http-get-file url file)
+              (cons url file)))
           *entrez-dtd-list*))
 
 (defun dtd-resolver (pubid sysid)
