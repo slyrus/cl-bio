@@ -877,6 +877,22 @@ abbreviation."
                 (residue-code dna i)))
     rna))
 
+(defgeneric rna->dna (rna-seqeunce &key &allow-other-keys))
+
+(defmethod rna->dna ((rna rna-sequence-with-residues)
+                     &key
+                     (dna-class (etypecase rna
+                                  (adjustable-rna-sequence
+                                   'adjustable-dna-sequence)
+                                  (dna-sequence
+                                   'simple-dna-sequence))))
+  (let ((dna (make-instance dna-class
+                            :length (seq-length rna))))
+    (loop for i below (seq-length dna)
+       do (setf (residue-code dna i)
+                (residue-code rna i)))
+    dna))
+
 (defmethod translate ((rna rna-sequence-with-residues)
                       &key
                       (range (range 0 (seq-length rna)))

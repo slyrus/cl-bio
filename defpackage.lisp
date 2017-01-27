@@ -206,6 +206,7 @@
                #:fetch
                
                #:dna->rna
+               #:rna->dna
                #:translate
 
                #:3-letter-residues-string
