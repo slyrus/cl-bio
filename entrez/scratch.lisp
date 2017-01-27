@@ -46,7 +46,7 @@
          *entrez-dictionary*))))
 
 (defparameter *esr1-nucleotide-search*
-  (bio:lookup "ESR1 human[ORGN]"
+  (bio:lookup "ESR1 AND human[ORGN]"
               *entrez-dictionary*
               :database "nucleotide"))
 
