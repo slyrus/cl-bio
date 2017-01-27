@@ -100,4 +100,5 @@
     (format stream "~&>~A~%" header)
     (split-string-into-lines (bio:residues-string sequence)
                              :stream stream)
-    (terpri stream)))
+    (terpri stream))
+  (truename filespec))
