@@ -112,6 +112,10 @@ string or use the provided string as the storage for the reisdues."))1
   (:documentation "Returns the residues of the sequence in a particular
 range."))
 
+(defgeneric (setf residues-string-range) (val seq range)
+  (:documentation "Sets the residues of the sequence specified by
+rnage to be the residues contained in the string."))
+
 (defgeneric residue (seq i)
   (:documentation "Returns the residue of seq at position i. Note
 that for residue-coded sequences this is the external character
