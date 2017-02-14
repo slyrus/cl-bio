@@ -59,14 +59,20 @@
    (authority :accessor authority :initarg :authority :initform
   "ncbi")))
 
+(defmethod get-ncbi-gis ((described described-object))
+  (get-descriptors described :type 'ncbi-gi))
+
 (defclass ncbi-pmid (identifier)
-  ((id :accessor id :initarg :id :initarg :gi)
+  ((id :accessor id :initarg :id :initarg :pmid)
    (type :accessor identity-type :initarg :type :initform "pmid")
    (authority :accessor authority :initarg :authority :initform
   "ncbi")))
 
-(defmethod get-ncbi-gis ((described described-object))
-  (get-descriptors described :type 'ncbi-gi))
+(defclass ncbi-geneid (identifier)
+  ((id :accessor id :initarg :id :initarg :geneid)
+   (type :accessor identity-type :initarg :type :initform "geneid")
+   (authority :accessor authority :initarg :authority :initform
+              "ncbi")))
 
 (defclass ncbi-locus (identifier)
   ((id :accessor id :initarg :id :initarg :locus)
