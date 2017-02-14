@@ -155,6 +155,11 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
        do (setf (elt str j) (residue seq i)))
     str))
 
+(defmethod (setf residues-string-range) (residues (seq sequence-with-residues) (range range))
+  (loop for i from (range-start range) below (range-end range)
+     for j from 0
+     do (setf (residue seq i) (elt residues j)))
+  residues)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 
