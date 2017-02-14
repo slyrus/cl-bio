@@ -24,6 +24,9 @@
    (:cl-source-file "encoding")
    (:cl-source-file "identifier")
    (:cl-source-file "bio-sequence")
+   (:cl-source-file "bio-sequence-util")
+   (:cl-source-file "bio-sequence0")
+   (:cl-source-file "bio-sequence1")
    (:cl-source-file "annotation")
    (:cl-source-file "dictionary")
    (:module :io
