@@ -91,6 +91,7 @@
           args)
    :id-class (cond 
                ((string-equal database "pubmed") 'bio::ncbi-pmid)
+               ((string-equal database "gene") 'bio::ncbi-geneid)
                (t 'bio:ncbi-gi))))
 
 (defmethod bio:fetch (object (dictionary entrez-dictionary)
