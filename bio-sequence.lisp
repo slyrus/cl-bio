@@ -129,6 +129,7 @@ representation."))
   (:documentation "Returns a new instance of the same class as seq
 whose residues have been reversed (AACCGT -> TGCCAA)"))
 
+(defgeneric copy-sequence-range (seq range))
 
 ;;; some reference implementations for
 ;;; sequence-with-residues. subclasses are free to override these as
@@ -218,6 +219,21 @@ ith residue of seq to the residue code val."))
   ;; doing the same thing:
   #+nil (make-instance (class-of forward)
                        :initial-contents (reverse (residues-string forward))))
+
+(defmethod copy-sequence-range ((seq sequence-with-residue-codes) range)
+  (let* ((new-length (range-length range))
+         (new-seq (make-instance (class-of seq) :length new-length)))
+    (loop for i below new-length
+       for j from (range-start range) to (range-end range)
+       do (setf (residue-code new-seq i) (residue-code seq j)))
+    new-seq))
+
+(defmethod copy-sequence-range (seq range)
+  (let* ((new-length (range-length range))
+         (new-seq (make-instance (class-of seq)
+                                 :initial-contents (residues-string-range seq range))))
+    new-seq))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Simple sequences. 

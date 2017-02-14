@@ -83,6 +83,7 @@
                #:residues-string
                #:residues-string-range
                #:seq-length
+               #:copy-sequence-range
 
                ;; sequences with residues
                #:sequence-with-residues
