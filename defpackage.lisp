@@ -92,6 +92,7 @@
                ;; sequences with residue codes
                #:sequence-with-residue-codes
                #:residue-code
+               #:sequence-encoding-error
 
                ;; annotated sequences
                #:annotated-sequence

@@ -46,6 +46,13 @@
 ;;; sequence encoding protocol class
 (defclass sequence-encoding () ())
 
+(define-condition sequence-encoding-error (simple-error) ())
+
+(defun sequence-encoding-error (message &rest args)
+  (error 'sequence-encoding-error
+         :format-control message
+         :format-arguments args))
+
 (defgeneric seq-code-to-char (seq code)
   (:documentation "Returns the character associated with sequence
 code code in sequence seq."))
@@ -79,7 +86,10 @@ in sequence seq."))
   (aref (char-map seq) code))
     
 (defmethod char-to-seq-code ((seq 2-bit-dna-sequence-encoding) char)
-  (aref (int-array seq) (char-code char)))
+  (let ((seq-code (aref (int-array seq) (char-code char))))
+    (if seq-code
+        seq-code
+        (sequence-encoding-error "No encoding found for ~S" char))))
 
 ;;; 4-bit dna sequence encoding
 ;;; 4-bit extended IUPAC nucleic sequence
@@ -122,7 +132,10 @@ in sequence seq."))
   (aref (char-map seq) code))
     
 (defmethod char-to-seq-code ((seq 4-bit-dna-sequence-encoding) char)
-  (aref (int-array seq) (char-code char)))
+  (let ((seq-code (aref (int-array seq) (char-code char))))
+    (if seq-code
+        seq-code
+        (error 'sequence-encoding-error "No encoding found for ~S" char))))
 
 ;;; dna sequence encoding protocol class
 
@@ -152,7 +165,10 @@ in sequence seq."))
 (defmethod char-to-seq-code ((seq 2-bit-rna-sequence-encoding) char)
   (when (char-equal char #\t)
     (setf char #\u))
-  (aref (int-array seq) (char-code char)))
+  (let ((seq-code (aref (int-array seq) (char-code char))))
+    (if seq-code
+        seq-code
+        (error 'sequence-encoding-error "No encoding found for ~S" char))))
 
 (defparameter *acgt-2-bit-rna-sequence-char-map* #(#\A #\C #\G #\T))
 (defparameter *acgt-2-bit-rna-char-list* (coerce *acgt-2-bit-rna-sequence-char-map* 'list))
@@ -176,7 +192,10 @@ in sequence seq."))
 (defmethod char-to-seq-code ((seq acgt-2-bit-rna-sequence-encoding) char)
   (when (char-equal char #\u)
     (setf char #\t))
-  (aref (int-array seq) (char-code char)))
+  (let ((seq-code (aref (int-array seq) (char-code char))))
+    (if seq-code
+        seq-code
+        (error 'sequence-encoding-error "No encoding found for ~S" char))))
 
 
 ;;; amino acid sequence encoding protocol class
@@ -206,6 +225,9 @@ in sequence seq."))
     
 (defmethod seq-code-to-char ((seq 5-bit-aa-sequence-encoding) code)
   (aref (char-map seq) code))
-    
+
 (defmethod char-to-seq-code ((seq 5-bit-aa-sequence-encoding) char)
-  (aref (int-array seq) (char-code char)))
+  (let ((seq-code (aref (int-array seq) (char-code char))))
+    (if seq-code
+        seq-code
+        (error 'sequence-encoding-error "No encoding found for ~S" char))))
