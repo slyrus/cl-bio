@@ -442,16 +442,19 @@ flexichains to store their residues."))
 
 ;;; 2-bit sequence protocol class
 (defclass 2-bit-sequence (sequence-with-residues)
-  ((element-type :initform '(unsigned-byte 2) :allocation :class))
+  ((element-type :initform (upgraded-array-element-type '(unsigned-byte 2))
+                 :allocation :class))
   (:documentation "A sequence with a 2-bit residue encoding"))
 
 (defclass 4-bit-sequence (sequence-with-residues)
-  ((element-type :initform '(unsigned-byte 4) :allocation :class))
+  ((element-type :initform (upgraded-array-element-type '(unsigned-byte 4))
+                 :allocation :class))
   (:documentation "A sequence with a 4-bit residue encoding"))
 
 ;;; 5-bit sequence protocol class
 (defclass 5-bit-sequence (sequence-with-residues)
-  ((element-type :initform '(unsigned-byte 5) :allocation :class))
+  ((element-type :initform (upgraded-array-element-type '(unsigned-byte 5))
+                 :allocation :class))
   (:documentation "A sequence with a 5-bit residue encoding"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
