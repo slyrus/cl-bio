@@ -1,8 +1,9 @@
 
 (in-package :bio-test)
 
-(plan 8)
+(plan 10)
 
+;; DNA Sequences
 
 (is 
  (let ((test-seq (make-instance 'adjustable-dna-sequence :initial-contents "GAATTC")))
@@ -34,6 +35,9 @@
    (residues-string test-seq))
  "ATATTC")
 
+
+;; RNA Sequences
+
 (is 
  (let ((test-seq (make-instance 'adjustable-rna-sequence :initial-contents "GAAUUC")))
    (residues-string test-seq))
@@ -53,5 +57,17 @@
    (residues-string test-seq))
  "AUAUUC")
 
+;; Amino Acid Sequences
+
+(is
+ (let ((test-seq (make-instance 'adjustable-aa-sequence :initial-contents "MVNPTVFFDIAVDGEPLGRV")))
+   (residues-string test-seq))
+ "MVNPTVFFDIAVDGEPLGRV")
+
+(is
+ (let ((test-seq (make-instance 'adjustable-aa-sequence)))
+   (insert-residues test-seq 0 "MVN")
+   (residues-string test-seq))
+ "MVN")
 
 (finalize)
