@@ -1,7 +1,7 @@
 
 (in-package :bio-test)
 
-(plan nil)
+(plan 11)
 
 ;;; ranges
 

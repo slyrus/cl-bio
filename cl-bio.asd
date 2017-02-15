@@ -1,9 +1,4 @@
 
-(cl:defpackage cl-bio-asd
-  (:use :cl :asdf))
-
-(in-package :cl-bio-asd)
-
 (asdf:defsystem #:cl-bio
   :name "cl-bio"
   :author "Cyrus Harmon <ch-lisp@bobobeach.com>"
@@ -34,5 +29,19 @@
             ((:cl-source-file "utilities")
              (:cl-source-file "fasta" :depends-on ("utilities"))
              (:cl-source-file "pdb" :depends-on ("utilities")))))
-  :in-order-to ((test-op (test-op cl-bio-test))))
+  :in-order-to ((test-op (test-op :cl-bio/test))))
+
+(asdf:defsystem :cl-bio/test
+  :serial t
+  :depends-on (:prove :cl-bio)
+  :defsystem-depends-on (:prove-asdf)
+  :components ((:module :test
+                        :serial t
+                        :components ((:file "defpackage")
+                                     (:test-file "cl-bio-test")
+                                     (:test-file "sequence-test")))
+               (:module :data
+                        :components ((:static-file "dpp-fasta" :pathname #p"dpp.fasta"))))
+  :perform (test-op :after (op c)
+                    (funcall (intern #.(string :run) :prove) c)))
 
