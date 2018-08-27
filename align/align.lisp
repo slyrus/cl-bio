@@ -542,8 +542,8 @@
 (defun %local-align-aa-affine-gaps (a b)
   (local-align-affine-gaps a b #'aa-score))
 
-(defmethod local-align-aa-affine-gaps ((seq1 na-sequence-with-residues)
-                                       (seq2 na-sequence-with-residues))
+(defmethod local-align-aa-affine-gaps ((seq1 aa-sequence-with-residues)
+                                       (seq2 aa-sequence-with-residues))
   (%local-align-aa-affine-gaps (residues-string seq1)
                                (residues-string seq2)))
 
