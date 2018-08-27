@@ -98,15 +98,32 @@
   (with-open-file (stream filespec)
     (apply #'read-fasta-sequences stream args)))
 
-(defun write-fasta-file (sequence filespec &key header)
+
+(defun write-fasta-stream (sequence stream &key header)
+  (unless header
+    (setf header (format nil "~{~A~^|~}" (mapcar (lambda (x)
+                                                   (typecase x
+                                                     (identifier (id x))))
+                                                 (get-descriptors sequence)))))
+  (format stream "~&>~A~%" header)
+  (split-string-into-lines (bio:residues-string sequence)
+                           :stream stream)
+  (terpri stream))
+
+(defun write-fasta-sequence (sequence filespec &key header)
   (with-open-file (stream filespec :direction :output :if-exists :supersede)
-    (unless header
-      (setf header (format nil "~{~A~^|~}" (mapcar (lambda (x)
-                                                     (typecase x
-                                                       (identifier (id x))))
-                                                   (get-descriptors sequence)))))
-    (format stream "~&>~A~%" header)
-    (split-string-into-lines (bio:residues-string sequence)
-                             :stream stream)
-    (terpri stream))
+    (apply #'write-fasta-stream sequence stream
+           (when header `(:header ,header)))))
+
+(defun write-fasta-file (sequence filespec &key header)
+  (apply #'write-fasta-sequence sequence filespec
+         (when header `(:header ,header)))
+  (truename filespec))
+
+(defun write-fasta-sequences (sequences filespec &key headers)
+  (with-open-file (stream filespec :direction :output :if-exists :supersede)
+    (loop for sequence in sequences
+       do
+         (apply #'write-fasta-stream sequence stream
+                (when header `(:header ,header)))))
   (truename filespec))
