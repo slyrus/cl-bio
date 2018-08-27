@@ -33,22 +33,30 @@
 (defun read-fasta-header-line (stream seq)
   ;; read until the first #\>
   (read-until-char stream #\>)
+
   ;; skip over the #\>
   (read-char stream)
   (let ((header (read-line stream)))
     (let ((terms (cl-ppcre:split #\| header)))
-      (do ((term (pop terms) (pop terms)))
-          ((null terms))
-        (cond ((equal term "gi")
-               (let ((gi-id (pop terms)))
-                 (add-descriptor
-                  seq
-                  (make-instance 'ncbi-gi :id gi-id))))
-              ((equal term "ref")
-               (let ((refseq-id (pop terms)))
-                 (add-descriptor
-                  seq
-                  (make-instance 'refseq-id :id refseq-id)))))))
+      (cond ((> (length terms) 1)
+             (loop :for (term-type term) :on terms by #'cddr while term
+                :do
+                (cond ((equal term "gi")
+                       (let ((gi-id term))
+                         (add-descriptor
+                          seq
+                          (make-instance 'ncbi-gi :id gi-id))))
+                      ((equal term "ref")
+                       (let ((refseq-id term))
+                         (add-descriptor
+                          seq
+                          (make-instance 'refseq-id :id refseq-id)))))))
+            ((car terms)
+             (print (list 'terms terms))
+             (add-descriptor seq (make-instance 'identifier :id (car terms)
+                                                :type nil
+                                                :version nil
+                                                :authority nil)))))
     header))
 
 (defun read-fasta-residues (stream seq &key (sequence-type :dna))
