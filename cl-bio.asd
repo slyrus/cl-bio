@@ -24,6 +24,7 @@
    (:cl-source-file "bio-sequence1")
    (:cl-source-file "annotation")
    (:cl-source-file "dictionary")
+   (:cl-source-file "reader-macros")
    (:module :io
             :components
             ((:cl-source-file "utilities")
