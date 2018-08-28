@@ -162,6 +162,13 @@ whose residues have been reversed (AACCGT -> TGCCAA)"))
      do (setf (residue seq i) (elt residues j)))
   residues)
 
+(defmethod split-string-into-lines ((seq sequence-with-residues) &key stream max-line-length)
+  (apply #'split-string-into-lines (bio:residues-string seq)
+         (append (when stream
+                   `(:stream ,stream))
+                 (when max-line-length
+                   `(:max-line-length ,max-line-length)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 
 ;;; Annotated sequences. Sequences that can have annotations attached
