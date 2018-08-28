@@ -2,7 +2,7 @@
 ;;; Classes, generic functions, methods and functions for aligning
 ;;; biological sequences
 ;;;
-;;; Copyright (c) 2002-2011 Cyrus Harmon (ch-lisp@bobobeach.com)
+;;; Copyright (c) 2002-2018 Cyrus Harmon (ch-lisp@bobobeach.com)
 ;;; All rights reserved.
 ;;;
 ;;; Redistribution and use in source and binary forms, with or without
@@ -181,19 +181,19 @@
 (defconstant +up+ 1)
 (defconstant +left+ 2)
 (defconstant +terminate+ 3)
-
-(defun emit (m n i j a b &optional s1 s2)
+l
+(defun emit-global (m n i j a b &optional s1 s2)
   (cond
     ((or (and (= i 0) (= j 0)) (= (aref n i j) +terminate+))
      (list s1 s2))
     ((or (= i 0) (= (aref n i j) +left+))
-     (emit m n i (1- j) a b
+     (emit-global m n i (1- j) a b
            (cons #\- s1) (cons (aref b (1- j)) s2)))
     ((or (= j 0) (= (aref n i j) +up+))
-     (emit m n (1- i) j a b
+     (emit-global m n (1- i) j a b
            (cons (aref a (1- i)) s1) (cons #\- s2)))
     (t
-     (emit m n (1- i) (1- j) a b
+     (emit-global m n (1- i) (1- j) a b
            (cons (aref a (1- i)) s1) (cons (aref b (1- j)) s2)))))
 
 (defun global-align-score (m n i j k l score-fn)
@@ -274,7 +274,7 @@
       (do ((j 1 (1+ j)))
           ((> j (length b)))
           (global-align-score m n i j (aref a (1- i)) (aref b (1- j)) score-fn)))
-    (let ((z (emit m n (length a) (length b) a b)))
+    (let ((z (emit-global m n (length a) (length b) a b)))
       (make-alignment
        :score (aref m (length a) (length b))
        :seq1 (coerce (first z) 'string)
@@ -352,7 +352,7 @@
                                                   (lambda (p q)
                                                     (let ((*gap* *terminal-gap*))
                                                       (,score-fn p q))))))
-                  (let ((z (emit m n (length a) (length b) a b)))
+                  (let ((z (emit-global m n (length a) (length b) a b)))
                     (make-alignment
                      :score (aref m (length a) (length b))
                      :seq1 (coerce (first z) 'string)
@@ -416,7 +416,7 @@
             ((> j (length b)))
           (global-align-score-affine-gaps m n d r i j
                                           (aref a (1- i)) (aref b (1- j)) score-fn)))
-    (let ((z (emit m n (length a) (length b) a b)))
+    (let ((z (emit-global m n (length a) (length b) a b)))
       (make-alignment
        :score (aref m (length a) (length b))
        :seq1 (coerce (first z) 'string)
@@ -469,6 +469,22 @@
          (residues-string seq2)
          args))
 
+
+(defun emit-local (m n i j a b &optional s1 s2)
+  (cond
+    ((or (and (= i 0) (= j 0))
+         (= (aref n i j) +terminate+)
+         (= (aref m i j) 0))
+     (list s1 s2))
+    ((or (= i 0) (= (aref n i j) +left+))
+     (emit-local m n i (1- j) a b
+           (cons #\- s1) (cons (aref b (1- j)) s2)))
+    ((or (= j 0) (= (aref n i j) +up+))
+     (emit-local m n (1- i) j a b
+           (cons (aref a (1- i)) s1) (cons #\- s2)))
+    (t
+     (emit-local m n (1- i) (1- j) a b
+           (cons (aref a (1- i)) s1) (cons (aref b (1- j)) s2)))))
 
 (defun local-align-score-affine-gaps (m n d r i j k l score-fn)
   (cond
@@ -529,7 +545,7 @@
                 (setf maxscore s)
                 (setf maxi i)
                 (setf maxj j))))))
-    (let ((z (emit m n maxi maxj a b)))
+    (let ((z (emit-local m n maxi maxj a b)))
       (make-alignment
        :score (aref m maxi maxj)
        :seq1 (coerce (first z) 'string)
@@ -627,7 +643,7 @@
                 (setf maxscore s)
                 (setf maxi i)
                 (setf maxj j))))))
-    (let ((z (emit m n maxi maxj a b)))
+    (let ((z (emit-local m n maxi maxj a b)))
       (make-alignment
        :score (aref m maxi maxj)
        :seq1 (coerce (first z) 'string)
