@@ -10,12 +10,20 @@
            while (plusp count)
          collect (subseq line-buffer 0 count)))))
 
-(defun split-string-into-lines (string &key stream max-line-length)
+(defgeneric split-string-into-lines (string &key stream max-line-length))
+
+(defmethod split-string-into-lines (string &key stream max-line-length)
   (format stream
           "~{~A~^~&~}"
           (apply #'split-string-into-lines-list string
                  (when max-line-length `(:max-line-length ,max-line-length)))))
 
+(defmethod split-string-into-lines ((seq bio-sequence) &key stream max-line-length)
+  (apply #'split-string-into-lines (bio:residues-string seq)
+         (when stream
+           `(:stream ,stream))
+         (when max-line-length
+           `(:max-line-length ,max-line-length))))
 
 (defun char-lookup-array-length (char-list)
   (1+ (apply #'max
