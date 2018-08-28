@@ -528,6 +528,9 @@ complement of seq."))
   (:documentation "A DNA sequence that is a simple-sequence and which
 uses a 2-bit sequence encoding."))
 
+(defmethod make-load-form ((self simple-dna-sequence) &optional environment)
+  (make-load-form-saving-slots self :environment environment))
+
 ;;; adjustable DNA sequence class
 (defclass adjustable-dna-sequence (2-bit-dna-sequence
                                    flexichain-sequence
@@ -603,6 +606,9 @@ with a 2-bit representation for A, C, G and U."))
   ()
   (:documentation "Simple RNA sequence class with a 2-bit encoding (ACGU)."))
 
+(defmethod make-load-form ((self simple-rna-sequence) &optional environment)
+  (make-load-form-saving-slots self :environment environment))
+
 ;;; adjustable RNA sequence class
 (defclass adjustable-rna-sequence (2-bit-rna-sequence
                                    flexichain-sequence
@@ -664,6 +670,9 @@ backed by a 5-bit residue encoding."))
   ()
   (:documentation "A subclass of simple-sequence for representing
 amino acid sequences using a 5-bit residue encoding."))
+
+(defmethod make-load-form ((self simple-aa-sequence) &optional environment)
+  (make-load-form-saving-slots self :environment environment))
 
 ;;; adjustable amino acid sequence class
 (defclass adjustable-aa-sequence (5-bit-aa-sequence
