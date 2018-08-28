@@ -994,6 +994,10 @@ abbreviation."
   (make-instance 'simple-dna-sequence
                  :initial-contents (apply #'concatenate 'string strings)))
 
+(defun rna-sequence (&rest strings)
+  (make-instance 'simple-rna-sequence
+                 :initial-contents (apply #'concatenate 'string strings)))
+
 (defun aa-sequence (&rest strings)
   (make-instance 'simple-aa-sequence
                  :initial-contents (apply #'concatenate 'string strings)))
