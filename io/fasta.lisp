@@ -124,6 +124,7 @@
   (with-open-file (stream filespec :direction :output :if-exists :supersede)
     (loop for sequence in sequences
        do
-         (apply #'write-fasta-stream sequence stream
-                (when header `(:header ,header)))))
+         (let ((header (when headers (pop headers))))
+           (apply #'write-fasta-stream sequence stream
+                  (when header `(:header ,header))))))
   (truename filespec))
