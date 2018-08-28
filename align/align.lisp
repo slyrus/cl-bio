@@ -181,7 +181,7 @@
 (defconstant +up+ 1)
 (defconstant +left+ 2)
 (defconstant +terminate+ 3)
-l
+
 (defun emit-global (m n i j a b &optional s1 s2)
   (cond
     ((or (and (= i 0) (= j 0)) (= (aref n i j) +terminate+))
