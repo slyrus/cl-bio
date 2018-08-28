@@ -98,7 +98,6 @@
   (with-open-file (stream filespec)
     (apply #'read-fasta-sequences stream args)))
 
-
 (defun write-fasta-stream (sequence stream &key header)
   (unless header
     (setf header (format nil "~{~A~^|~}" (mapcar (lambda (x)
@@ -106,8 +105,7 @@
                                                      (identifier (id x))))
                                                  (get-descriptors sequence)))))
   (format stream "~&>~A~%" header)
-  (split-string-into-lines (bio:residues-string sequence)
-                           :stream stream)
+  (split-string-into-lines sequence :stream stream)
   (terpri stream))
 
 (defun write-fasta-sequence (sequence filespec &key header)
