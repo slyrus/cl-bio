@@ -1003,3 +1003,12 @@ abbreviation."
                  :initial-contents (apply #'concatenate 'string strings)))
 
 
+;; lisp printer
+(defvar *sequence-print-max-length* 40)
+
+(defmethod print-object ((object bio-sequence) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (if (and *sequence-print-max-length*
+             (> (seq-length object) *sequence-print-max-length*))
+        (format stream "~S..." (residues-string-range object (range 0 *sequence-print-max-length*)))
+        (format stream "~S" (residues-string object)))))
