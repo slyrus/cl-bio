@@ -37,7 +37,7 @@
 
 (defclass identifier (descriptor)
   ((id :accessor id :initarg :id)
-   (type :accessor identity-type :initarg :type)
+   (type :accessor identifier-type :initarg :type)
    (version :accessor version :initarg :version)
    (authority :accessor authority :initarg :authority)))
 
@@ -55,7 +55,7 @@
 
 (defclass ncbi-gi (identifier)
   ((id :accessor id :initarg :id :initarg :gi)
-   (type :accessor identity-type :initarg :type :initform "gi")
+   (type :accessor identifier-type :initarg :type :initform "gi")
    (authority :accessor authority :initarg :authority :initform
   "ncbi")))
 
@@ -64,19 +64,19 @@
 
 (defclass ncbi-pmid (identifier)
   ((id :accessor id :initarg :id :initarg :pmid)
-   (type :accessor identity-type :initarg :type :initform "pmid")
+   (type :accessor identifier-type :initarg :type :initform "pmid")
    (authority :accessor authority :initarg :authority :initform
   "ncbi")))
 
 (defclass ncbi-geneid (identifier)
   ((id :accessor id :initarg :id :initarg :geneid)
-   (type :accessor identity-type :initarg :type :initform "geneid")
+   (type :accessor identifier-type :initarg :type :initform "geneid")
    (authority :accessor authority :initarg :authority :initform
               "ncbi")))
 
 (defclass ncbi-locus (identifier)
   ((id :accessor id :initarg :id :initarg :locus)
-   (type :accessor identity-type :initarg :type :initform "locus")
+   (type :accessor identifier-type :initarg :type :initform "locus")
    (authority :accessor authority :initarg :authority :initform
   "ncbi")))
 
@@ -85,7 +85,7 @@
 
 (defclass refseq-id (identifier)
   ((id :accessor id :initarg :id :initarg :refseq-id)
-   (type :accessor identity-type :initarg :type :initform "refseq-id")
+   (type :accessor identifier-type :initarg :type :initform "refseq-id")
    (authority :accessor authority :initarg :authority :initform "ncbi")))
 
 (defmethod get-refseq-ids ((described described-object))
@@ -93,7 +93,7 @@
 
 (defclass genbank-accession (identifier)
   ((id :accessor id :initarg :id :initarg :accession)
-   (type :accessor identity-type :initarg :type :initform "accession")
+   (type :accessor identifier-type :initarg :type :initform "accession")
    (authority :accessor authority :initarg :authority :initform "genbank")))
 
 (defmethod get-genbank-accessions ((described described-object))
@@ -101,7 +101,7 @@
 
 (defclass affymetrix-probe-set-id (identifier)
   ((id :accessor id :initarg :id :initarg :accession)
-   (type :accessor identity-type :initarg :type :initform "probe-set-id")
+   (type :accessor identifier-type :initarg :type :initform "probe-set-id")
    (authority :accessor authority :initarg :authority :initform "affymetrix")))
 
 (defclass flybase-identifier (identifier)
@@ -109,8 +109,8 @@
    (authority :accessor authority :initarg :authority :initform "flybase")))
 
 (defclass flybase-gene-identifier (flybase-identifier)
-  ((type :accessor identity-type :initarg :type :initform "gene-identifier")))
+  ((type :accessor identifier-type :initarg :type :initform "gene-identifier")))
 
 (defclass flybase-symbol (flybase-identifier)
-  ((type :accessor identity-type :initarg :type :initform "symbol")))
+  ((type :accessor identifier-type :initarg :type :initform "symbol")))
 
