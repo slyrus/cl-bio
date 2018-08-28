@@ -162,6 +162,10 @@
                #:exon
                #:cds
                #:sts
+               #:repeat-region
+               #:source
+               #:region
+
                #:get-genbank-accessions
 
                #:simple-pairwise-alignment
