@@ -5,7 +5,7 @@
   :version "0.2.7"
   :licence "BSD"
   :description "A library for representing various biological objects"
-  :depends-on (cl-ppcre flexichain parse-number)
+  :depends-on (cl-ppcre flexichain parse-number named-readtables)
   :serial t
   :components
   ((:cl-source-file "defpackage")
