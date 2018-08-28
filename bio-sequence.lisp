@@ -1012,3 +1012,9 @@ abbreviation."
              (> (seq-length object) *sequence-print-max-length*))
         (format stream "~S..." (residues-string-range object (range 0 *sequence-print-max-length*)))
         (format stream "~S" (residues-string object)))))
+
+;; common (but not universal) sequence functions
+(defun organism (bio-sequence)
+  (id (car (remove-if-not
+            (lambda (x) (equalp (bio::identifier-type x) "organism"))
+            (get-descriptors bio-sequence)))))
