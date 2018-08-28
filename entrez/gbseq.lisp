@@ -73,6 +73,15 @@
        obj
        (make-instance 'bio:identifier :id gbseq-locus :type "locus")))))
 
+(defun parse-gbseq-definition (node obj)
+  (let ((gbseq-definition
+         (xpath:string-value
+          (xpath:evaluate "GBSeq_definition/text()" node))))
+    (when gbseq-definition
+      (bio:add-descriptor
+       obj
+       (make-instance 'bio:identifier :id gbseq-definition :type "definition")))))
+
 (defun parse-gbseq-sequence (node obj)
   (let ((gbseq-sequence
          (xpath:string-value
@@ -138,6 +147,7 @@
                     ((equal moltype "AA") 'bio:adjustable-aa-sequence)
                     (t 'bio:simple-sequence)))))
         (parse-gbseq-locus node obj)
+        (parse-gbseq-definition node obj)
         (parse-gbseq-sequence node obj)
         (parse-gbseq-organism node obj)
         (parse-gbseq-taxonomy node obj)
