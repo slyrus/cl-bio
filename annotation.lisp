@@ -35,12 +35,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 
 ;;; Annotations. Annotations are themselves sequences, though not
-;;; necessarily sequences.
+;;; necessarily a sequence with residues.
+
+(defclass qualifier ()
+  ((name :initform nil :accessor name :initarg :name)
+   (value :initform nil :accessor value :initarg :value)))
+
+(defun make-qualifier (name value)
+  (make-instance 'qualifier :name name :value value))
 
 (defclass annotation (bio-sequence)
   ((length :accessor annotation-length :initarg :length)
    (type :accessor annotation-type :initarg :type)
-   (note :accessor annotation-note :initarg :note)))
+   (note :accessor annotation-note :initarg :note)
+   (qualifiers :initform nil :accessor annotation-qualifiers :initarg :qualifiers)))
 
 (defclass exon (annotation)
   ((type :accessor annotation-type :initarg type :initform "exon")))
@@ -53,4 +61,18 @@
 
 (defclass repeat-region (annotation)
   ((type :accessor annotation-type :initarg type :initform "repeat-region")))
+
+(defclass source (annotation)
+  ((type :accessor annotation-type :initarg type :initform "source")))
+
+(defclass region (annotation)
+  ((type :accessor annotation-type :initarg type :initform "region")))
+
+(defclass site (annotation)
+  ((type :accessor annotation-type :initarg type :initform "site")))
+
+
+(defgeneric add-qualifier (annotation qualifier)
+  (:method ((annotation annotation) (qualifier qualifier))
+    (push (annotation-qualifiers annotation) qualifier)))
 
