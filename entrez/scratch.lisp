@@ -19,7 +19,7 @@
 ;;; search entrez the entrez "gene" database for the terms "ESR1" and
 ;;; "estrogen"
 (defparameter *esr1-gene-search*
-  (bio:lookup "ESR1[sym] human[ORGN]" *entrez-dictionary* :database "gene"))
+  (bio:lookup "ESR1[sym] AND human[ORGN]" *entrez-dictionary* :database "gene"))
 
 ;;; get the id first hit from the search set returned above, and load
 ;;; the corresponding gene from the entrez "gene" database.
@@ -30,7 +30,12 @@
                    :database "gene"))))
 
 (defparameter *esr1-nucleotide-search*
-  (bio:lookup "ESR1[sym] human[ORGN]"
+  (bio:lookup "ESR1[sym] AND human[ORGN]"
+              *entrez-dictionary*
+              :database "nucleotide"))
+
+(defparameter *esr1-nucleotide-search-2*
+  (bio:lookup "X03635[LOCUS]"
               *entrez-dictionary*
               :database "nucleotide"))
 
@@ -44,11 +49,6 @@
           (car (bio:get-genbank-accessions
                 (car (bio:gene-products *esr1-gene*)))))
          *entrez-dictionary*))))
-
-(defparameter *esr1-nucleotide-search*
-  (bio:lookup "ESR1 AND human[ORGN]"
-              *entrez-dictionary*
-              :database "nucleotide"))
 
 (defparameter *esr1-nucleotide-results*
   (bio:fetch (bio:id (car (bio:members *esr1-nucleotide-search*)))
@@ -424,3 +424,31 @@
 
 (defparameter *esr1-refseqgene-search*
   (bio:lookup "NG_008493[accession]" *entrez-dictionary* :database "nucleotide"))
+
+
+
+(defparameter *esr1-nm_000125.3-search*
+  (bio:lookup "NM_000125.3[VERSION]"
+              entrez:*entrez-dictionary*
+              :database "nucleotide"))
+
+(defparameter *esr1-nm_000125.3*
+  (car (bio:members
+        (bio:fetch (bio:id (car (bio:members *esr1-nm_000125.3-search*)))
+                   entrez:*entrez-dictionary*
+                   :database "nucleotide"))))
+
+(defparameter *esr1-np_000116.2-search*
+  (bio:lookup "NP_000116.2[VERSION]"
+              entrez:*entrez-dictionary*
+              :database "protein"))
+
+(defparameter *esr1-np_000116.2*
+  (car (bio:members
+        (bio:fetch (bio:id (car (bio:members *esr1-np_000116.2-search*)))
+                   entrez:*entrez-dictionary*
+                   :database "protein"))))
+
+(seq:string (seq0:translate *esr1-nm_000125.3* :start 234 :end 2022))
+(seq:string (seq1:translate *esr1-nm_000125.3* :start 235 :end 2023))
+
