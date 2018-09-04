@@ -56,16 +56,20 @@
    (dp-right-matrix :accessor alignment-dp-right-matrix :initarg :dp-right-matrix :initform nil)
    (dp-traceback :accessor alignment-dp-traceback :initarg :dp-traceback)))
 
-(defun make-alignment (&key score seq1 seq2 dp-matrix dp-down-matrix dp-right-matrix dp-traceback)
-  (apply #'make-instance 'alignment
-         (append
-          (when score `(:score ,score))
-          (when seq1 `(:seq1 ,seq1))
-          (when seq2 `(:seq2 ,seq2))
-          (when dp-matrix `(:dp-matrix ,dp-matrix))
-          (when dp-down-matrix `(:dp-down-matrix ,dp-down-matrix))
-          (when dp-right-matrix `(:dp-right-matrix ,dp-right-matrix))
-          (when dp-traceback `(:dp-traceback ,dp-traceback)))))
+(defclass local-alignment (alignment)
+  ((ungapped-seq1 :accessor alignment-ungapped-seq1 :initarg :ungapped-seq1)
+   (ungapped-seq2 :accessor alignment-ungapped-seq2 :initarg :ungapped-seq2)))
+
+(defun make-alignment (&rest args &key score seq1 seq2 dp-matrix dp-down-matrix dp-right-matrix dp-traceback (class 'alignment))
+  (declare (ignorable score seq1 seq2 dp-matrix dp-down-matrix dp-right-matrix dp-traceback))
+  (apply #'make-instance class
+         (alexandria:remove-from-plist args :class)))
+
+(defun make-local-alignment (&rest args &key score seq1 seq2 ungapped-seq1 ungapped-seq2
+                                             dp-matrix dp-down-matrix dp-right-matrix dp-traceback (class 'local-alignment))
+  (declare (ignorable score seq1 seq2 ungapped-seq1 ungapped-seq2  dp-matrix dp-down-matrix dp-right-matrix dp-traceback))
+  (apply #'make-instance class
+         (alexandria:remove-from-plist args :class)))
 
 (defun alignment-results (a)
   (values (alignment-score a)
@@ -470,21 +474,21 @@
          args))
 
 
-(defun emit-local (m n i j a b &optional s1 s2)
+(defun emit-local (m n i j a b &optional s1 s2 s3 s4)
   (cond
     ((or (and (= i 0) (= j 0))
          (= (aref n i j) +terminate+)
          (= (aref m i j) 0))
-     (list s1 s2))
+     (list s1 s2 s3 s4))
     ((or (= i 0) (= (aref n i j) +left+))
      (emit-local m n i (1- j) a b
-           (cons #\- s1) (cons (aref b (1- j)) s2)))
+                 (cons #\- s1) (cons (aref b (1- j)) s2) s3 (cons (aref b (1- j)) s4)))
     ((or (= j 0) (= (aref n i j) +up+))
      (emit-local m n (1- i) j a b
-           (cons (aref a (1- i)) s1) (cons #\- s2)))
+                 (cons (aref a (1- i)) s1) (cons #\- s2) (cons (aref a (1- i)) s3) s4))
     (t
      (emit-local m n (1- i) (1- j) a b
-           (cons (aref a (1- i)) s1) (cons (aref b (1- j)) s2)))))
+                 (cons (aref a (1- i)) s1) (cons (aref b (1- j)) s2) (cons (aref a (1- i)) s3) (cons (aref b (1- j)) s4)))))
 
 (defun local-align-score-affine-gaps (m n d r i j k l score-fn)
   (cond
@@ -545,15 +549,19 @@
                 (setf maxscore s)
                 (setf maxi i)
                 (setf maxj j))))))
-    (let ((z (emit-local m n maxi maxj a b)))
-      (make-alignment
+    (destructuring-bind (seq1 seq2 ungapped-seq1 ungapped-seq2)
+        (emit-local m n maxi maxj a b)
+      (make-local-alignment
        :score (aref m maxi maxj)
-       :seq1 (coerce (first z) 'string)
-       :seq2 (coerce (second z) 'string)
+       :seq1 (coerce seq1 'string)
+       :seq2 (coerce seq2 'string)
+       :ungapped-seq1 (coerce ungapped-seq1 'string)
+       :ungapped-seq2 (coerce ungapped-seq2 'string)
        :dp-matrix m
        :dp-down-matrix d
        :dp-right-matrix r
-       :dp-traceback n))))
+       :dp-traceback n
+       :class 'local-alignment))))
 
 (defun %local-align-aa-affine-gaps (a b)
   (local-align-affine-gaps a b #'aa-score))
@@ -643,13 +651,17 @@
                 (setf maxscore s)
                 (setf maxi i)
                 (setf maxj j))))))
-    (let ((z (emit-local m n maxi maxj a b)))
-      (make-alignment
+    (destructuring-bind (seq1 seq2 ungapped-seq1 ungapped-seq2)
+        (emit-local m n maxi maxj a b)
+      (make-local-alignment
        :score (aref m maxi maxj)
-       :seq1 (coerce (first z) 'string)
-       :seq2 (coerce (second z) 'string)
+       :seq1 (coerce seq1 'string)
+       :seq2 (coerce seq2 'string)
+       :ungapped-seq1 (coerce ungapped-seq1 'string)
+       :ungapped-seq2 (coerce ungapped-seq2 'string)
        :dp-matrix m
-       :dp-traceback n))))
+       :dp-traceback n
+       :class 'local-alignment))))
 
 (defun %local-align-aa (a b)
   (local-align a b #'aa-score))
