@@ -5,7 +5,7 @@
   :version "0.2.7"
   :licence "BSD"
   :description "A library for representing various biological objects"
-  :depends-on (cl-ppcre flexichain parse-number named-readtables alexandria)
+  :depends-on (cl-ppcre flexichain parse-number named-readtables alexandria prove)
   :serial t
   :components
   ((:cl-source-file "defpackage")
@@ -34,13 +34,12 @@
 
 (asdf:defsystem :cl-bio/test
   :serial t
-  :depends-on (:prove :cl-bio)
-  :defsystem-depends-on (:prove-asdf)
+  :depends-on (:cl-bio :prove :prove-asdf)
   :components ((:module :test
                         :serial t
                         :components ((:file "defpackage")
-                                     (:test-file "cl-bio-test")
-                                     (:test-file "sequence-test")))
+                                     (:file "cl-bio-test")
+                                     (:file "sequence-test")))
                (:module :data
                         :components ((:static-file "dpp-fasta" :pathname #p"dpp.fasta"))))
   :perform (test-op :after (op c)
