@@ -42,8 +42,8 @@
 ;;; author protocol class
 (defclass author (bio-object)
   ((last-name :type string :accessor author-last-name :initarg :last-name)
-   (forenames :type (or nil string) :accessor author-forenames :initarg :forenames :initform nil)
-   (initials :type (or nil string) :accessor author-initials :initarg :initials :initform nil)))
+   (forenames :type (or string null) :accessor author-forenames :initarg :forenames :initform nil)
+   (initials :type (or string null) :accessor author-initials :initarg :initials :initform nil)))
 
 ;;; article protocol class
 (defclass article (bio-object)
